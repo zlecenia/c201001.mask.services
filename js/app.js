@@ -21,12 +21,18 @@ class MasktronicApp {
             // Make CONFIG accessible to other modules
             window.CONFIG = CONFIG;
             
+            // Initialize i18n system
+            if (window.I18nManager) {
+                await window.I18nManager.init();
+                console.log('✅ I18n system initialized');
+            }
+            
             // Initialize modular components
             this.setupEventListeners();
             this.startClock();
             this.loadMockData();
             
-            console.log('✅ MASKTRONIC C20 - Fully Initialized with Modular Architecture');
+            console.log('✅ MASKTRONIC C20 - Fully Initialized with Modular Architecture + I18n');
         } catch (error) {
             console.error('❌ Failed to initialize app:', error);
             alert('Failed to load application configuration. Please try refreshing the page.');

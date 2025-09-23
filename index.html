@@ -22,9 +22,14 @@
             </div>
             <div class="header-right">
                 <span id="clock">--:--:--</span>
+                <span id="language-selector" class="language-selector">
+                    <button id="lang-pl" class="lang-btn active" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                    <button id="lang-en" class="lang-btn" onclick="changeLanguage('en')" title="English">🇺🇸</button>
+                    <button id="lang-de" class="lang-btn" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+                </span>
                 <span id="status" class="status-indicator">
                     <span class="status-dot"></span>
-                    <span id="status-text">OFFLINE</span>
+                    <span id="status-text" data-i18n="global.offline">OFFLINE</span>
                 </span>
                 <span id="user-info" style="display:none;">
                     <span id="username">---</span>
@@ -38,18 +43,18 @@
             <!-- Login Screen -->
             <div id="login-screen" class="screen active">
                 <div class="menu-container">
-                    <div class="menu-header">LOGIN MENU</div>
+                    <div class="menu-header" data-i18n="login.menu_header">LOGIN MENU</div>
                     <div class="menu-layout">
                         <div class="menu-sidebar">
-                            <button id="login-scanner-btn" class="menu-item" onclick="selectLoginMethod('scanner')">Scanner</button>
-                            <button id="login-keyword-btn" class="menu-item active" onclick="selectLoginMethod('keyword')">Keyword</button>
+                            <button id="login-scanner-btn" class="menu-item" onclick="selectLoginMethod('scanner')" data-i18n="login.scanner">Scanner</button>
+                            <button id="login-keyword-btn" class="menu-item active" onclick="selectLoginMethod('keyword')" data-i18n="login.keyword">Keyword</button>
                         </div>
                         <div class="menu-content">
                             <div id="login-keyword" class="login-method active">
-                                <h2>User Login By Keyword</h2>
+                                <h2 data-i18n="login.user_login_by_keyword">User Login By Keyword</h2>
                                 <div class="login-form">
                                     <div class="password-container">
-                                        <input type="password" id="password-input" placeholder="Password">
+                                        <input type="password" id="password-input" placeholder="Password" data-i18n-placeholder="login.password_placeholder">
                                         <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
                                     </div>
                                     <div class="keyboard-container">
@@ -83,7 +88,7 @@
                                             </div>
                                             <!-- Row 3 -->
                                             <div class="keyboard-row">
-                                                <div id="key-caps" class="keyboard-key special caps" data-action="caps">Caps</div>
+                                                <div id="key-caps" class="keyboard-key special caps" data-action="caps" data-i18n="keyboard.caps">Caps</div>
                                                 <div id="key-a" class="keyboard-key" data-char="a" data-shift-char="A">a</div>
                                                 <div id="key-s" class="keyboard-key" data-char="s" data-shift-char="S">s</div>
                                                 <div id="key-d" class="keyboard-key" data-char="d" data-shift-char="D">d</div>
@@ -93,7 +98,7 @@
                                                 <div id="key-j" class="keyboard-key" data-char="j" data-shift-char="J">j</div>
                                                 <div id="key-k" class="keyboard-key" data-char="k" data-shift-char="K">k</div>
                                                 <div id="key-l" class="keyboard-key" data-char="l" data-shift-char="L">l</div>
-                                                <div id="key-enter" class="keyboard-key special enter" data-action="enter">⏎</div>
+                                                <div id="key-enter" class="keyboard-key special enter" data-action="enter" title="Enter">⏎</div>
                                             </div>
                                             <!-- Row 4 -->
                                             <div class="keyboard-row">
@@ -392,10 +397,11 @@
         document.write('<script src="js/utils.js?v=' + cacheBuster + '"><\/script>');
         document.write('<script src="js/auth.js?v=' + cacheBuster + '"><\/script>');
         document.write('<script src="js/menu.js?v=' + cacheBuster + '"><\/script>');
+        document.write('<script src="js/i18n.js?v=' + cacheBuster + '"><\/script>');
         document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
         document.write('<script type="module" src="js/app.js?v=' + cacheBuster + '"><\/script>');
         document.write('<script type="module" src="js/ui-tester.js?v=' + cacheBuster + '"><\/script>');
     </script>
-    <!-- Modular architecture: utils → auth → menu → keyboard → app → ui-tester -->
+    <!-- Modular architecture: utils → auth → menu → i18n → keyboard → app → ui-tester -->
 </body>
 </html>
