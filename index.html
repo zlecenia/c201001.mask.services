@@ -46,75 +46,77 @@
                                         <input type="password" id="password-input" placeholder="Password">
                                         <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
                                     </div>
-                                    <div class="virtual-keyboard" id="virtual-keyboard">
-                                        <!-- Row 1 -->
-                                        <div class="keyboard-row">
-                                            <div id="key-1" class="keyboard-key" data-char="1" data-shift-char="!">1<span class="sub-char">!</span></div>
-                                            <div id="key-2" class="keyboard-key" data-char="2" data-shift-char="@">2<span class="sub-char">@</span></div>
-                                            <div id="key-3" class="keyboard-key" data-char="3" data-shift-char="#">3<span class="sub-char">#</span></div>
-                                            <div id="key-4" class="keyboard-key" data-char="4" data-shift-char="$">4<span class="sub-char">$</span></div>
-                                            <div id="key-5" class="keyboard-key" data-char="5" data-shift-char="%">5<span class="sub-char">%</span></div>
-                                            <div id="key-6" class="keyboard-key" data-char="6" data-shift-char="^">6<span class="sub-char">^</span></div>
-                                            <div id="key-7" class="keyboard-key" data-char="7" data-shift-char="&">7<span class="sub-char">&</span></div>
-                                            <div id="key-8" class="keyboard-key" data-char="8" data-shift-char="*">8<span class="sub-char">*</span></div>
-                                            <div id="key-9" class="keyboard-key" data-char="9" data-shift-char="(">9<span class="sub-char">(</span></div>
-                                            <div id="key-0" class="keyboard-key" data-char="0" data-shift-char=")">0<span class="sub-char">)</span></div>
-                                            <div id="key-backspace" class="keyboard-key special backspace" data-action="backspace">⌫</div>
+                                    <div class="keyboard-container">
+                                        <div class="virtual-keyboard" id="virtual-keyboard">
+                                            <!-- Row 1 -->
+                                            <div class="keyboard-row">
+                                                <div id="key-1" class="keyboard-key" data-char="1" data-shift-char="!">1<span class="sub-char">!</span></div>
+                                                <div id="key-2" class="keyboard-key" data-char="2" data-shift-char="@">2<span class="sub-char">@</span></div>
+                                                <div id="key-3" class="keyboard-key" data-char="3" data-shift-char="#">3<span class="sub-char">#</span></div>
+                                                <div id="key-4" class="keyboard-key" data-char="4" data-shift-char="$">4<span class="sub-char">$</span></div>
+                                                <div id="key-5" class="keyboard-key" data-char="5" data-shift-char="%">5<span class="sub-char">%</span></div>
+                                                <div id="key-6" class="keyboard-key" data-char="6" data-shift-char="^">6<span class="sub-char">^</span></div>
+                                                <div id="key-7" class="keyboard-key" data-char="7" data-shift-char="&">7<span class="sub-char">&</span></div>
+                                                <div id="key-8" class="keyboard-key" data-char="8" data-shift-char="*">8<span class="sub-char">*</span></div>
+                                                <div id="key-9" class="keyboard-key" data-char="9" data-shift-char="(">9<span class="sub-char">(</span></div>
+                                                <div id="key-0" class="keyboard-key" data-char="0" data-shift-char=")">0<span class="sub-char">)</span></div>
+                                                <div id="key-backspace" class="keyboard-key special backspace" data-action="backspace">⌫</div>
+                                            </div>
+                                            <!-- Row 2 -->
+                                            <div class="keyboard-row">
+                                                <div id="key-q" class="keyboard-key" data-char="q" data-shift-char="Q">q</div>
+                                                <div id="key-w" class="keyboard-key" data-char="w" data-shift-char="W">w</div>
+                                                <div id="key-e" class="keyboard-key" data-char="e" data-shift-char="E">e</div>
+                                                <div id="key-r" class="keyboard-key" data-char="r" data-shift-char="R">r</div>
+                                                <div id="key-t" class="keyboard-key" data-char="t" data-shift-char="T">t</div>
+                                                <div id="key-y" class="keyboard-key" data-char="y" data-shift-char="Y">y</div>
+                                                <div id="key-u" class="keyboard-key" data-char="u" data-shift-char="U">u</div>
+                                                <div id="key-i" class="keyboard-key" data-char="i" data-shift-char="I">i</div>
+                                                <div id="key-o" class="keyboard-key" data-char="o" data-shift-char="O">o</div>
+                                                <div id="key-p" class="keyboard-key" data-char="p" data-shift-char="P">p</div>
+                                            </div>
+                                            <!-- Row 3 -->
+                                            <div class="keyboard-row">
+                                                <div id="key-caps" class="keyboard-key special caps" data-action="caps">Caps</div>
+                                                <div id="key-a" class="keyboard-key" data-char="a" data-shift-char="A">a</div>
+                                                <div id="key-s" class="keyboard-key" data-char="s" data-shift-char="S">s</div>
+                                                <div id="key-d" class="keyboard-key" data-char="d" data-shift-char="D">d</div>
+                                                <div id="key-f" class="keyboard-key" data-char="f" data-shift-char="F">f</div>
+                                                <div id="key-g" class="keyboard-key" data-char="g" data-shift-char="G">g</div>
+                                                <div id="key-h" class="keyboard-key" data-char="h" data-shift-char="H">h</div>
+                                                <div id="key-j" class="keyboard-key" data-char="j" data-shift-char="J">j</div>
+                                                <div id="key-k" class="keyboard-key" data-char="k" data-shift-char="K">k</div>
+                                                <div id="key-l" class="keyboard-key" data-char="l" data-shift-char="L">l</div>
+                                                <div id="key-enter" class="keyboard-key special enter" data-action="enter">⏎</div>
+                                            </div>
+                                            <!-- Row 4 -->
+                                            <div class="keyboard-row">
+                                                <div id="key-shift" class="keyboard-key special shift" data-action="shift">⇧</div>
+                                                <div id="key-z" class="keyboard-key" data-char="z" data-shift-char="Z">z</div>
+                                                <div id="key-x" class="keyboard-key" data-char="x" data-shift-char="X">x</div>
+                                                <div id="key-c" class="keyboard-key" data-char="c" data-shift-char="C">c</div>
+                                                <div id="key-v" class="keyboard-key" data-char="v" data-shift-char="V">v</div>
+                                                <div id="key-b" class="keyboard-key" data-char="b" data-shift-char="B">b</div>
+                                                <div id="key-n" class="keyboard-key" data-char="n" data-shift-char="N">n</div>
+                                                <div id="key-m" class="keyboard-key" data-char="m" data-shift-char="M">m</div>
+                                                <div id="key-comma" class="keyboard-key" data-char="," data-shift-char="<">,<span class="sub-char"><</span></div>
+                                                <div id="key-period" class="keyboard-key" data-char="." data-shift-char=">">.<span class="sub-char">></span></div>
+                                                <div id="key-slash" class="keyboard-key" data-char="/" data-shift-char="?">/<span class="sub-char">?</span></div>
+                                            </div>
+                                            <!-- Row 5 -->
+                                            <div class="keyboard-row">
+                                                <div id="key-tab" class="keyboard-key special tab" data-action="tab">Tab</div>
+                                                <div id="key-space" class="keyboard-key space" data-char=" " data-shift-char=" "> </div>
+                                                <div id="key-clear" class="keyboard-key special clear" data-action="clear">Clear</div>
+                                                <div id="key-toggle" class="keyboard-key special toggle" data-action="toggle">123</div>
+                                            </div>
                                         </div>
-                                        <!-- Row 2 -->
-                                        <div class="keyboard-row">
-                                            <div id="key-q" class="keyboard-key" data-char="q" data-shift-char="Q">q</div>
-                                            <div id="key-w" class="keyboard-key" data-char="w" data-shift-char="W">w</div>
-                                            <div id="key-e" class="keyboard-key" data-char="e" data-shift-char="E">e</div>
-                                            <div id="key-r" class="keyboard-key" data-char="r" data-shift-char="R">r</div>
-                                            <div id="key-t" class="keyboard-key" data-char="t" data-shift-char="T">t</div>
-                                            <div id="key-y" class="keyboard-key" data-char="y" data-shift-char="Y">y</div>
-                                            <div id="key-u" class="keyboard-key" data-char="u" data-shift-char="U">u</div>
-                                            <div id="key-i" class="keyboard-key" data-char="i" data-shift-char="I">i</div>
-                                            <div id="key-o" class="keyboard-key" data-char="o" data-shift-char="O">o</div>
-                                            <div id="key-p" class="keyboard-key" data-char="p" data-shift-char="P">p</div>
+                                        <div class="login-buttons">
+                                            <button id="login-operator-btn" class="btn btn-green" onclick="mockLogin('OPERATOR')">Login as OPERATOR</button>
+                                            <button id="login-admin-btn" class="btn btn-yellow" onclick="mockLogin('ADMIN')">Login as ADMIN</button>
+                                            <button id="login-superuser-btn" class="btn btn-red" onclick="mockLogin('SUPERUSER')">Login as SUPERUSER</button>
+                                            <button id="login-serwisant-btn" class="btn btn-blue" onclick="mockLogin('SERWISANT')">Login as SERWISANT</button>
                                         </div>
-                                        <!-- Row 3 -->
-                                        <div class="keyboard-row">
-                                            <div id="key-caps" class="keyboard-key special caps" data-action="caps">Caps</div>
-                                            <div id="key-a" class="keyboard-key" data-char="a" data-shift-char="A">a</div>
-                                            <div id="key-s" class="keyboard-key" data-char="s" data-shift-char="S">s</div>
-                                            <div id="key-d" class="keyboard-key" data-char="d" data-shift-char="D">d</div>
-                                            <div id="key-f" class="keyboard-key" data-char="f" data-shift-char="F">f</div>
-                                            <div id="key-g" class="keyboard-key" data-char="g" data-shift-char="G">g</div>
-                                            <div id="key-h" class="keyboard-key" data-char="h" data-shift-char="H">h</div>
-                                            <div id="key-j" class="keyboard-key" data-char="j" data-shift-char="J">j</div>
-                                            <div id="key-k" class="keyboard-key" data-char="k" data-shift-char="K">k</div>
-                                            <div id="key-l" class="keyboard-key" data-char="l" data-shift-char="L">l</div>
-                                            <div id="key-enter" class="keyboard-key special enter" data-action="enter">⏎</div>
-                                        </div>
-                                        <!-- Row 4 -->
-                                        <div class="keyboard-row">
-                                            <div id="key-shift" class="keyboard-key special shift" data-action="shift">⇧</div>
-                                            <div id="key-z" class="keyboard-key" data-char="z" data-shift-char="Z">z</div>
-                                            <div id="key-x" class="keyboard-key" data-char="x" data-shift-char="X">x</div>
-                                            <div id="key-c" class="keyboard-key" data-char="c" data-shift-char="C">c</div>
-                                            <div id="key-v" class="keyboard-key" data-char="v" data-shift-char="V">v</div>
-                                            <div id="key-b" class="keyboard-key" data-char="b" data-shift-char="B">b</div>
-                                            <div id="key-n" class="keyboard-key" data-char="n" data-shift-char="N">n</div>
-                                            <div id="key-m" class="keyboard-key" data-char="m" data-shift-char="M">m</div>
-                                            <div id="key-comma" class="keyboard-key" data-char="," data-shift-char="<">,<span class="sub-char"><</span></div>
-                                            <div id="key-period" class="keyboard-key" data-char="." data-shift-char=">">.<span class="sub-char">></span></div>
-                                            <div id="key-slash" class="keyboard-key" data-char="/" data-shift-char="?">/<span class="sub-char">?</span></div>
-                                        </div>
-                                        <!-- Row 5 -->
-                                        <div class="keyboard-row">
-                                            <div id="key-tab" class="keyboard-key special tab" data-action="tab">Tab</div>
-                                            <div id="key-space" class="keyboard-key space" data-char=" " data-shift-char=" "> </div>
-                                            <div id="key-clear" class="keyboard-key special clear" data-action="clear">Clear</div>
-                                            <div id="key-toggle" class="keyboard-key special toggle" data-action="toggle">123</div>
-                                        </div>
-                                    </div>
-                                    <div class="login-buttons">
-                                        <button id="login-operator-btn" class="btn btn-green" onclick="mockLogin('OPERATOR')">Login as OPERATOR</button>
-                                        <button id="login-admin-btn" class="btn btn-yellow" onclick="mockLogin('ADMIN')">Login as ADMIN</button>
-                                        <button id="login-superuser-btn" class="btn btn-red" onclick="mockLogin('SUPERUSER')">Login as SUPERUSER</button>
-                                        <button id="login-serwisant-btn" class="btn btn-blue" onclick="mockLogin('SERWISANT')">Login as SERWISANT</button>
                                     </div>
                                 </div>
                             </div>
