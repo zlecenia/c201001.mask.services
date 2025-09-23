@@ -231,16 +231,31 @@ class ConfigLoader {
      * @param {Object} config - Router config object
      */
     validateRouterConfig(config) {
-        if (!config.routes || typeof config.routes !== 'object') {
+        // Check for either 'routes' or 'views' (backward compatibility)
+        if (!config.routes && !config.views) {
+            throw new Error('routes or views must be defined');
+        }
+
+        if (config.routes && typeof config.routes !== 'object') {
             throw new Error('routes must be an object');
+        }
+
+        if (config.views && typeof config.views !== 'object') {
+            throw new Error('views must be an object');
         }
 
         if (config.default_route && typeof config.default_route !== 'string') {
             throw new Error('default_route must be a string');
         }
 
-        if (config.supported_languages && !Array.isArray(config.supported_languages)) {
-            throw new Error('supported_languages must be an array');
+        // Check for languages array in router config
+        if (config.languages && !Array.isArray(config.languages)) {
+            throw new Error('languages must be an array');
+        }
+
+        // Validate default section
+        if (config.default && typeof config.default !== 'object') {
+            throw new Error('default must be an object');
         }
     }
 
@@ -342,16 +357,43 @@ class ConfigLoader {
      * @returns {Object} Processed config
      */
     processRouterConfig(config, options) {
+        // Handle backward compatibility: convert 'views' to 'routes' if needed
+        if (config.views && !config.routes) {
+            config.routes = config.views;
+        }
+
         // Create route lookup map
         config._routeMap = new Map();
-        Object.entries(config.routes).forEach(([path, routeConfig]) => {
-            config._routeMap.set(path, routeConfig);
-        });
+        if (config.routes) {
+            Object.entries(config.routes).forEach(([path, routeConfig]) => {
+                config._routeMap.set(path, routeConfig);
+            });
+        }
 
-        // Set defaults
-        config.default_route = config.default_route || 'menu-screen';
-        config.supported_languages = config.supported_languages || ['en'];
+        // Set defaults from config structure
+        if (config.default && config.default.view) {
+            config.default_route = config.default.view;
+        } else {
+            config.default_route = config.default_route || 'login-screen';
+        }
+
+        // Extract supported languages from languages array
+        if (config.languages && Array.isArray(config.languages)) {
+            config.supported_languages = config.languages.map(lang => lang.code);
+        } else {
+            config.supported_languages = config.supported_languages || ['pl', 'en', 'de'];
+        }
+
         config.case_sensitive = config.case_sensitive !== undefined ? config.case_sensitive : false;
+
+        // Ensure storage is properly configured
+        if (config.storage && config.storage.enabled === false) {
+            // Storage is explicitly disabled in config
+            config.storage.enabled = false;
+        } else if (!config.storage) {
+            // Default storage config
+            config.storage = { enabled: true };
+        }
 
         return config;
     }

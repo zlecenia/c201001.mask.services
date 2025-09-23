@@ -1,291 +1,303 @@
 /**
- * MASKSERVICE C20 - Enhanced System Settings Module
+ * MASKSERVICE C20 - Enhanced System Settings Module (Orchestrator)
  * Advanced system configuration for SUPERUSER role
- * Test scenario management, external integrations, standards compliance
- * @version 2.0.0 - Modularized Architecture
+ * Coordinates modular components for settings management
+ * @version 3.0.0 - Fully Modularized Architecture
  * @author MASKSERVICE Team
  */
 
-// Import modular components
-// Note: In a production environment, these would be proper ES6 imports
-// For now, we load them as script tags in the HTML
+define('system-settings-enhanced', [
+    'settings-ui-generator',
+    'settings-scenario-manager', 
+    'settings-integration-manager',
+    'settings-standards-validator',
+    'settings-system-config'
+], function(
+    SettingsUIGenerator,
+    SettingsScenarioManager,
+    SettingsIntegrationManager, 
+    SettingsStandardsValidator,
+    SettingsSystemConfig
+) {
 
-class SystemSettingsEnhanced {
-    constructor() {
-        // Initialize core settings module
-        this.core = new SettingsCore();
-        
-        // Initialize specialized modules
-        this.scenarios = new SettingsScenarios(this.core);
-        this.integration = new SettingsIntegration(this.core);
-        this.standards = new SettingsStandards(this.core);
-        this.system = new SettingsSystem(this.core);
-        
-        this.init();
-    }
-
-    init() {
-        console.log('✅ SystemSettingsEnhanced initialized with modular architecture');
-    }
-
-    // Test scenarios management
-    testScenarios = {
-        editor: {
-            createNew: true,
-            modifyExisting: true,
-            importFromXML: true,
-            validateAgainstNorms: true // PN-EN 136/137
-        },
-        mapping: {
-            deviceType: 'scenario_matrix',
-            testInterval: 'scenario_selection',
-            customRules: true
+    class SystemSettingsEnhanced {
+        constructor() {
+            // Initialize modular components
+            this.uiGenerator = new SettingsUIGenerator();
+            this.scenarioManager = new SettingsScenarioManager();
+            this.integrationManager = new SettingsIntegrationManager();
+            this.standardsValidator = new SettingsStandardsValidator();
+            this.systemConfig = new SettingsSystemConfig();
+            
+            this.currentTab = 'scenarios';
+            this.init();
         }
-    };
 
-    loadTestScenarios() {
-        const scenarios = [
-            {
-                id: 'scenario_1',
-                name: 'Test po użyciu',
-                norm: 'PN-EN 136',
-                deviceTypes: ['PP_MASK', 'NP_MASK'],
-                parameters: {
-                    pressureTest: { min: -10, max: -5, unit: 'mbar' },
-                    leakTest: { max: 0.5, unit: 'l/min' },
-                    duration: 300
+        init() {
+            console.log('✅ SystemSettingsEnhanced orchestrator initialized with modular components');
+        }
+
+        // Delegation methods to modular components
+
+        // UI Generation methods
+        getEnhancedSystemSettingsHTML() {
+            return this.uiGenerator.getEnhancedSystemSettingsHTML();
+        }
+
+        showTab(tabName) {
+            this.currentTab = tabName;
+            const content = document.getElementById('settings-tab-content');
+            if (content) {
+                switch (tabName) {
+                    case 'scenarios':
+                        content.innerHTML = this.uiGenerator.getTestScenariosHTML(
+                            this.scenarioManager.getAllScenarios()
+                        );
+                        break;
+                    case 'integration':
+                        content.innerHTML = this.uiGenerator.getIntegrationsHTML();
+                        break;
+                    case 'standards':
+                        content.innerHTML = this.uiGenerator.getStandardsHTML();
+                        break;
+                    case 'system':
+                        content.innerHTML = this.uiGenerator.getSystemConfigHTML();
+                        break;
                 }
-            },
-            {
-                id: 'scenario_2',
-                name: 'Test 6-miesięczny',
-                norm: 'PN-EN 136',
-                deviceTypes: ['PP_MASK', 'NP_MASK', 'SCBA'],
-                parameters: {
-                    pressureTest: { min: -15, max: -10, unit: 'mbar' },
-                    flowTest: { min: 40, max: 60, unit: 'l/min' },
-                    duration: 600
+                
+                // Update active tab
+                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                document.querySelector(`.tab-btn[onclick*="${tabName}"]`)?.classList.add('active');
+            }
+        }
+
+        // Scenario Management delegation methods
+        createNewScenario(scenarioData) {
+            try {
+                const scenario = this.scenarioManager.createNewScenario(scenarioData || {
+                    name: 'Nowy scenariusz',
+                    norm: 'PN-EN 136',
+                    deviceTypes: ['PP_MASK'],
+                    parameters: {}
+                });
+                this.showTab('scenarios'); // Refresh UI
+                return scenario;
+            } catch (error) {
+                console.error('❌ Failed to create scenario:', error.message);
+                alert(`Błąd tworzenia scenariusza: ${error.message}`);
+            }
+        }
+
+        editScenario(scenarioId) {
+            const scenario = this.scenarioManager.getScenario(scenarioId);
+            if (scenario) {
+                // In a real implementation, this would open an edit dialog
+                console.log('✏️ Editing scenario:', scenario.name);
+                // For now, just log the scenario
+                return scenario;
+            }
+        }
+
+        validateScenario(scenarioId) {
+            try {
+                const scenario = this.scenarioManager.getScenario(scenarioId);
+                const validation = this.standardsValidator.validateScenario(scenario);
+                
+                const message = validation.valid ? 
+                    `✅ Scenariusz "${scenario.name}" jest zgodny z normą ${scenario.norm}` :
+                    `❌ Scenariusz "${scenario.name}" ma błędy: ${validation.errors.join(', ')}`;
+                
+                alert(message);
+                return validation;
+            } catch (error) {
+                console.error('❌ Failed to validate scenario:', error.message);
+                alert(`Błąd walidacji: ${error.message}`);
+            }
+        }
+
+        deleteScenario(scenarioId) {
+            try {
+                const scenario = this.scenarioManager.getScenario(scenarioId);
+                if (confirm(`Czy na pewno chcesz usunąć scenariusz "${scenario.name}"?`)) {
+                    this.scenarioManager.deleteScenario(scenarioId);
+                    this.showTab('scenarios'); // Refresh UI
+                }
+            } catch (error) {
+                console.error('❌ Failed to delete scenario:', error.message);
+                alert(`Błąd usuwania scenariusza: ${error.message}`);
+            }
+        }
+
+        importScenarios() {
+            const fileInput = document.getElementById('scenario-file');
+            const file = fileInput?.files[0];
+            
+            if (!file) {
+                alert('Proszę wybrać plik do importu');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const fileType = file.name.endsWith('.xml') ? 'xml' : 'json';
+                    const result = this.scenarioManager.importScenariosFromFile(e.target.result, fileType);
+                    
+                    alert(`Import zakończony: ${result.imported} zaimportowanych, ${result.failed} błędów`);
+                    this.showTab('scenarios'); // Refresh UI
+                } catch (error) {
+                    console.error('❌ Failed to import scenarios:', error.message);
+                    alert(`Błąd importu: ${error.message}`);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Integration Management delegation methods
+        async testDatabaseConnection() {
+            try {
+                const result = await this.integrationManager.testDatabaseConnection();
+                alert(result.message);
+                return result;
+            } catch (error) {
+                console.error('❌ Database connection test failed:', error.message);
+                alert(`Błąd połączenia z bazą danych: ${error.message}`);
+            }
+        }
+
+        async validateAPIConnection() {
+            try {
+                const result = await this.integrationManager.testAPIConnection();
+                alert(result.message);
+                return result;
+            } catch (error) {
+                console.error('❌ API connection test failed:', error.message);
+                alert(`Błąd połączenia z API: ${error.message}`);
+            }
+        }
+
+        // Standards Management delegation methods
+        downloadNormDocument(normName) {
+            console.log(`📋 Downloading norm document: ${normName}`);
+            // In a real implementation, this would trigger document download
+            alert(`Pobieranie dokumentu normy ${normName} (symulacja)`);
+        }
+
+        saveCustomStandards() {
+            const customText = document.getElementById('custom-standards-text')?.value;
+            if (customText) {
+                try {
+                    this.standardsValidator.addCustomStandard({
+                        name: 'Custom Requirements',
+                        description: customText,
+                        category: 'custom'
+                    });
+                    alert('Niestandardowe wymogi zostały zapisane');
+                } catch (error) {
+                    console.error('❌ Failed to save custom standards:', error.message);
+                    alert(`Błąd zapisu: ${error.message}`);
                 }
             }
-        ];
+        }
 
-        scenarios.forEach(scenario => {
-            this.testScenarios.set(scenario.id, scenario);
-        });
+        // System Configuration delegation methods
+        clearOldData() {
+            if (confirm('Czy na pewno chcesz usunąć stare dane? Ta operacja jest nieodwracalna.')) {
+                try {
+                    const result = this.systemConfig.clearOldData();
+                    alert(`Usunięto ${result.clearedEntries} starych wpisów`);
+                    return result;
+                } catch (error) {
+                    console.error('❌ Failed to clear old data:', error.message);
+                    alert(`Błąd usuwania danych: ${error.message}`);
+                }
+            }
+        }
+
+        // Global Settings Management methods
+        saveAllSettings() {
+            try {
+                // Export all configurations
+                const scenariosConfig = this.scenarioManager.exportScenariosToJSON();
+                const integrationConfig = this.integrationManager.exportConfiguration();
+                const systemConfig = this.systemConfig.exportConfiguration();
+                const standardsConfig = this.standardsValidator.exportStandardsConfig();
+
+                // In a real implementation, save to backend or local storage
+                localStorage.setItem('maskservice_scenarios', scenariosConfig);
+                localStorage.setItem('maskservice_integrations', integrationConfig);
+                localStorage.setItem('maskservice_system', systemConfig);
+                localStorage.setItem('maskservice_standards', standardsConfig);
+
+                alert('✅ Wszystkie ustawienia zostały zapisane');
+                console.log('💾 All settings saved successfully');
+            } catch (error) {
+                console.error('❌ Failed to save settings:', error.message);
+                alert(`Błąd zapisu ustawień: ${error.message}`);
+            }
+        }
+
+        resetToDefaults() {
+            if (confirm('Czy na pewno chcesz przywrócić domyślne ustawienia? Wszystkie zmiany zostaną utracone.')) {
+                try {
+                    this.scenarioManager.clearAllScenarios();
+                    this.integrationManager.resetToDefaults();
+                    this.systemConfig.resetAllToDefaults();
+                    
+                    // Clear localStorage
+                    localStorage.removeItem('maskservice_scenarios');
+                    localStorage.removeItem('maskservice_integrations');
+                    localStorage.removeItem('maskservice_system');
+                    localStorage.removeItem('maskservice_standards');
+
+                    alert('🔄 Przywrócono domyślne ustawienia');
+                    this.showTab(this.currentTab); // Refresh current tab
+                } catch (error) {
+                    console.error('❌ Failed to reset to defaults:', error.message);
+                    alert(`Błąd przywracania ustawień: ${error.message}`);
+                }
+            }
+        }
+
+        exportConfiguration() {
+            try {
+                const config = {
+                    scenarios: JSON.parse(this.scenarioManager.exportScenariosToJSON()),
+                    integrations: JSON.parse(this.integrationManager.exportConfiguration()),
+                    system: JSON.parse(this.systemConfig.exportConfiguration()),
+                    standards: JSON.parse(this.standardsValidator.exportStandardsConfig()),
+                    exportedAt: new Date().toISOString(),
+                    version: '3.0.0'
+                };
+
+                const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `maskservice-config-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+
+                console.log('📤 Configuration exported successfully');
+            } catch (error) {
+                console.error('❌ Failed to export configuration:', error.message);
+                alert(`Błąd eksportu: ${error.message}`);
+            }
+        }
+
+        reload() {
+            location.reload();
+        }
     }
 
-    loadIntegrationSettings() {
-        this.integrationSettings.set('erpSystem', {
-            enabled: false,
-            url: '',
-            apiKey: '',
-            syncInterval: 3600
-        });
+    return SystemSettingsEnhanced;
+});
 
-        this.integrationSettings.set('cloudBackup', {
-            enabled: true,
-            provider: 'azure',
-            schedule: 'daily',
-            retention: 365
-        });
-    }
+// Legacy global export
+if (typeof window !== 'undefined') {
+    window.SystemSettingsEnhanced = SystemSettingsEnhanced;
+}
 
-    loadStandardsConfig() {
-        this.standardsConfig.set('activeNorms', ['PN-EN 136', 'PN-EN 137']);
-        this.standardsConfig.set('customParameters', []);
-        this.standardsConfig.set('complianceChecking', true);
-    }
-
-    loadSystemConfig() {
-        this.systemConfig = {
-            deviceTimeout: 30000,
-            sensorUpdateInterval: 1000,
-            maxConcurrentTests: 3,
-            dataRetention: 1825, // 5 years in days
-            auditLogEnabled: true
-        };
-    }
-
-    getEnhancedSystemSettingsHTML() {
-        return `
-            <div class="system-settings-enhanced">
-                <div class="settings-header">
-                    <h2>Ustawienia systemowe - Rozszerzone</h2>
-                    <div class="settings-tabs">
-                        <button class="tab-btn active" onclick="systemSettingsEnhanced.showTab('scenarios')">
-                            🧪 Scenariusze testowe
-                        </button>
-                        <button class="tab-btn" onclick="systemSettingsEnhanced.showTab('integration')">
-                            🔗 Integracje
-                        </button>
-                        <button class="tab-btn" onclick="systemSettingsEnhanced.showTab('standards')">
-                            📋 Normy i standardy
-                        </button>
-                        <button class="tab-btn" onclick="systemSettingsEnhanced.showTab('system')">
-                            ⚙️ Konfiguracja systemu
-                        </button>
-                    </div>
-                </div>
-
-                <div class="settings-content">
-                    <div id="settings-tab-content">
-                        ${this.getTestScenariosHTML()}
-                    </div>
-                </div>
-
-                <div class="settings-actions">
-                    <button class="btn btn-success" onclick="systemSettingsEnhanced.saveAllSettings()">
-                        💾 Zapisz wszystkie ustawienia
-                    </button>
-                    <button class="btn btn-warning" onclick="systemSettingsEnhanced.resetToDefaults()">
-                        🔄 Przywróć domyślne
-                    </button>
-                    <button class="btn btn-info" onclick="systemSettingsEnhanced.exportConfiguration()">
-                        📤 Eksportuj konfigurację
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    getTestScenariosHTML() {
-        return `
-            <div class="test-scenarios-config">
-                <div class="scenarios-header">
-                    <h3>Zarządzanie scenariuszami testowymi</h3>
-                    <button class="btn btn-primary" onclick="systemSettingsEnhanced.createNewScenario()">
-                        ➕ Nowy scenariusz
-                    </button>
-                </div>
-
-                <div class="scenarios-list">
-                    ${Array.from(this.testScenarios.values()).map(scenario => `
-                        <div class="scenario-card">
-                            <div class="scenario-header">
-                                <h4>${scenario.name}</h4>
-                                <span class="norm-badge">${scenario.norm}</span>
-                            </div>
-                            <div class="scenario-details">
-                                <p><strong>Typy urządzeń:</strong> ${scenario.deviceTypes.join(', ')}</p>
-                                <p><strong>Parametry:</strong></p>
-                                <ul>
-                                    ${Object.entries(scenario.parameters).map(([key, value]) => 
-                                        `<li>${key}: ${JSON.stringify(value)}</li>`
-                                    ).join('')}
-                                </ul>
-                            </div>
-                            <div class="scenario-actions">
-                                <button class="btn-small btn-secondary" onclick="systemSettingsEnhanced.editScenario('${scenario.id}')">
-                                    ✏️ Edytuj
-                                </button>
-                                <button class="btn-small btn-info" onclick="systemSettingsEnhanced.validateScenario('${scenario.id}')">
-                                    ✅ Waliduj
-                                </button>
-                                <button class="btn-small btn-danger" onclick="systemSettingsEnhanced.deleteScenario('${scenario.id}')">
-                                    🗑️ Usuń
-                                </button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="scenario-import">
-                    <h4>Import scenariuszy</h4>
-                    <input type="file" id="scenario-file" accept=".xml,.json">
-                    <button class="btn btn-secondary" onclick="systemSettingsEnhanced.importScenarios()">
-                        📥 Importuj z pliku
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    getIntegrationHTML() {
-        return `
-            <div class="integration-settings">
-                <h3>Integracje z systemami zewnętrznymi</h3>
-                
-                <div class="integration-section">
-                    <h4>System ERP</h4>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" ${this.integrationSettings.get('erpSystem').enabled ? 'checked' : ''}>
-                            Włącz integrację ERP
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>URL API:</label>
-                        <input type="text" value="${this.integrationSettings.get('erpSystem').url}" placeholder="https://api.erp.company.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Klucz API:</label>
-                        <input type="password" value="${this.integrationSettings.get('erpSystem').apiKey}" placeholder="Wprowadź klucz API">
-                    </div>
-                </div>
-
-                <div class="integration-section">
-                    <h4>Kopia zapasowa w chmurze</h4>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" ${this.integrationSettings.get('cloudBackup').enabled ? 'checked' : ''}>
-                            Włącz backup w chmurze
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>Dostawca:</label>
-                        <select>
-                            <option value="azure" ${this.integrationSettings.get('cloudBackup').provider === 'azure' ? 'selected' : ''}>Microsoft Azure</option>
-                            <option value="aws">Amazon AWS</option>
-                            <option value="gcp">Google Cloud</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    getStandardsHTML() {
-        return `
-            <div class="standards-config">
-                <h3>Normy i standardy</h3>
-                
-                <div class="active-norms">
-                    <h4>Aktywne normy</h4>
-                    ${this.standardsConfig.get('activeNorms').map(norm => `
-                        <div class="norm-item">
-                            <label>
-                                <input type="checkbox" checked>
-                                ${norm}
-                            </label>
-                            <button class="btn-small btn-info" onclick="systemSettingsEnhanced.viewNormDetails('${norm}')">
-                                📖 Szczegóły
-                            </button>
-                        </div>
-                    `).join('')}
-                </div>
-
-                <div class="compliance-settings">
-                    <h4>Ustawienia zgodności</h4>
-                    <label>
-                        <input type="checkbox" ${this.standardsConfig.get('complianceChecking') ? 'checked' : ''}>
-                        Automatyczne sprawdzanie zgodności
-                    </label>
-                </div>
-            </div>
-        `;
-    }
-
-    getSystemConfigHTML() {
-        return `
-            <div class="system-config">
-                <h3>Konfiguracja systemu</h3>
-                
-                <div class="config-groups">
-                    <div class="config-group">
-                        <h4>Ustawienia urządzeń</h4>
-                        <div class="form-group">
-                            <label>Timeout urządzenia (ms):</label>
-                            <input type="number" value="${this.systemConfig.deviceTimeout}">
                         </div>
                         <div class="form-group">
                             <label>Interwał odczytu czujników (ms):</label>

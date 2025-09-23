@@ -42,25 +42,53 @@ class C20Router {
      * Initialize modular components
      */
     initializeComponents() {
-        // Initialize components if available
-        if (window.RouteParser) {
-            this.routeParser = new window.RouteParser();
+        // Initialize components if available and properly loaded
+        try {
+            if (window.RouteParser && typeof window.RouteParser === 'function') {
+                this.routeParser = new window.RouteParser();
+                console.log('✅ RouteParser initialized');
+            }
+        } catch (error) {
+            console.warn('⚠️ RouteParser initialization failed:', error);
         }
-        if (window.NavigationManager) {
-            this.navigationManager = new window.NavigationManager();
+
+        try {
+            if (window.NavigationManager && typeof window.NavigationManager === 'function') {
+                this.navigationManager = new window.NavigationManager();
+                console.log('✅ NavigationManager initialized');
+            }
+        } catch (error) {
+            console.warn('⚠️ NavigationManager initialization failed:', error);
         }
-        if (window.StorageManager) {
-            this.storageManager = new window.StorageManager();
+
+        try {
+            if (window.StorageManager && typeof window.StorageManager === 'function') {
+                this.storageManager = new window.StorageManager();
+                console.log('✅ StorageManager initialized');
+            }
+        } catch (error) {
+            console.warn('⚠️ StorageManager initialization failed:', error);
         }
-        if (window.ConfigLoader) {
-            this.configLoader = new window.ConfigLoader();
+
+        try {
+            if (window.ConfigLoader && typeof window.ConfigLoader === 'function') {
+                this.configLoader = new window.ConfigLoader();
+                console.log('✅ ConfigLoader initialized');
+            }
+        } catch (error) {
+            console.warn('⚠️ ConfigLoader initialization failed:', error);
         }
 
         // Set up component integration
-        if (this.navigationManager) {
-            this.navigationManager.addNavigationListener((newRoute, previousRoute, options) => {
-                this.handleNavigationChange(newRoute, previousRoute, options);
-            });
+        if (this.navigationManager && this.navigationManager.addNavigationListener) {
+            try {
+                this.navigationManager.addNavigationListener((newRoute, previousRoute, options) => {
+                    this.handleNavigationChange(newRoute, previousRoute, options);
+                });
+                console.log('✅ Navigation listener setup complete');
+            } catch (error) {
+                console.warn('⚠️ Navigation listener setup failed:', error);
+            }
         }
     }
 

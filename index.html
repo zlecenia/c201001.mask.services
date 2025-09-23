@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASKSERVICE C20 1001 - System Mock v2.0</title>
+    <title data-i18n="global.page_title">MASKSERVICE C20 1001 - System Mock v2.0</title>
     <script>
         // Cache-busting for CSS
         const cssVersion = Date.now();
@@ -222,15 +222,15 @@
                             </div>
                         </div>
                         <div id="login-scanner" class="login-method">
-                            <h2>User Login by QR-CODE / BARCODE</h2>
+                            <h2 data-i18n="login.user_login_by_scanner">User Login by QR-CODE / BARCODE</h2>
                             <div class="scanner-mock">
                                 <div class="scanner-animation">
                                     <div class="scanner-line"></div>
                                 </div>
-                                <p class="error-msg">+ Skaner nie został wykryty</p>
-                                <p>kod nie został poprawnie sczytany</p>
+                                <p class="error-msg" data-i18n="login.scanner_not_detected">+ Skaner nie został wykryty</p>
+                                <p data-i18n="login.code_not_read">kod nie został poprawnie sczytany</p>
                                 <button id="use-keyboard-btn" class="btn"
-                                        onclick="navigateAction('use-keyboard-btn'); selectLoginMethod('keyword')">Użyj
+                                        onclick="navigateAction('use-keyboard-btn'); selectLoginMethod('keyword')" data-i18n="login.use_keyboard">Użyj
                                     klawiatury
                                 </button>
                             </div>
@@ -245,12 +245,12 @@
             <div class="menu-container">
                 <!--                <div class="menu-header">SYSTEM</div>-->
                 <div class="system-content">
-                    <h1>Welcome</h1>
-                    <div class="system-logo">MASKTRONIC</div>
+                    <h1 data-i18n="system.welcome">Welcome</h1>
+                    <div class="system-logo" data-i18n="global.system_name">MASKTRONIC</div>
                     <div class="loading-bar">
                         <div class="loading-progress" id="loading-progress"></div>
                     </div>
-                    <p id="loading-text">System starting in Progress...</p>
+                    <p id="loading-text" data-i18n="system.loading_message">System starting in Progress...</p>
                 </div>
             </div>
         </div>
@@ -268,8 +268,8 @@
                     </div>
                     <div class="menu-content" id="menu-content">
                         <div class="welcome-message">
-                            <h2>Wybierz opcję z menu</h2>
-                            <p>System gotowy do pracy</p>
+                            <h2 data-i18n="menu.select_option">Wybierz opcję z menu</h2>
+                            <p data-i18n="system.ready">System gotowy do pracy</p>
                         </div>
                     </div>
                 </div>
@@ -278,10 +278,10 @@
 
         <!-- Pressure Display Panel - Always Visible -->
         <aside id="pressure-panel" class="pressure-panel">
-            <h3 id="pressure-panel-title">PRESSURE</h3>
+            <h3 id="pressure-panel-title" data-i18n="device.pressure_title">PRESSURE</h3>
             <div class="pressure-box">
                 <div class="pressure-item">
-                    <div id="pressure-low-label" class="pressure-label">Low</div>
+                    <div id="pressure-low-label" class="pressure-label" data-i18n="device.pressure_low">Low</div>
                     <div id="pressure-low" class="pressure-value">10</div>
                     <div id="pressure-low-unit" class="pressure-unit">mbar</div>
                     <div id="pressure-low-dia" class="pressure-dia"></div>
@@ -290,7 +290,7 @@
             <div class="pressure-box">
 
                 <div class="pressure-item">
-                    <div id="pressure-medium-label" class="pressure-label">Medium</div>
+                    <div id="pressure-medium-label" class="pressure-label" data-i18n="device.pressure_medium">Medium</div>
                     <div id="pressure-medium" class="pressure-value">20</div>
                     <div id="pressure-medium-unit" class="pressure-unit">bar</div>
                     <div id="pressure-medium-dia" class="pressure-dia"></div>
@@ -299,7 +299,7 @@
             <div class="pressure-box">
 
                 <div class="pressure-item">
-                    <div id="pressure-high-label" class="pressure-label">High</div>
+                    <div id="pressure-high-label" class="pressure-label" data-i18n="device.pressure_high">High</div>
                     <div id="pressure-high" class="pressure-value">30</div>
                     <div id="pressure-high-unit" class="pressure-unit">bar</div>
                     <div id="pressure-high-dia" class="pressure-dia"></div>
@@ -314,7 +314,7 @@
         <div class="footer-left">
             <span id="user-info" style="display:none;">
 <!--                    <span id="username">-&#45;&#45;</span>-->
-                <span id="user-name">USERNAME</span>
+                <span id="user-name" data-i18n="user.username_placeholder">USERNAME</span>
                 <span id="user-role" class="role-badge">---</span>
             </span>
 
@@ -535,6 +535,13 @@
     document.write('<script src="js/auth.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/menu.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/i18n.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Router Modules (load BEFORE router orchestrator)
+    document.write('<script src="js/modules/route-parser.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/navigation-manager.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/storage-manager.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/config-loader.js?v=' + cacheBuster + '"><\/script>');
+    
     document.write('<script src="js/router.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
     
@@ -571,12 +578,6 @@
     document.write('<script src="js/modules/pressure-visualization.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/modules/device-history.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/modules/alarm-management.js?v=' + cacheBuster + '"><\/script>');
-    
-    // Router Modules (load before router orchestrator)
-    document.write('<script src="js/modules/route-parser.js?v=' + cacheBuster + '"><\/script>');
-    document.write('<script src="js/modules/navigation-manager.js?v=' + cacheBuster + '"><\/script>');
-    document.write('<script src="js/modules/storage-manager.js?v=' + cacheBuster + '"><\/script>');
-    document.write('<script src="js/modules/config-loader.js?v=' + cacheBuster + '"><\/script>');
     
     document.write('<script src="js/device-data-enhanced.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/test-reports-enhanced.js?v=' + cacheBuster + '"><\/script>');

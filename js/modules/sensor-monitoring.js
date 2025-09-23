@@ -14,6 +14,7 @@ class SensorMonitoring {
     init() {
         this.initializeSensorPanel();
         this.setupAlarmThresholds();
+        this.startMonitoring(); // Automatycznie uruchom monitoring
     }
 
     // Panel czujników w czasie rzeczywistym
@@ -207,6 +208,32 @@ class SensorMonitoring {
             
             element.classList.toggle('alarm', !isInRange);
         }
+    }
+
+    // Monitoring control methods
+    startMonitoring() {
+        if (this.isMonitoring) return;
+        
+        this.isMonitoring = true;
+        this.updateInterval = setInterval(() => {
+            this.updateSensorReadings();
+            this.updateDisplay();
+            this.checkAlarms();
+        }, 1000); // Update every 1 second
+        
+        console.log('🔄 Sensor monitoring started - 1 second intervals');
+    }
+
+    stopMonitoring() {
+        if (!this.isMonitoring) return;
+        
+        this.isMonitoring = false;
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+            this.updateInterval = null;
+        }
+        
+        console.log('⏹️ Sensor monitoring stopped');
     }
 
     // Public API methods

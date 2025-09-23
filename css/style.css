@@ -898,7 +898,7 @@ button:active {
     position: absolute;
     bottom: 0;
     width: 2px;
-    background: #fbbf24;
+    background: #111222;
     transition: height 0.3s ease;
 }
 
@@ -908,7 +908,6 @@ button:active {
     height: 100%;
     padding: 2px;
     gap: 1px;
-}
 }
 .pressure-label {
     font-weight: normal;
