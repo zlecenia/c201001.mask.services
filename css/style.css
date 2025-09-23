@@ -851,7 +851,6 @@ button:active {
 /* Pressure Panel */
 .pressure-panel {
     width: 250px;
-    background: linear-gradient(to bottom, #ecfdf5, #d1fae5);
     padding: 1rem;
     border-left: 1px solid #e5e7eb;
 }
