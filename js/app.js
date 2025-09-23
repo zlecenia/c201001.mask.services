@@ -2,6 +2,8 @@
    frontend/js/app.js
    ==================== */
 
+import { CONFIG, MENU_STRUCTURE, loadConfig } from './config.js';
+
 class MasktronicApp {
     constructor() {
         this.currentScreen = 'login-screen';
@@ -13,11 +15,22 @@ class MasktronicApp {
         this.init();
     }
 
-    init() {
-        this.setupEventListeners();
-        this.startClock();
-        this.loadMockData();
-        console.log('MASKTRONIC C20 Mock - Initialized');
+    async init() {
+        try {
+            // Load configuration first
+            await loadConfig();
+            console.log('Configuration loaded:', CONFIG);
+            
+            // Then initialize the rest of the app
+            this.setupEventListeners();
+            this.startClock();
+            this.loadMockData();
+            console.log('MASKTRONIC C20 Mock - Initialized');
+        } catch (error) {
+            console.error('Failed to initialize app:', error);
+            // Show error to user
+            alert('Failed to load application configuration. Please try refreshing the page.');
+        }
     }
 
     setupEventListeners() {
@@ -82,8 +95,9 @@ class MasktronicApp {
 
 // Initialize app
 let app;
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     app = new MasktronicApp();
+    // No need to call init() here as it's called in the constructor
 });
 
 // Global functions for HTML onclick handlers
@@ -105,36 +119,56 @@ function addToPassword(digit) {
 }
 
 function mockLogin(role) {
-    console.log(`Mock login as ${role}`);
+    const password = document.getElementById('password-input').value.trim();
+    
+    // Simple validation
+    if (!password) {
+        alert('Please enter a password');
+        return;
+    }
+    
+    console.log(`Logging in as ${role} with password`);
+    
+    // In a real app, this would be an API call to your backend
+    // Example: fetch(`${CONFIG.API_URL}/api/login`, { method: 'POST', body: JSON.stringify({ password, role }) })
+    
+    // Set user data
+    const user = {
+        username: role.toLowerCase(),
+        role: role,
+        token: `mock-jwt-token-${Date.now()}`,
+        lastLogin: new Date().toISOString()
+    };
+    
+    // Store user in app state
+    app.currentUser = user;
     app.userRole = role;
-    app.currentUser = role.toLowerCase() + '.user';
     app.loginTime = new Date();
     app.lastActivity = new Date();
     
+    // Clear password field
+    document.getElementById('password-input').value = '';
+    
     // Update UI
-    document.getElementById('user-info').style.display = 'inline';
-    document.getElementById('username').textContent = app.currentUser;
-    document.getElementById('user-role').textContent = role;
-    document.getElementById('user-role').className = `role-badge role-${role.toLowerCase()}`;
+    document.getElementById('login-screen').classList.remove('active');
+    document.getElementById('system-screen').classList.add('active');
     
-    // Show system start
-    app.switchScreen('system-screen');
-    app.updateStatus('STARTING');
+    // Show user menu based on role
+    app.showUserMenu(role);
     
-    // Simulate system startup
-    let progress = 0;
-    const interval = setInterval(() => {
-        progress += 10;
-        document.getElementById('loading-progress').style.width = progress + '%';
+    // Start activity tracking
+    setInterval(() => {
+        const now = new Date();
+        const inactiveTime = Math.floor((now - app.lastActivity) / 1000);
+        document.getElementById('inactive-time').textContent = `${inactiveTime}s`;
         
-        if (progress >= 100) {
-            clearInterval(interval);
-            setTimeout(() => {
-                app.updateStatus('ONLINE');
-                showUserMenu(role);
-            }, 500);
+        // Auto-logout after 30 minutes of inactivity
+        if (inactiveTime > 1800) { // 30 minutes
+            app.logout();
         }
-    }, 200);
+    }, 1000);
+    
+    console.log('Login successful:', user);
 }
 
 function showUserMenu(role) {

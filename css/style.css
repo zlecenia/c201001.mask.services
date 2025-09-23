@@ -11,6 +11,13 @@
     --bg-light: #f3f4f6;
     --text-dark: #111827;
     --text-light: #6b7280;
+    --keyboard-bg: #e5e7eb;
+    --key-color: #1f2937;
+    --key-bg: #ffffff;
+    --key-active: #d1d5db;
+    --key-special-bg: #9ca3af;
+    --key-special-color: #ffffff;
+    --key-space-bg: #f3f4f6;
 }
 
 * {
@@ -183,6 +190,160 @@ body {
 
 .number-pad button:hover {
     background: #f3f4f6;
+}
+
+/* Virtual Keyboard */
+.virtual-keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--keyboard-bg);
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+}
+
+.keyboard-key {
+    padding: 15px;
+    margin: 2px;
+    background-color: var(--key-bg);
+    border: 1px solid var(--key-border);
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 1.2rem;
+    transition: all 0.1s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 40px;
+    height: 40px;
+    user-select: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.keyboard-key:active,
+.keyboard-key.key-press {
+    transform: translateY(2px);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2) inset;
+    background-color: #d0d0d0;
+}
+
+.keyboard-key.special {
+    background-color: #e0e0e0;
+}
+
+.keyboard-key.special:active,
+.keyboard-key.special.key-press {
+    background-color: #c0c0c0;
+}
+
+.keyboard-key.wide {
+    min-width: 60px;
+}
+
+.keyboard-key.extra-wide {
+    min-width: 80px;
+}
+
+.keyboard-key.space {
+    min-width: 200px;
+    background: var(--key-space-bg);
+}
+
+.keyboard-key.special {
+    background: var(--key-special-bg);
+    color: var(--key-special-color);
+    font-size: 0.9rem;
+}
+
+.keyboard-key.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.keyboard-key.shift-active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.keyboard-key.caps-active {
+    background: var(--primary-color);
+    color: white;
+}
+
+.keyboard-key.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.keyboard-key .sub-char {
+    font-size: 0.7rem;
+    margin-top: -12px;
+    margin-right: -6px;
+    align-self: flex-start;
+    color: var(--text-light);
+}
+
+/* Input fields */
+.password-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.password-container input[type="password"],
+.password-container input[type="text"] {
+    width: 100%;
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.2em;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.toggle-password:hover {
+    opacity: 1;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #d1d5db;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* Login form specific */
+.login-form {
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 /* Scanner Animation */
