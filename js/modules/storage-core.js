@@ -3,6 +3,9 @@
  * Basic storage operations and support checking
  */
 
+// AMD/RequireJS module definition
+define('storage-core', [], function() {
+
 class StorageCore {
     constructor() {
         this.storagePrefix = 'maskservice_c20_';

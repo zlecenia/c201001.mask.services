@@ -3,6 +3,9 @@
  * CSS-like translation system - maps classes and IDs to translation keys
  */
 
+// AMD/RequireJS module definition
+define('i18n', ['utils'], function(Utils) {
+
 class I18nManager {
     constructor() {
         this.currentLanguage = 'pl'; // Default language
@@ -351,11 +354,16 @@ class I18nManager {
     }
 }
 
-// Create global i18n manager instance
-window.I18nManager = new I18nManager();
+    // Create global i18n manager instance for backwards compatibility
+    const i18nManager = new I18nManager();
+    window.I18nManager = i18nManager;
 
-// Export functions for global access
-window.t = (key, params) => window.I18nManager.t(key, params);
-window.changeLanguage = (language) => window.I18nManager.changeLanguage(language);
+    // Export functions for global access
+    window.t = (key, params) => i18nManager.t(key, params);
+    window.changeLanguage = (language) => i18nManager.changeLanguage(language);
 
-console.log('✅ I18n Module initialized');
+    console.log('✅ I18n Module initialized');
+
+    // Return I18nManager class for AMD/RequireJS
+    return I18nManager;
+});
