@@ -91,7 +91,12 @@
                             <div class="login-form">
                                 <div class="password-container">
                                     <input type="password" id="password-input" placeholder="Password"
-                                           data-i18n-placeholder="login.password_placeholder">
+                                           data-i18n-placeholder="login.password_placeholder"
+                                           readonly="readonly" 
+                                           inputmode="none"
+                                           autocomplete="off"
+                                           onclick="this.focus()"
+                                           onfocus="this.removeAttribute('readonly')">
                                     <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
                                 </div>
                                 <div class="keyboard-container">
@@ -279,6 +284,7 @@
                     <div id="pressure-low-label" class="pressure-label">Low</div>
                     <div id="pressure-low" class="pressure-value">10</div>
                     <div id="pressure-low-unit" class="pressure-unit">mbar</div>
+                    <div id="pressure-low-dia" class="pressure-dia"></div>
                 </div>
             </div>
             <div class="pressure-box">
@@ -287,7 +293,7 @@
                     <div id="pressure-medium-label" class="pressure-label">Medium</div>
                     <div id="pressure-medium" class="pressure-value">20</div>
                     <div id="pressure-medium-unit" class="pressure-unit">bar</div>
-
+                    <div id="pressure-medium-dia" class="pressure-dia"></div>
                 </div>
             </div>
             <div class="pressure-box">
@@ -296,6 +302,7 @@
                     <div id="pressure-high-label" class="pressure-label">High</div>
                     <div id="pressure-high" class="pressure-value">30</div>
                     <div id="pressure-high-unit" class="pressure-unit">bar</div>
+                    <div id="pressure-high-dia" class="pressure-dia"></div>
 
                 </div>
             </div>
@@ -553,7 +560,24 @@
     document.write('<script src="js/modules/reports-display.js?v=' + cacheBuster + '"><\/script>');
     
     // Enhanced modules for MASKSERVICE C20 functionality
+    // Test Menu modular components
+    document.write('<script src="js/modules/test-wizard.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/test-quick.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/test-scenarios.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/test-menu-enhanced.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Device Data Modules (load before orchestrator)
+    document.write('<script src="js/modules/sensor-monitoring.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/pressure-visualization.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/device-history.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/alarm-management.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Router Modules (load before router orchestrator)
+    document.write('<script src="js/modules/route-parser.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/navigation-manager.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/storage-manager.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/config-loader.js?v=' + cacheBuster + '"><\/script>');
+    
     document.write('<script src="js/device-data-enhanced.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/test-reports-enhanced.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/workshop-enhanced.js?v=' + cacheBuster + '"><\/script>');

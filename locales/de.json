@@ -96,6 +96,20 @@
     "humidity": "Feuchtigkeit",
     "uptime": "Betriebszeit"
   },
+  "device": {
+    "realtime_sensors": "Echtzeit-Sensoren",
+    "pressure_sensors": "Drucksensoren",
+    "pressure_low": "Niedrig",
+    "pressure_medium": "Mittel",
+    "pressure_high": "Hoch",
+    "history_title": "Gerätehistorie",
+    "history_loading": "Lade Gerätehistorie..."
+  },
+  "alarms": {
+    "title": "Aktive Alarme",
+    "acknowledge_all": "Alle bestätigen",
+    "mute": "Stumm schalten"
+  },
   "settings": {
     "device_settings": "Geräteeinstellungen",
     "network_config": "Netzwerkkonfiguration",

@@ -1,6 +1,12 @@
 /**
- * MASKSERVICE C20 - Advanced URL Router Module
+ * MASKSERVICE C20 - Advanced URL Router Module (Orchestrator)
  * Format: PROTOCOL://DOMAIN:PORT/VIEW-ID/LANGUAGE/ACTION-ID
+ * 
+ * This orchestrator delegates functionality to modular components:
+ * - RouteParser: URL parsing and validation
+ * - NavigationManager: Navigation logic and history
+ * - StorageManager: Browser storage management
+ * - ConfigLoader: Configuration loading and caching
  */
 
 class C20Router {
@@ -9,43 +15,96 @@ class C20Router {
         this.currentView = 'login-screen';
         this.currentLanguage = 'pl';
         this.currentAction = 'default';
-        this.viewHistory = [];
         this.routes = {};
-        this.storageKeys = {
-            lastView: 'c20_last_view',
-            lastLanguage: 'c20_last_language',
-            lastAction: 'c20_last_action',
-            userPreferences: 'c20_user_prefs'
-        };
+        
+        // Initialize modular components
+        this.routeParser = null;
+        this.navigationManager = null;
+        this.storageManager = null;
+        this.configLoader = null;
+        
         this.init();
     }
 
     /**
-     * Initialize router with config and storage
+     * Initialize router with modular components and config
      */
     async init() {
+        this.initializeComponents();
         await this.loadConfig();
         this.loadFromStorage();
         this.initializeRoutes();
         this.bindEvents();
-        console.log('🛣️ C20Router initialized with config and storage');
+        console.log('🛣️ C20Router orchestrator initialized with modular components');
     }
 
     /**
-     * Load router configuration from config/router.json
+     * Initialize modular components
+     */
+    initializeComponents() {
+        // Initialize components if available
+        if (window.RouteParser) {
+            this.routeParser = new window.RouteParser();
+        }
+        if (window.NavigationManager) {
+            this.navigationManager = new window.NavigationManager();
+        }
+        if (window.StorageManager) {
+            this.storageManager = new window.StorageManager();
+        }
+        if (window.ConfigLoader) {
+            this.configLoader = new window.ConfigLoader();
+        }
+
+        // Set up component integration
+        if (this.navigationManager) {
+            this.navigationManager.addNavigationListener((newRoute, previousRoute, options) => {
+                this.handleNavigationChange(newRoute, previousRoute, options);
+            });
+        }
+    }
+
+    /**
+     * Load router configuration using ConfigLoader module
      */
     async loadConfig() {
+        if (this.configLoader) {
+            try {
+                this.config = await this.configLoader.loadConfig('router');
+                
+                // Set defaults from config
+                if (this.config.default) {
+                    this.currentView = this.config.default.view;
+                    this.currentLanguage = this.config.default.language;  
+                    this.currentAction = this.config.default.action;
+                }
+                
+                console.log('✅ Router config loaded via ConfigLoader:', this.config);
+            } catch (error) {
+                console.warn('⚠️ Failed to load router config via ConfigLoader, using defaults:', error);
+                this.config = this.getDefaultConfig();
+            }
+        } else {
+            // Fallback to direct loading
+            await this.loadConfigDirect();
+        }
+    }
+
+    /**
+     * Fallback direct config loading
+     */
+    async loadConfigDirect() {
         try {
             const response = await fetch('/config/router.json');
             this.config = await response.json();
             
-            // Set defaults from config
-            this.currentView = this.config.default.view;
-            this.currentLanguage = this.config.default.language;
-            this.currentAction = this.config.default.action;
-            this.storageKeys = this.config.storage.keys;
+            if (this.config.default) {
+                this.currentView = this.config.default.view;
+                this.currentLanguage = this.config.default.language;
+                this.currentAction = this.config.default.action;
+            }
             
-            console.log('✅ Router config loaded:', this.config);
+            console.log('✅ Router config loaded directly:', this.config);
         } catch (error) {
             console.warn('⚠️ Failed to load router config, using defaults:', error);
             this.config = this.getDefaultConfig();
@@ -53,42 +112,98 @@ class C20Router {
     }
 
     /**
-     * Load last settings from browser storage
+     * Load last settings using StorageManager module
      */
     loadFromStorage() {
         if (!this.config?.storage?.enabled) return;
         
+        if (this.storageManager) {
+            try {
+                const lastView = this.storageManager.getLocal('last_view');
+                const lastLanguage = this.storageManager.getLocal('last_language');
+                const lastAction = this.storageManager.getLocal('last_action');
+                
+                if (lastView) this.currentView = lastView;
+                if (lastLanguage) this.currentLanguage = lastLanguage;
+                if (lastAction) this.currentAction = lastAction;
+                
+                console.log('✅ Settings loaded via StorageManager:', {
+                    view: this.currentView,
+                    language: this.currentLanguage,
+                    action: this.currentAction
+                });
+            } catch (error) {
+                console.warn('⚠️ Failed to load from StorageManager:', error);
+            }
+        } else {
+            // Fallback to direct localStorage
+            this.loadFromStorageDirect();
+        }
+    }
+
+    /**
+     * Fallback direct storage loading
+     */
+    loadFromStorageDirect() {
         try {
-            const lastView = localStorage.getItem(this.storageKeys.lastView);
-            const lastLanguage = localStorage.getItem(this.storageKeys.lastLanguage);
-            const lastAction = localStorage.getItem(this.storageKeys.lastAction);
+            const storageKeys = this.config?.storage?.keys || {
+                lastView: 'c20_last_view',
+                lastLanguage: 'c20_last_language',
+                lastAction: 'c20_last_action'
+            };
+            
+            const lastView = localStorage.getItem(storageKeys.lastView);
+            const lastLanguage = localStorage.getItem(storageKeys.lastLanguage);
+            const lastAction = localStorage.getItem(storageKeys.lastAction);
             
             if (lastView) this.currentView = lastView;
             if (lastLanguage) this.currentLanguage = lastLanguage;
             if (lastAction) this.currentAction = lastAction;
             
-            console.log('✅ Settings loaded from storage:', {
-                view: this.currentView,
-                language: this.currentLanguage,
-                action: this.currentAction
-            });
+            console.log('✅ Settings loaded directly from localStorage');
         } catch (error) {
             console.warn('⚠️ Failed to load from storage:', error);
         }
     }
 
     /**
-     * Save current settings to browser storage
+     * Save current settings using StorageManager module
      */
     saveToStorage() {
         if (!this.config?.storage?.enabled) return;
         
+        if (this.storageManager) {
+            try {
+                this.storageManager.setLocal('last_view', this.currentView);
+                this.storageManager.setLocal('last_language', this.currentLanguage);
+                this.storageManager.setLocal('last_action', this.currentAction);
+                
+                console.log('💾 Settings saved via StorageManager');
+            } catch (error) {
+                console.warn('⚠️ Failed to save via StorageManager:', error);
+            }
+        } else {
+            // Fallback to direct localStorage
+            this.saveToStorageDirect();
+        }
+    }
+
+    /**
+     * Fallback direct storage saving
+     */
+    saveToStorageDirect() {
         try {
-            localStorage.setItem(this.storageKeys.lastView, this.currentView);
-            localStorage.setItem(this.storageKeys.lastLanguage, this.currentLanguage);
-            localStorage.setItem(this.storageKeys.lastAction, this.currentAction);
+            const storageKeys = this.config?.storage?.keys || {
+                lastView: 'c20_last_view',
+                lastLanguage: 'c20_last_language',
+                lastAction: 'c20_last_action'
+            };
             
-            console.log('💾 Settings saved to storage');
+            localStorage.setItem(storageKeys.lastView, this.currentView);
+            localStorage.setItem(storageKeys.lastLanguage, this.currentLanguage);
+            localStorage.setItem(storageKeys.lastAction, this.currentAction);
+            
+            console.log('💾 Settings saved directly to localStorage');
         } catch (error) {
             console.warn('⚠️ Failed to save to storage:', error);
         }
@@ -192,10 +307,28 @@ class C20Router {
     }
 
     /**
-     * Parse URL hash into route components
+     * Parse URL hash using RouteParser module
      * Format: #/view-id/language/action-id
      */
     parseRoute(hash = window.location.hash) {
+        if (this.routeParser) {
+            try {
+                const route = this.routeParser.parseRoute(hash);
+                console.log('🔍 Route parsed via RouteParser:', route);
+                return route;
+            } catch (error) {
+                console.warn('⚠️ RouteParser failed, using fallback:', error);
+            }
+        }
+        
+        // Fallback direct parsing
+        return this.parseRouteDirect(hash);
+    }
+
+    /**
+     * Fallback direct route parsing
+     */
+    parseRouteDirect(hash = window.location.hash) {
         // Remove # and split by /
         const cleanHash = hash.replace('#', '');
         
@@ -261,9 +394,25 @@ class C20Router {
     }
 
     /**
-     * Navigate with action-only changes (preserves view and language)
+     * Navigate with action-only changes using NavigationManager
      */
     navigateAction(actionId) {
+        if (this.navigationManager) {
+            try {
+                return this.navigationManager.navigateAction(actionId);
+            } catch (error) {
+                console.warn('⚠️ NavigationManager.navigateAction failed, using fallback:', error);
+            }
+        }
+        
+        // Fallback to direct navigation
+        return this.navigateActionDirect(actionId);
+    }
+
+    /**
+     * Fallback direct action navigation
+     */
+    navigateActionDirect(actionId) {
         if (!this.config?.navigation?.actionOnlyChanges) {
             // Fallback to regular navigation
             this.navigate(this.currentView, this.currentLanguage, actionId);
@@ -278,7 +427,7 @@ class C20Router {
         const newHash = this.buildRouteHash(this.currentView, this.currentLanguage, actionId);
         window.location.hash = newHash;
         
-        console.log('🎯 Action-only navigation:', {
+        console.log('🎯 Action-only navigation (direct):', {
             view: this.currentView,
             language: this.currentLanguage,
             action: actionId,
@@ -287,7 +436,7 @@ class C20Router {
     }
 
     /**
-     * Navigate to a specific route
+     * Navigate to a specific route using NavigationManager
      */
     navigate(view, language = null, action = null, updateHash = true) {
         const targetLang = language || this.currentLanguage;
@@ -297,7 +446,31 @@ class C20Router {
             action: action
         };
 
-        console.log('🛣️ Navigating to:', route);
+        if (this.navigationManager) {
+            try {
+                const options = { updateUrl: updateHash };
+                return this.navigationManager.navigate(route, options);
+            } catch (error) {
+                console.warn('⚠️ NavigationManager.navigate failed, using fallback:', error);
+            }
+        }
+
+        // Fallback to direct navigation
+        return this.navigateDirect(view, language, action, updateHash);
+    }
+
+    /**
+     * Fallback direct navigation
+     */
+    navigateDirect(view, language = null, action = null, updateHash = true) {
+        const targetLang = language || this.currentLanguage;
+        const route = {
+            view: view,
+            language: targetLang, 
+            action: action
+        };
+
+        console.log('🛣️ Navigating directly to:', route);
 
         // Validate route
         if (!this.routes[view]) {
@@ -312,12 +485,6 @@ class C20Router {
 
         // Save to browser storage
         this.saveToStorage();
-
-        // Add to history
-        this.viewHistory.push({
-            ...route,
-            timestamp: new Date().toISOString()
-        });
 
         // Update hash if requested (using new full format)
         if (updateHash) {
@@ -496,19 +663,58 @@ class C20Router {
     }
 
     /**
-     * Navigate back in history
+     * Handle navigation changes from NavigationManager
+     */
+    handleNavigationChange(newRoute, previousRoute, options) {
+        // Update internal state
+        this.currentView = newRoute.view;
+        this.currentLanguage = newRoute.language;
+        this.currentAction = newRoute.action;
+        
+        // Save to storage
+        this.saveToStorage();
+        
+        // Trigger view change
+        this.showView(newRoute.view);
+        
+        // Update language if changed
+        if (newRoute.language !== previousRoute?.language && window.changeLanguage) {
+            window.changeLanguage(newRoute.language);
+        }
+        
+        // Focus action element if specified
+        if (newRoute.action) {
+            this.focusActionElement(newRoute.action);
+        }
+        
+        // Emit navigation event for backward compatibility
+        this.emitNavigationEvent(newRoute);
+        
+        console.log('🔄 Navigation change handled:', { newRoute, previousRoute, options });
+    }
+
+    /**
+     * Navigate back in history using NavigationManager
      */
     goBack() {
-        if (this.viewHistory.length > 1) {
-            // Remove current route
-            this.viewHistory.pop();
-            
-            // Get previous route
-            const previousRoute = this.viewHistory[this.viewHistory.length - 1];
-            this.navigate(previousRoute.view, previousRoute.language, previousRoute.action);
-            
-            return true;
+        if (this.navigationManager) {
+            try {
+                return this.navigationManager.navigateBack();
+            } catch (error) {
+                console.warn('⚠️ NavigationManager.navigateBack failed, using fallback:', error);
+            }
         }
+        
+        // Fallback to direct history navigation
+        return this.goBackDirect();
+    }
+
+    /**
+     * Fallback direct history navigation
+     */
+    goBackDirect() {
+        // This is a basic implementation since we don't have access to NavigationManager's history
+        console.warn('⚠️ Direct history navigation not fully implemented without NavigationManager');
         return false;
     }
 

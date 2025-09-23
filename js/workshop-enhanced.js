@@ -86,6 +86,23 @@ class WorkshopEnhanced {
         this.tools.scheduleCalibration(toolId);
     }
 
+    // Missing delegation methods for UI display
+    showWorkshopParts() {
+        return this.parts.showWorkshopParts();
+    }
+
+    showWorkshopMaintenance() {
+        return this.maintenance.showWorkshopMaintenance();
+    }
+
+    showWorkshopTools() {
+        return this.tools.showWorkshopTools();
+    }
+
+    showWorkshopInventory() {
+        return this.inventory.showWorkshopInventory();
+    }
+
 }
 
 // Create global instance

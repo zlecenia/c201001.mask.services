@@ -1,39 +1,51 @@
 /**
- * MASKSERVICE C20 - Enhanced Device Data Module
- * Real-time sensor monitoring, device history, and predictive maintenance
+ * MASKSERVICE C20 - Enhanced Device Data Module (Orchestrator)
+ * Coordinates modular components for sensor monitoring, pressure visualization, 
+ * device history, and alarm management
  */
 
 class DeviceDataEnhanced {
     constructor() {
-        this.sensorData = new Map();
-        this.deviceHistory = new Map();
-        this.alarmThresholds = new Map();
-        this.updateInterval = null;
-        this.isMonitoring = false;
+        this.sensorMonitoring = null;
+        this.pressureVisualization = null;
+        this.deviceHistory = null;
+        this.alarmManagement = null;
         this.init();
     }
 
     init() {
-        this.initializeSensorPanel();
-        this.loadDeviceHistory();
-        this.setupAlarmThresholds();
-        this.startRealTimeMonitoring();
+        this.initializeModularComponents();
+        this.setupComponentIntegration();
+        console.log('✅ DeviceDataEnhanced orchestrator initialized');
     }
 
-    // Panel czujników w czasie rzeczywistym
-    sensorPanel = {
-        pressure: {
-            low: { min: 8, max: 12, unit: 'mbar', alarm: true, current: 10.0 },
-            medium: { min: 18, max: 22, unit: 'bar', alarm: true, current: 20.0 },
-            high: { min: 28, max: 32, unit: 'bar', alarm: true, current: 30.0 }
-        },
-        flow: {
-            inlet: { current: 0, unit: 'l/min', max: 50, alarm: true },
-            outlet: { current: 0, unit: 'l/min', max: 45, alarm: true }
-        },
-        temperature: { current: 22.5, unit: '°C', min: 18, max: 35, alarm: true },
-        humidity: { current: 45, unit: '%', min: 30, max: 70, alarm: true }
-    };
+    initializeModularComponents() {
+        // Initialize modular components
+        this.sensorMonitoring = new SensorMonitoring();
+        this.pressureVisualization = new PressureVisualization();
+        this.deviceHistory = new DeviceHistory();
+        this.alarmManagement = new AlarmManagement();
+        
+        // Make alarm management globally available for other modules
+        window.alarmManagement = this.alarmManagement;
+    }
+
+    setupComponentIntegration() {
+        // Integrate pressure visualization with sensor monitoring
+        const originalUpdateDisplay = this.sensorMonitoring.updateDisplay.bind(this.sensorMonitoring);
+        this.sensorMonitoring.updateDisplay = () => {
+            originalUpdateDisplay();
+            // Update pressure charts when sensor data updates
+            this.pressureVisualization.updateCharts(this.sensorMonitoring.getSensorPanel());
+        };
+
+        // Handle alarms from sensor monitoring
+        this.handleAlarm = (alarm) => {
+            this.alarmManagement.handleAlarm(alarm);
+        };
+    }
+
+    // Delegation methods for backward compatibility and external API access
 
     initializeSensorPanel() {
         // Initialize sensor readings with default values
@@ -71,8 +83,10 @@ class DeviceDataEnhanced {
         if (this.isMonitoring) return;
 
         this.isMonitoring = true;
+        this.initializePressureCharts();
         this.updateInterval = setInterval(() => {
             this.updateSensorReadings();
+            this.updatePressureCharts();
             this.checkAlarms();
             this.updateDisplay();
         }, 1000); // Update every second
@@ -87,6 +101,79 @@ class DeviceDataEnhanced {
         }
         this.isMonitoring = false;
         console.log('🛑 Real-time sensor monitoring stopped');
+    }
+
+    // Pressure visualization methods
+    initializePressureCharts() {
+        const pressureTypes = ['low', 'medium', 'high'];
+        pressureTypes.forEach(type => {
+            const chartContainer = document.getElementById(`pressure-${type}-dia`);
+            if (chartContainer) {
+                chartContainer.innerHTML = '<div class="pressure-chart-container"></div>';
+                // Initialize with 60 empty data points
+                this.pressureHistory[type] = new Array(60).fill(0);
+                this.renderPressureChart(type);
+            }
+        });
+    }
+
+    updatePressureCharts() {
+        // Get current pressure values
+        const currentPressures = {
+            low: this.sensorPanel.pressure.low.current,
+            medium: this.sensorPanel.pressure.medium.current,
+            high: this.sensorPanel.pressure.high.current
+        };
+
+        // Update history arrays (shift left and add new value)
+        Object.keys(currentPressures).forEach(type => {
+            this.pressureHistory[type].shift(); // Remove oldest value
+            this.pressureHistory[type].push(currentPressures[type]); // Add new value
+            this.renderPressureChart(type);
+        });
+    }
+
+    renderPressureChart(type) {
+        const chartContainer = document.querySelector(`#pressure-${type}-dia .pressure-chart-container`);
+        if (!chartContainer) return;
+
+        const data = this.pressureHistory[type];
+        const maxValue = Math.max(...data) || 1; // Avoid division by zero
+        const minValue = Math.min(...data) || 0;
+        const range = maxValue - minValue || 1;
+
+        // Clear existing chart
+        chartContainer.innerHTML = '';
+
+        // Create chart lines (60 data points)
+        data.forEach((value, index) => {
+            const line = document.createElement('div');
+            line.className = 'pressure-chart-line';
+            
+            // Calculate height as percentage (0-100%)
+            const normalizedValue = ((value - minValue) / range) * 100;
+            const height = Math.max(2, normalizedValue); // Minimum 2% height for visibility
+            
+            line.style.height = `${height}%`;
+            line.style.left = `${(index / 59) * 100}%`;
+            line.style.backgroundColor = this.getPressureColor(type, value);
+            
+            chartContainer.appendChild(line);
+        });
+    }
+
+    getPressureColor(type, value) {
+        const sensor = this.sensorPanel.pressure[type];
+        if (!sensor) return '#fbbf24'; // Default yellow
+        
+        // Color based on pressure ranges
+        if (value < sensor.min) {
+            return '#ef4444'; // Red for low values
+        } else if (value > sensor.max) {
+            return '#f97316'; // Orange for high values
+        } else {
+            return '#22c55e'; // Green for normal range
+        }
     }
 
     updateSensorReadings() {
@@ -763,12 +850,71 @@ class DeviceDataEnhanced {
         }
     }
 
+    // Delegation methods for UI display (backward compatibility)
+    showRealtimeSensors() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getRealtimeSensorsHTML();
+        }
+    }
+
+    showDeviceHistory() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getDeviceHistoryHTML();
+        }
+    }
+
+    getRealtimeSensorsHTML() {
+        return `
+            <div class="device-data-panel">
+                <h2 data-i18n="device.realtime_sensors">Real-time Sensors</h2>
+                <div class="sensors-grid">
+                    <div id="pressure-panel" class="sensor-group">
+                        <h3 data-i18n="device.pressure_sensors">Pressure Sensors</h3>
+                        <div class="pressure-items">
+                            <div class="pressure-item">
+                                <span data-i18n="device.pressure_low">Low</span>
+                                <div id="pressure-low-dia" class="pressure-dia"></div>
+                            </div>
+                            <div class="pressure-item">
+                                <span data-i18n="device.pressure_medium">Medium</span>
+                                <div id="pressure-medium-dia" class="pressure-dia"></div>
+                            </div>
+                            <div class="pressure-item">
+                                <span data-i18n="device.pressure_high">High</span>
+                                <div id="pressure-high-dia" class="pressure-dia"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getDeviceHistoryHTML() {
+        return `
+            <div class="device-history-panel">
+                <h2 data-i18n="device.history_title">Device History</h2>
+                <div class="history-content">
+                    <p data-i18n="device.history_loading">Loading device history...</p>
+                </div>
+            </div>
+        `;
+    }
+
     destroy() {
-        this.stopRealTimeMonitoring();
+        if (this.sensorMonitoring) {
+            this.sensorMonitoring.stopRealTimeMonitoring();
+        }
+        if (this.alarmManagement) {
+            this.alarmManagement.clearAllAlarms();
+        }
+        console.log('🗑️ DeviceDataEnhanced orchestrator destroyed');
     }
 }
 
 // Create global instance
 window.deviceDataEnhanced = new DeviceDataEnhanced();
 
-console.log('✅ Enhanced Device Data Module loaded');
+console.log('✅ Enhanced Device Data Module (Orchestrator) loaded');
