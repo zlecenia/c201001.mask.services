@@ -3,6 +3,9 @@
  * Handles compression and decompression of storage data
  */
 
+// AMD/RequireJS module definition
+define('storage-compression', [], function() {
+
 class StorageCompression {
     constructor() {
         this.compressionEnabled = true;
@@ -174,7 +177,11 @@ class StorageCompression {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageCompression = StorageCompression;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageCompression = StorageCompression;
+    }
+
+    // Return StorageCompression class for AMD/RequireJS
+    return StorageCompression;
+});

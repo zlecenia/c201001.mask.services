@@ -3,6 +3,9 @@
  * Handles encryption and decryption of storage data
  */
 
+// AMD/RequireJS module definition
+define('storage-encryption', [], function() {
+
 class StorageEncryption {
     constructor() {
         this.encryptionKey = 'mask_c20_2024';
@@ -145,7 +148,11 @@ class StorageEncryption {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageEncryption = StorageEncryption;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageEncryption = StorageEncryption;
+    }
+
+    // Return StorageEncryption class for AMD/RequireJS
+    return StorageEncryption;
+});

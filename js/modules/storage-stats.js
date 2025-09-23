@@ -3,6 +3,9 @@
  * Handles storage statistics and monitoring
  */
 
+// AMD/RequireJS module definition
+define('storage-stats', [], function() {
+
 class StorageStats {
     constructor() {
         this.storagePrefix = 'maskservice_c20_';
@@ -384,7 +387,11 @@ class StorageStats {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageStats = StorageStats;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageStats = StorageStats;
+    }
+
+    // Return StorageStats class for AMD/RequireJS
+    return StorageStats;
+});

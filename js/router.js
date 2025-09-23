@@ -9,6 +9,9 @@
  * - ConfigLoader: Configuration loading and caching
  */
 
+// AMD/RequireJS module definition with dependencies
+define('router', ['storage-manager'], function(StorageManager) {
+
 class C20Router {
     constructor() {
         this.config = null;
@@ -780,16 +783,21 @@ class C20Router {
     }
 }
 
-// Create global router instance
-window.C20Router = new C20Router();
+    // Create global router instance for backwards compatibility
+    const c20Router = new C20Router();
+    window.C20Router = c20Router;
 
-// Export functions for global access
-window.navigateTo = (view, language, action) => window.C20Router.navigate(view, language, action);
-window.navigateAction = (actionId) => window.C20Router.navigateAction(actionId);
-window.buildFullURL = (view, language, action) => window.C20Router.buildFullURL(view, language, action);
-window.getCurrentRoute = () => window.C20Router.getCurrentRoute();
-window.getRouteBreadcrumb = () => window.C20Router.getBreadcrumb();
-window.saveRouterSettings = () => window.C20Router.saveToStorage();
-window.loadRouterSettings = () => window.C20Router.loadFromStorage();
+    // Export functions for global access
+    window.navigateTo = (view, language, action) => c20Router.navigate(view, language, action);
+    window.navigateAction = (actionId) => c20Router.navigateAction(actionId);
+    window.buildFullURL = (view, language, action) => c20Router.buildFullURL(view, language, action);
+    window.getCurrentRoute = () => c20Router.getCurrentRoute();
+    window.getRouteBreadcrumb = () => c20Router.getBreadcrumb();
+    window.saveRouterSettings = () => c20Router.saveToStorage();
+    window.loadRouterSettings = () => c20Router.loadFromStorage();
 
-console.log('✅ Router Module initialized');
+    console.log('✅ Router Module initialized');
+
+    // Return C20Router class for AMD/RequireJS
+    return C20Router;
+});

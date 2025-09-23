@@ -3,6 +3,9 @@
  * Handles cleanup and maintenance of storage data
  */
 
+// AMD/RequireJS module definition
+define('storage-cleanup', [], function() {
+
 class StorageCleanup {
     constructor() {
         this.storagePrefix = 'maskservice_c20_';
@@ -309,7 +312,11 @@ class StorageCleanup {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageCleanup = StorageCleanup;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageCleanup = StorageCleanup;
+    }
+
+    // Return StorageCleanup class for AMD/RequireJS
+    return StorageCleanup;
+});

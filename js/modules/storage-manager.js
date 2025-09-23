@@ -3,6 +3,23 @@
  * Coordinates modular storage components
  */
 
+// AMD/RequireJS module definition with all storage component dependencies
+define('storage-manager', [
+    'storage-core', 
+    'storage-encryption', 
+    'storage-compression', 
+    'storage-cleanup', 
+    'storage-stats', 
+    'storage-events'
+], function(
+    StorageCore, 
+    StorageEncryption, 
+    StorageCompression, 
+    StorageCleanup, 
+    StorageStats, 
+    StorageEvents
+) {
+
 class StorageManager {
     constructor() {
         this.storagePrefix = 'maskservice_c20_';
@@ -358,7 +375,11 @@ class StorageManager {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageManager = StorageManager;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageManager = StorageManager;
+    }
+
+    // Return StorageManager class for AMD/RequireJS
+    return StorageManager;
+});

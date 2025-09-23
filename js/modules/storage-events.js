@@ -3,6 +3,9 @@
  * Handles event management and listeners for storage operations
  */
 
+// AMD/RequireJS module definition
+define('storage-events', [], function() {
+
 class StorageEvents {
     constructor() {
         this.listeners = {
@@ -337,7 +340,11 @@ class StorageEvents {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageEvents = StorageEvents;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageEvents = StorageEvents;
+    }
+
+    // Return StorageEvents class for AMD/RequireJS
+    return StorageEvents;
+});

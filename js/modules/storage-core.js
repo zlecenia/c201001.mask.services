@@ -266,7 +266,11 @@ class StorageCore {
     }
 }
 
-// Export for use in other modules
-if (typeof window !== 'undefined') {
-    window.StorageCore = StorageCore;
-}
+    // Export for backwards compatibility
+    if (typeof window !== 'undefined') {
+        window.StorageCore = StorageCore;
+    }
+
+    // Return StorageCore class for AMD/RequireJS
+    return StorageCore;
+});
