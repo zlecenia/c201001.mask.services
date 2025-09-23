@@ -4,13 +4,13 @@
  */
 
 // AMD/RequireJS module definition with all storage component dependencies
-define('storage-manager', [
-    'storage-core', 
-    'storage-encryption', 
-    'storage-compression', 
-    'storage-cleanup', 
-    'storage-stats', 
-    'storage-events'
+define('modules/storage-manager', [
+    'modules/storage-core', 
+    'modules/storage-encryption', 
+    'modules/storage-compression', 
+    'modules/storage-cleanup', 
+    'modules/storage-stats', 
+    'modules/storage-events'
 ], function(
     StorageCore, 
     StorageEncryption, 

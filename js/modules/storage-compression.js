@@ -4,7 +4,7 @@
  */
 
 // AMD/RequireJS module definition
-define('storage-compression', [], function() {
+define('modules/storage-compression', [], function() {
 
 class StorageCompression {
     constructor() {

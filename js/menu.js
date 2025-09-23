@@ -296,6 +296,305 @@ class MenuManager {
     showUsers() {
         console.log('Opening Users Management...');
         this.loadTemplate('users-template');
+        this.loadUsersList();
+    }
+
+    /**
+     * Load users list from storage and display
+     */
+    loadUsersList() {
+        const users = this.getUsersFromStorage();
+        const usersList = document.querySelector('.users-list');
+        
+        if (!usersList) {
+            setTimeout(() => this.loadUsersList(), 100);
+            return;
+        }
+
+        usersList.innerHTML = '';
+        
+        users.forEach((user, index) => {
+            const userItem = document.createElement('div');
+            userItem.className = 'user-item';
+            
+            userItem.innerHTML = `
+                <span class="username">${user.username}</span>
+                <span class="role-badge role-${user.role.toLowerCase()}" data-i18n="roles.${user.role.toLowerCase()}">${user.role}</span>
+                <div class="user-actions">
+                    <button class="btn-small btn-edit" onclick="window.MenuManager.editUser(${index})" data-i18n="actions.edit">Edit</button>
+                    <button class="btn-small btn-delete" onclick="window.MenuManager.deleteUser(${index})" data-i18n="actions.delete">Delete</button>
+                </div>
+            `;
+            
+            usersList.appendChild(userItem);
+        });
+        
+        // Add "Add User" button functionality
+        const addUserBtn = document.querySelector('[data-i18n="users.add_user"]');
+        if (addUserBtn) {
+            addUserBtn.onclick = () => this.addUser();
+        }
+    }
+
+    /**
+     * Get users from localStorage or return default users
+     */
+    getUsersFromStorage() {
+        const stored = localStorage.getItem('maskservice_users');
+        if (stored) {
+            try {
+                return JSON.parse(stored);
+            } catch (e) {
+                console.warn('Invalid users data in storage, using defaults');
+            }
+        }
+        
+        // Default users
+        const defaultUsers = [
+            { username: 'operator1', role: 'OPERATOR', password: '1234', created: Date.now() },
+            { username: 'admin1', role: 'ADMIN', password: 'admin', created: Date.now() },
+            { username: 'super1', role: 'SUPERUSER', password: 'super', created: Date.now() },
+            { username: 'service1', role: 'SERWISANT', password: 'service', created: Date.now() }
+        ];
+        
+        this.saveUsersToStorage(defaultUsers);
+        return defaultUsers;
+    }
+
+    /**
+     * Save users to localStorage
+     */
+    saveUsersToStorage(users) {
+        try {
+            localStorage.setItem('maskservice_users', JSON.stringify(users));
+            console.log('💾 Users saved to storage');
+        } catch (e) {
+            console.error('❌ Failed to save users to storage:', e);
+        }
+    }
+
+    /**
+     * Add new user
+     */
+    addUser() {
+        console.log('Adding new user...');
+        
+        if (window.InlineDialog) {
+            const dialog = new InlineDialog({
+                title: 'Add New User',
+                fields: [
+                    {
+                        id: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        required: true,
+                        pattern: '^[a-zA-Z0-9_]{3,20}$',
+                        placeholder: 'Enter username (3-20 chars)'
+                    },
+                    {
+                        id: 'password',
+                        label: 'Password',
+                        type: 'password',
+                        required: true,
+                        minLength: 4,
+                        placeholder: 'Enter password (min 4 chars)'
+                    },
+                    {
+                        id: 'role',
+                        label: 'Role',
+                        type: 'select',
+                        required: true,
+                        options: [
+                            { value: 'OPERATOR', label: 'Operator' },
+                            { value: 'ADMIN', label: 'Administrator' },
+                            { value: 'SUPERUSER', label: 'Superuser' },
+                            { value: 'SERWISANT', label: 'Serwisant' }
+                        ]
+                    }
+                ],
+                onSubmit: (data) => {
+                    this.createUser(data);
+                }
+            });
+            dialog.show();
+        } else {
+            // Fallback for simple prompt
+            const username = prompt('Enter username:');
+            const password = prompt('Enter password:');
+            const role = prompt('Enter role (OPERATOR/ADMIN/SUPERUSER/SERWISANT):');
+            
+            if (username && password && role) {
+                this.createUser({ username, password, role: role.toUpperCase() });
+            }
+        }
+    }
+
+    /**
+     * Edit existing user
+     */
+    editUser(userIndex) {
+        console.log('Editing user at index:', userIndex);
+        
+        const users = this.getUsersFromStorage();
+        const user = users[userIndex];
+        
+        if (!user) {
+            console.error('❌ User not found at index:', userIndex);
+            return;
+        }
+
+        if (window.InlineDialog) {
+            const dialog = new InlineDialog({
+                title: `Edit User: ${user.username}`,
+                fields: [
+                    {
+                        id: 'username',
+                        label: 'Username',
+                        type: 'text',
+                        required: true,
+                        pattern: '^[a-zA-Z0-9_]{3,20}$',
+                        value: user.username,
+                        placeholder: 'Enter username (3-20 chars)'
+                    },
+                    {
+                        id: 'password',
+                        label: 'New Password (leave empty to keep current)',
+                        type: 'password',
+                        required: false,
+                        minLength: 4,
+                        placeholder: 'Enter new password or leave empty'
+                    },
+                    {
+                        id: 'role',
+                        label: 'Role',
+                        type: 'select',
+                        required: true,
+                        value: user.role,
+                        options: [
+                            { value: 'OPERATOR', label: 'Operator' },
+                            { value: 'ADMIN', label: 'Administrator' },
+                            { value: 'SUPERUSER', label: 'Superuser' },
+                            { value: 'SERWISANT', label: 'Serwisant' }
+                        ]
+                    }
+                ],
+                onSubmit: (data) => {
+                    this.updateUser(userIndex, data);
+                }
+            });
+            dialog.show();
+        } else {
+            // Fallback for simple prompt
+            const username = prompt('Enter username:', user.username);
+            const password = prompt('Enter new password (leave empty to keep current):');
+            const role = prompt('Enter role:', user.role);
+            
+            if (username && role) {
+                const updateData = { username, role: role.toUpperCase() };
+                if (password) updateData.password = password;
+                this.updateUser(userIndex, updateData);
+            }
+        }
+    }
+
+    /**
+     * Delete user
+     */
+    deleteUser(userIndex) {
+        const users = this.getUsersFromStorage();
+        const user = users[userIndex];
+        
+        if (!user) {
+            console.error('❌ User not found at index:', userIndex);
+            return;
+        }
+
+        if (confirm(`Are you sure you want to delete user "${user.username}"?`)) {
+            users.splice(userIndex, 1);
+            this.saveUsersToStorage(users);
+            this.loadUsersList();
+            console.log('🗑️ User deleted:', user.username);
+        }
+    }
+
+    /**
+     * Create new user
+     */
+    createUser(userData) {
+        const users = this.getUsersFromStorage();
+        
+        // Check if username already exists
+        if (users.some(u => u.username === userData.username)) {
+            alert(`Username "${userData.username}" already exists!`);
+            return;
+        }
+
+        // Validate role
+        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'];
+        if (!validRoles.includes(userData.role)) {
+            alert(`Invalid role "${userData.role}". Valid roles: ${validRoles.join(', ')}`);
+            return;
+        }
+
+        const newUser = {
+            username: userData.username,
+            password: userData.password,
+            role: userData.role,
+            created: Date.now(),
+            modified: Date.now()
+        };
+
+        users.push(newUser);
+        this.saveUsersToStorage(users);
+        this.loadUsersList();
+        
+        console.log('✅ User created:', newUser.username);
+        alert(`User "${newUser.username}" created successfully!`);
+    }
+
+    /**
+     * Update existing user
+     */
+    updateUser(userIndex, updateData) {
+        const users = this.getUsersFromStorage();
+        const user = users[userIndex];
+        
+        if (!user) {
+            console.error('❌ User not found at index:', userIndex);
+            return;
+        }
+
+        // Check if new username conflicts with existing users (excluding current user)
+        if (updateData.username !== user.username) {
+            const existingUser = users.find((u, i) => i !== userIndex && u.username === updateData.username);
+            if (existingUser) {
+                alert(`Username "${updateData.username}" already exists!`);
+                return;
+            }
+        }
+
+        // Validate role
+        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'];
+        if (!validRoles.includes(updateData.role)) {
+            alert(`Invalid role "${updateData.role}". Valid roles: ${validRoles.join(', ')}`);
+            return;
+        }
+
+        // Update user data
+        user.username = updateData.username;
+        user.role = updateData.role;
+        user.modified = Date.now();
+        
+        // Update password only if provided
+        if (updateData.password) {
+            user.password = updateData.password;
+        }
+
+        this.saveUsersToStorage(users);
+        this.loadUsersList();
+        
+        console.log('✅ User updated:', user.username);
+        alert(`User "${user.username}" updated successfully!`);
     }
 
     showServiceMenu() {

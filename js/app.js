@@ -3,7 +3,8 @@
  * Integrates with modular components: auth.js, menu.js, utils.js, keyboard.js
  */
 
-import { CONFIG, MENU_STRUCTURE, loadConfig } from './config.js';
+// AMD/RequireJS module definition
+define('app', ['config', 'router', 'auth', 'keyboard'], function(ConfigManager, C20Router, AuthManager, VirtualKeyboard) {
 
 class MasktronicApp {
     constructor() {
@@ -15,7 +16,9 @@ class MasktronicApp {
     async init() {
         try {
             // Load configuration first
-            await loadConfig();
+            const configManager = window.ConfigManager || new ConfigManager();
+            await configManager.loadConfig();
+            const CONFIG = configManager.getConfig();
             console.log('✅ Configuration loaded:', CONFIG);
             
             // Make CONFIG accessible to other modules
@@ -125,7 +128,7 @@ class MasktronicApp {
 
     async loadMockData() {
         // Load mock data
-        if (CONFIG.MOCK_MODE) {
+        if (window.CONFIG && window.CONFIG.MOCK_MODE) {
             this.mockData = {
                 devices: [
                     { id: 1, serial: 'PP001', type: 'PP_MASK', status: 'ACTIVE' },
@@ -153,34 +156,6 @@ class MasktronicApp {
     }
 }
 
-// Initialize app
-let app;
-document.addEventListener('DOMContentLoaded', async () => {
-    app = new MasktronicApp();
-    // No need to call init() here as it's called in the constructor
-});
-
-// Global functions are now handled by modular components:
-// - auth.js: mockLogin, logout
-// - menu.js: showUserMenu, selectMenuOption  
-// - utils.js: selectLoginMethod, togglePasswordVisibility
-// - keyboard.js: VirtualKeyboard class
-console.log('✅ App.js - Modular integration complete');
-
-// selectLoginMethod is now in utils.js - removed duplicate
-
-// addToPassword functionality is now handled by VirtualKeyboard class
-
-// mockLogin is now in auth.js (AuthManager class) - removed duplicate
-// Activity tracking is now handled by AuthManager in auth.js
-
-// selectMenuItem is now handled by MenuManager.selectMenuOption in menu.js
-
-// updateMenuContent is now handled within MenuManager class methods
-
-// updateDeviceData is now part of the mock data system
-// logout is now handled by AuthManager.logout() in auth.js
-
 // Mock data updates - keeping in app.js as part of core app functionality
 function startMockDataUpdates() {
     setInterval(() => {
@@ -199,7 +174,7 @@ function startMockDataUpdates() {
         
         if (tempValue) tempValue.textContent = (22 + Math.random() * 4 - 2).toFixed(1) + '°C';
         if (humidityValue) humidityValue.textContent = (45 + Math.random() * 10 - 5).toFixed(0) + '%';
-    }, CONFIG?.UPDATE_INTERVAL || 1000);
+    }, window.CONFIG?.UPDATE_INTERVAL || 1000);
 }
 
 function selectTestOption(option) {
@@ -449,3 +424,29 @@ window.initSystemScreen = function() {
     
     console.log('🎯 System-Screen 2-second loading animation started');
 };
+
+// Initialize app
+let app;
+document.addEventListener('DOMContentLoaded', async () => {
+    app = new MasktronicApp();
+    // No need to call init() here as it's called in the constructor
+});
+
+// Export for AMD/RequireJS and global access
+window.MasktronicApp = MasktronicApp;
+
+// Export functions globally for HTML onclick handlers
+window.selectTestOption = selectTestOption;
+window.selectDevice = selectDevice;
+window.simulateTest = simulateTest;
+window.backToMenu = backToMenu;
+window.showUserMenu = showUserMenu;
+window.togglePasswordVisibility = togglePasswordVisibility;
+window.startMockDataUpdates = startMockDataUpdates;
+
+console.log('✅ App.js - Modular integration complete with AMD pattern');
+
+// Return main class for AMD/RequireJS
+return MasktronicApp;
+
+}); // End of AMD define block

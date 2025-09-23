@@ -426,11 +426,19 @@ class DependencyLoader {
         // Handle different naming conventions
         let fileName = moduleName;
         
-        // Convert kebab-case or camelCase to file names
+        // Convert kebab-case or camelCase to file names, but preserve directory paths
         if (!fileName.endsWith('.js')) {
-            fileName = fileName
+            // Split path and filename to handle directories properly
+            const pathParts = fileName.split('/');
+            const fileBaseName = pathParts.pop(); // Get the actual filename
+            const dirPath = pathParts.length > 0 ? pathParts.join('/') + '/' : '';
+            
+            // Process only the filename part for kebab-case/camelCase conversion
+            const processedFileName = fileBaseName
                 .replace(/([a-z])([A-Z])/g, '$1-$2')
                 .toLowerCase() + '.js';
+            
+            fileName = dirPath + processedFileName;
         }
 
         return `${this.basePath}${fileName}?v=${this.cacheBuster}`;
@@ -490,6 +498,50 @@ class DependencyLoader {
                 ? this.stats.totalLoadTime / this.stats.modulesLoaded 
                 : 0
         };
+    }
+
+    /**
+     * Set base URL for module loading
+     * @param {string} baseUrl - Base URL path
+     */
+    setBaseUrl(baseUrl) {
+        this.basePath = baseUrl.endsWith('/') ? baseUrl : baseUrl + '/';
+        if (this.debug) {
+            console.log(`🔧 DependencyLoader base URL set to: ${this.basePath}`);
+        }
+    }
+
+    /**
+     * Set cache buster value
+     * @param {string|number} cacheBuster - Cache buster value
+     */
+    setCacheBuster(cacheBuster) {
+        this.cacheBuster = cacheBuster;
+        if (this.debug) {
+            console.log(`🔧 DependencyLoader cache buster set to: ${this.cacheBuster}`);
+        }
+    }
+
+    /**
+     * Set load timeout
+     * @param {number} timeout - Timeout in milliseconds
+     */
+    setTimeout(timeout) {
+        this.loadTimeout = timeout;
+        if (this.debug) {
+            console.log(`🔧 DependencyLoader timeout set to: ${this.loadTimeout}ms`);
+        }
+    }
+
+    /**
+     * Set debug mode
+     * @param {boolean} debug - Debug mode flag
+     */
+    setDebug(debug) {
+        this.debug = debug;
+        if (this.debug) {
+            console.log(`🔧 DependencyLoader debug mode: ${this.debug}`);
+        }
     }
 
     /**

@@ -4,7 +4,7 @@
  */
 
 // AMD/RequireJS module definition
-define('storage-stats', [], function() {
+define('modules/storage-stats', [], function() {
 
 class StorageStats {
     constructor() {

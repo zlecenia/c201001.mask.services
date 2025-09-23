@@ -3,6 +3,9 @@
  * Handles all keyboard input and interactions
  */
 
+// AMD/RequireJS module definition
+define('keyboard', [], function() {
+
 class VirtualKeyboard {
     constructor() {
         this.shiftActive = false;
@@ -352,6 +355,19 @@ function togglePasswordVisibility() {
     }
 }
 
-// Export functions to global scope
+// Create and initialize the virtual keyboard
+const virtualKeyboard = new VirtualKeyboard();
+
+// Export functions to global scope for HTML onclick handlers
 window.addToPassword = addToPassword;
 window.togglePasswordVisibility = togglePasswordVisibility;
+
+// Return the module
+return {
+    VirtualKeyboard: VirtualKeyboard,
+    addToPassword: addToPassword,
+    togglePasswordVisibility: togglePasswordVisibility,
+    instance: virtualKeyboard
+};
+
+}); // Close AMD define block

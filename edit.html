@@ -327,12 +327,17 @@
             </div>
 
             <div class="file-selector">
-                <label>Schematy:</label>
-                <input type="file" id="schemaInput" accept=".json" onchange="importSchemas(event)">
+                <label>Schema:</label>
+                <input type="file" id="schemaFileInput" accept=".json" onchange="importSchemaFile(event)">
+            </div>
+
+            <div class="file-selector">
+                <label>CRUD Rules:</label>
+                <input type="file" id="crudFileInput" accept=".json" onchange="importCrudFile(event)">
             </div>
 
             <div class="schema-selector">
-                <label>Schema:</label>
+                <label>Typ:</label>
                 <select id="schemaSelect">
                     <option value="">Wybierz schemat</option>
                     <option value="app">App.json</option>
@@ -347,7 +352,8 @@
             <button class="btn-primary" onclick="loadSampleData()">📂 Załaduj Przykład</button>
             <button class="btn-success" onclick="validateJSON()">✅ Waliduj</button>
             <button class="btn-warning" onclick="exportJSON()">💾 Eksportuj JSON</button>
-            <button class="btn-info" onclick="exportSchemas()">📋 Eksportuj Schematy</button>
+            <button class="btn-info" onclick="exportCurrentSchema()">📋 Eksportuj Bieżący</button>
+            <button class="btn-info" onclick="exportAllSchemasAndCrud()">📦 Eksportuj Wszystko</button>
             <button class="btn-info" onclick="resetEditor()">🔄 Reset</button>
         </div>
 
@@ -355,18 +361,38 @@
             <div class="editor-panel">
                 <h3>📝 Edytor Wizualny</h3>
                 <div id="errorContainer"></div>
+                <div id="schemaInfo" style="background: #f0f8ff; padding: 10px; border-radius: 5px; margin: 10px 0; font-size: 12px; border-left: 4px solid #0066cc;">
+                    <strong>📋 Pliki schematów:</strong>
+                    <div style="margin: 5px 0;">
+                        • <strong>Schema:</strong> <span id="currentSchemaFile">Brak</span><br>
+                        • <strong>CRUD Rules:</strong> <span id="currentCrudFile">Brak</span><br>
+                        • <strong>Opis:</strong> <span id="currentDescription">Wybierz schemat</span>
+                    </div>
+                </div>
                 <div id="jsonEditor"></div>
             </div>
 
             <div class="preview-panel">
                 <h3>👁️ Podgląd JSON</h3>
+                <div style="background: #e3f2fd; padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 11px;">
+                    <strong>💡 Instrukcja:</strong><br>
+                    🟢 <strong>Zielone pola</strong> = można edytować<br>
+                    🔴 <strong>Czerwone pola</strong> = tylko do odczytu<br>
+                    ➕ <strong>Przycisk dodaj</strong> = można dodawać elementy<br>
+                    🗑️ <strong>Przycisk usuń</strong> = usuwa CAŁY obiekt z tablicy
+                </div>
                 <pre id="jsonPreview"></pre>
             </div>
         </div>
 
         <div class="status-bar">
             <div id="statusLeft">Gotowy do edycji</div>
-            <div id="statusRight">Wczytaj plik lub wybierz przykład</div>
+            <div id="statusRight">
+                📁 Wczytaj JSON | 📋 Wybierz schema | ✏️ Edytuj | 💾 Eksportuj
+                <span style="margin-left: 20px; font-size: 11px;">
+                    v2.0.0 - Modularny edytor z osobnymi schematami
+                </span>
+            </div>
         </div>
     </div>
 
@@ -695,7 +721,7 @@
             }
         };
 
-        // Przykładowe dane
+        // Przykładowe dane dla wszystkich typów
         const sampleData = {
             app: {
                 "API_URL": "http://localhost:3000",
@@ -707,7 +733,103 @@
                 "OPERATOR": [
                     { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
                     { "key": "test_quick", "label": "Quick Test", "icon": "⚡" }
+                ],
+                "ADMIN": [
+                    { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
+                    { "key": "users", "label": "Users", "icon": "👥" }
                 ]
+            },
+            router: {
+                "default": {
+                    "protocol": "http",
+                    "domain": "localhost",
+                    "port": "8081",
+                    "view": "login-screen",
+                    "language": "pl",
+                    "action": "default"
+                },
+                "views": {
+                    "login-screen": {
+                        "name": "Login Screen",
+                        "description": "Main login interface",
+                        "actions": ["default", "login-admin-btn"]
+                    }
+                },
+                "languages": [
+                    { "code": "pl", "name": "Polski", "flag": "🇵🇱", "default": true },
+                    { "code": "en", "name": "English", "flag": "🇺🇸", "default": false }
+                ]
+            },
+            system: {
+                "roles": {
+                    "valid_roles": ["OPERATOR", "ADMIN", "SUPERUSER", "SERWISANT"],
+                    "default_role": "OPERATOR",
+                    "role_hierarchy": { "OPERATOR": 1, "ADMIN": 2, "SUPERUSER": 3, "SERWISANT": 4 }
+                },
+                "authentication": {
+                    "session_timeout": 1800000,
+                    "max_login_attempts": 5,
+                    "password_requirements": { "min_length": 4, "require_uppercase": false }
+                },
+                "sensors": {
+                    "update_interval": 1000,
+                    "pressure_units": "mbar",
+                    "alarm_thresholds": { "pressure_low": -15, "pressure_high": 50 }
+                }
+            },
+            "test-scenarios": {
+                "default_scenarios": {
+                    "PP_MASK": {
+                        "post_use": {
+                            "name": "Test po użyciu - Maska pełnotwarzowa",
+                            "norm": "PN-EN 136",
+                            "description": "Standardowy test szczelności po każdym użyciu maski",
+                            "parameters": {
+                                "pressure_min": -10,
+                                "pressure_max": 0,
+                                "duration": 300,
+                                "leak_threshold": 0.5
+                            }
+                        }
+                    }
+                },
+                "device_types": {
+                    "PP_MASK": {
+                        "name": "Maska pełnotwarzowa",
+                        "category": "RPE",
+                        "test_frequency": "after_each_use"
+                    }
+                }
+            },
+            workshop: {
+                "spare_parts": {
+                    "default_parts": [
+                        {
+                            "id": "F001",
+                            "name": "Filtr P3 uniwersalny",
+                            "category": "FILTER",
+                            "quantity": 25,
+                            "min_level": 5,
+                            "price": 45.50,
+                            "supplier": "SafetyTech Sp. z o.o.",
+                            "part_number": "ST-P3-001"
+                        }
+                    ]
+                },
+                "tools": {
+                    "calibration_tools": [
+                        {
+                            "id": "CAL001",
+                            "name": "Manometr wzorcowy ±50mbar",
+                            "location": "LAB-001",
+                            "last_calibration": "2024-01-15",
+                            "next_calibration": "2025-01-15",
+                            "status": "OK",
+                            "calibration_interval": 365,
+                            "serial_number": "MAN-2024-001"
+                        }
+                    ]
+                }
             }
         };
 
@@ -719,7 +841,7 @@
             updateStatus('Gotowy do edycji', 'Wczytaj plik lub wybierz przykład');
         });
 
-        // Obsługa wczytywania pliku
+        // Obsługa wczytywania pliku z automatycznym wykrywaniem typu
         function handleFileLoad(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -729,7 +851,16 @@
                 try {
                     const json = JSON.parse(e.target.result);
                     loadJSON(json);
-                    updateStatus('Plik wczytany pomyślnie', `${file.name}`);
+
+                    // Spróbuj automatycznie wykryć typ pliku
+                    const detectedType = detectFileType(json, file.name);
+                    if (detectedType) {
+                        document.getElementById('schemaSelect').value = detectedType;
+                        handleSchemaChange({ target: { value: detectedType } });
+                        updateStatus(`Plik wczytany pomyślnie. Wykryto typ: ${detectedType}`, `${file.name}`);
+                    } else {
+                        updateStatus('Plik wczytany pomyślnie', `${file.name} - wybierz schemat ręcznie`);
+                    }
                 } catch (error) {
                     showError('Błąd parsowania JSON: ' + error.message);
                 }
@@ -737,13 +868,63 @@
             reader.readAsText(file);
         }
 
+        // Automatyczne wykrywanie typu pliku na podstawie struktury
+        function detectFileType(json, fileName) {
+            // Na podstawie nazwy pliku
+            const lowerName = fileName.toLowerCase();
+            if (lowerName.includes('app')) return 'app';
+            if (lowerName.includes('menu')) return 'menu';
+            if (lowerName.includes('router')) return 'router';
+            if (lowerName.includes('system')) return 'system';
+            if (lowerName.includes('test') || lowerName.includes('scenario')) return 'test-scenarios';
+            if (lowerName.includes('workshop')) return 'workshop';
+
+            // Na podstawie struktury JSON
+            const keys = Object.keys(json);
+
+            // App.json - ma API_URL i WS_URL
+            if (keys.includes('API_URL') && keys.includes('WS_URL')) {
+                return 'app';
+            }
+
+            // Menu.json - ma role użytkowników
+            if (keys.some(k => ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'].includes(k))) {
+                return 'menu';
+            }
+
+            // Router.json - ma default, views, languages
+            if (keys.includes('default') && keys.includes('views') && keys.includes('languages')) {
+                return 'router';
+            }
+
+            // System.json - ma roles i authentication
+            if (keys.includes('roles') && keys.includes('authentication')) {
+                return 'system';
+            }
+
+            // Test-scenarios.json - ma default_scenarios
+            if (keys.includes('default_scenarios') && keys.includes('test_standards')) {
+                return 'test-scenarios';
+            }
+
+            // Workshop.json - ma spare_parts
+            if (keys.includes('spare_parts') && keys.includes('tools')) {
+                return 'workshop';
+            }
+
+            return null; // Nie udało się wykryć
+        }
+
         // Obsługa zmiany schematu
         function handleSchemaChange(event) {
             const schemaName = event.target.value;
             if (schemaName && schemas[schemaName]) {
                 currentSchema = schemas[schemaName];
-                editRules = editingRules[schemaName];
+                editRules = editingRules[schemaName] || {};
                 currentSchemaName = schemaName;
+
+                // Aktualizuj informacje o schemacie
+                updateSchemaInfo(schemaName);
 
                 if (Object.keys(currentJSON).length > 0) {
                     renderEditor();
@@ -751,6 +932,15 @@
 
                 updateStatus('Schema załadowana', `${schemaName}.json`);
             }
+        }
+
+        // Aktualizacja informacji o schemacie
+        function updateSchemaInfo(schemaName) {
+            document.getElementById('currentSchemaFile').textContent = `${schemaName}-schema.json`;
+            document.getElementById('currentCrudFile').textContent = `${schemaName}-crud.json`;
+
+            const description = editingRules[schemaName]?.description || schemas[schemaName]?.description || 'Brak opisu';
+            document.getElementById('currentDescription').textContent = description;
         }
 
         // Ładowanie przykładowych danych
@@ -1229,7 +1419,100 @@
             showSuccess('Plik został zapisany');
         }
 
-        // Import schematów z pliku
+        // Import schematu z pliku
+        function importSchemaFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const schemaData = JSON.parse(e.target.result);
+
+                    // Określ nazwę schematu na podstawie nazwy pliku
+                    const schemaName = file.name.replace(/[-_]schema\.json$/i, '').replace(/\.json$/i, '');
+
+                    // Dodaj schemat do kolekcji
+                    schemas[schemaName] = schemaData;
+
+                    // Zaktualizuj listę schematów
+                    updateSchemaSelect();
+
+                    showSuccess(`Zaimportowano schemat: ${schemaName}`);
+                    updateStatus('Schemat zaimportowany', `${file.name}`);
+                } catch (error) {
+                    showError('Błąd importu schematu: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Import reguł CRUD z pliku
+        function importCrudFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const crudData = JSON.parse(e.target.result);
+
+                    // Określ nazwę na podstawie nazwy pliku lub pola name w JSON
+                    const crudName = crudData.name || file.name.replace(/[-_]crud\.json$/i, '').replace(/\.json$/i, '');
+
+                    // Konwertuj format CRUD na format editingRules
+                    if (crudData.rules) {
+                        editingRules[crudName] = {
+                            editable: crudData.rules.editable || [],
+                            addable: crudData.rules.addable || false,
+                            deletable: crudData.rules.deletable || false,
+                            description: crudData.description || 'Imported CRUD rules'
+                        };
+                    }
+
+                    showSuccess(`Zaimportowano reguły CRUD: ${crudName}`);
+                    updateStatus('Reguły CRUD zaimportowane', `${file.name}`);
+                } catch (error) {
+                    showError('Błąd importu reguł CRUD: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Eksport aktualnego schematu i reguł CRUD
+        function exportCurrentSchema() {
+            if (!currentSchemaName) {
+                showError('Nie wybrano schematu do eksportu');
+                return;
+            }
+
+            const exportData = {
+                schema: schemas[currentSchemaName] || {},
+                crud: editingRules[currentSchemaName] || {},
+                metadata: {
+                    name: currentSchemaName,
+                    type: 'json-editor-config',
+                    version: '1.0.0',
+                    exported: new Date().toISOString()
+                }
+            };
+
+            const jsonString = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentSchemaName}-config.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSuccess(`Eksport zakończony: ${currentSchemaName}-config.json`);
+        }
+
+        // Import schematów z pliku (backward compatibility)
         function importSchemas(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -1282,31 +1565,66 @@
             }
         }
 
-        // Eksport schematów do pliku
-        function exportSchemas() {
-            const schemaData = {
-                schemas: schemas,
-                editingRules: editingRules,
-                metadata: {
-                    version: "1.0.0",
-                    created: new Date().toISOString(),
-                    description: "Schematy walidacji i reguły edycji dla edytora JSON"
+        // Eksport wszystkich schematów do osobnych plików
+        function exportAllSchemasAndCrud() {
+            if (Object.keys(schemas).length === 0) {
+                showError('Brak schematów do eksportu');
+                return;
+            }
+
+            let exportedFiles = 0;
+
+            // Eksportuj każdy schemat jako osobny plik
+            Object.keys(schemas).forEach(schemaName => {
+                // Eksportuj schemat
+                const schemaData = schemas[schemaName];
+                const schemaJson = JSON.stringify(schemaData, null, 2);
+                const schemaBlob = new Blob([schemaJson], { type: 'application/json' });
+                const schemaUrl = URL.createObjectURL(schemaBlob);
+
+                const schemaLink = document.createElement('a');
+                schemaLink.href = schemaUrl;
+                schemaLink.download = `${schemaName}-schema.json`;
+                document.body.appendChild(schemaLink);
+                schemaLink.click();
+                document.body.removeChild(schemaLink);
+                URL.revokeObjectURL(schemaUrl);
+
+                // Eksportuj reguły CRUD jeśli istnieją
+                if (editingRules[schemaName]) {
+                    const crudData = {
+                        name: schemaName,
+                        title: schemaData.title || `${schemaName} Configuration`,
+                        description: editingRules[schemaName].description || 'CRUD rules',
+                        rules: {
+                            editable: editingRules[schemaName].editable || [],
+                            addable: editingRules[schemaName].addable || false,
+                            deletable: editingRules[schemaName].deletable || false
+                        },
+                        metadata: {
+                            version: '1.0.0',
+                            exported: new Date().toISOString(),
+                            type: 'crud-rules'
+                        }
+                    };
+
+                    const crudJson = JSON.stringify(crudData, null, 2);
+                    const crudBlob = new Blob([crudJson], { type: 'application/json' });
+                    const crudUrl = URL.createObjectURL(crudBlob);
+
+                    const crudLink = document.createElement('a');
+                    crudLink.href = crudUrl;
+                    crudLink.download = `${schemaName}-crud.json`;
+                    document.body.appendChild(crudLink);
+                    crudLink.click();
+                    document.body.removeChild(crudLink);
+                    URL.revokeObjectURL(crudUrl);
                 }
-            };
 
-            const jsonString = JSON.stringify(schemaData, null, 2);
-            const blob = new Blob([jsonString], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
+                exportedFiles += 2;
+            });
 
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'json-editor-schemas.json';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-
-            showSuccess('Schematy zostały wyeksportowane');
+            showSuccess(`Wyeksportowano ${exportedFiles} plików schematów i reguł CRUD`);
         }
 
         // Reset edytora

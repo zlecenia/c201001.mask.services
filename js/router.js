@@ -10,7 +10,8 @@
  */
 
 // AMD/RequireJS module definition with dependencies
-define('router', ['storage-manager'], function(StorageManager) {
+// TEMPORARY: Removed storage-manager dependency to fix 404 errors
+define('router', [], function() {
 
 class C20Router {
     constructor() {
@@ -64,14 +65,15 @@ class C20Router {
             console.warn('⚠️ NavigationManager initialization failed:', error);
         }
 
-        try {
-            if (window.StorageManager && typeof window.StorageManager === 'function') {
-                this.storageManager = new window.StorageManager();
-                console.log('✅ StorageManager initialized');
-            }
-        } catch (error) {
-            console.warn('⚠️ StorageManager initialization failed:', error);
-        }
+        // TODO: Re-enable StorageManager when modules/storage-manager is properly integrated
+        // try {
+        //     if (window.StorageManager && typeof window.StorageManager === 'function') {
+        //         this.storageManager = new window.StorageManager();
+        //         console.log('✅ StorageManager initialized');
+        //     }
+        // } catch (error) {
+        //     console.warn('⚠️ StorageManager initialization failed:', error);
+        // }
 
         try {
             if (window.ConfigLoader && typeof window.ConfigLoader === 'function') {

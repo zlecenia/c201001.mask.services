@@ -4,7 +4,7 @@
  */
 
 // AMD/RequireJS module definition
-define('storage-cleanup', [], function() {
+define('modules/storage-cleanup', [], function() {
 
 class StorageCleanup {
     constructor() {

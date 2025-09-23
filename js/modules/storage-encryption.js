@@ -4,7 +4,7 @@
  */
 
 // AMD/RequireJS module definition
-define('storage-encryption', [], function() {
+define('modules/storage-encryption', [], function() {
 
 class StorageEncryption {
     constructor() {

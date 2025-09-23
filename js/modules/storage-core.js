@@ -4,7 +4,7 @@
  */
 
 // AMD/RequireJS module definition
-define('storage-core', [], function() {
+define('modules/storage-core', [], function() {
 
 class StorageCore {
     constructor() {

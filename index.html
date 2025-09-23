@@ -560,107 +560,13 @@
         loader.setCacheBuster(window.MASKSERVICE_CONFIG.cacheBuster);
         loader.setTimeout(window.MASKSERVICE_CONFIG.loadTimeout);
         
-        // Define module dependencies and load order
-        const moduleConfig = {
-            // Core infrastructure modules (load first)
-            'utils': { path: 'utils.js', deps: [] },
-            'auth': { path: 'auth.js', deps: ['utils'] },
-            'menu': { path: 'menu.js', deps: ['utils', 'auth'] },
-            'i18n': { path: 'i18n.js', deps: ['utils'] },
-            
-            // Storage system modules
-            'storage-core': { path: 'modules/storage-core.js', deps: [] },
-            'storage-encryption': { path: 'modules/storage-encryption.js', deps: [] },
-            'storage-compression': { path: 'modules/storage-compression.js', deps: [] },
-            'storage-cleanup': { path: 'modules/storage-cleanup.js', deps: [] },
-            'storage-stats': { path: 'modules/storage-stats.js', deps: [] },
-            'storage-events': { path: 'modules/storage-events.js', deps: [] },
-            'storage-manager': { path: 'modules/storage-manager.js', deps: [
-                'storage-core', 'storage-encryption', 'storage-compression', 
-                'storage-cleanup', 'storage-stats', 'storage-events'
-            ]},
-            
-            // Configuration and utility modules
-            'config-loader': { path: 'modules/config-loader.js', deps: ['utils'] },
-            'inline-dialog': { path: 'modules/inline-dialog.js', deps: ['utils'] },
-            
-            // Router system modules
-            'route-parser': { path: 'modules/route-parser.js', deps: ['utils'] },
-            'navigation-manager': { path: 'modules/navigation-manager.js', deps: ['utils'] },
-            'router': { path: 'router.js', deps: ['route-parser', 'navigation-manager', 'storage-manager', 'config-loader'] },
-            
-            // Settings system modules
-            'settings-ui-generator': { path: 'modules/settings-ui-generator.js', deps: ['utils', 'inline-dialog'] },
-            'settings-scenario-manager': { path: 'modules/settings-scenario-manager.js', deps: ['utils'] },
-            'settings-integration-manager': { path: 'modules/settings-integration-manager.js', deps: ['utils'] },
-            'settings-standards-validator': { path: 'modules/settings-standards-validator.js', deps: ['utils'] },
-            'settings-system-config': { path: 'modules/settings-system-config.js', deps: ['utils'] },
-            'system-settings-enhanced': { path: 'system-settings-enhanced.js', deps: [
-                'settings-ui-generator', 'settings-scenario-manager', 'settings-integration-manager',
-                'settings-standards-validator', 'settings-system-config', 'config-loader'
-            ]},
-            
-            // Workshop system modules
-            'workshop-core': { path: 'modules/workshop-core.js', deps: ['utils'] },
-            'workshop-parts': { path: 'modules/workshop-parts.js', deps: ['utils'] },
-            'workshop-maintenance': { path: 'modules/workshop-maintenance.js', deps: ['utils'] },
-            'workshop-tools': { path: 'modules/workshop-tools.js', deps: ['utils'] },
-            'workshop-inventory': { path: 'modules/workshop-inventory.js', deps: ['utils'] },
-            'workshop-enhanced': { path: 'workshop-enhanced.js', deps: [
-                'workshop-core', 'workshop-parts', 'workshop-maintenance', 
-                'workshop-tools', 'workshop-inventory', 'config-loader'
-            ]},
-            
-            // Reports system modules
-            'reports-core': { path: 'modules/reports-core.js', deps: ['utils'] },
-            'reports-generation': { path: 'modules/reports-generation.js', deps: ['utils'] },
-            'reports-batch': { path: 'modules/reports-batch.js', deps: ['utils'] },
-            'reports-schedule': { path: 'modules/reports-schedule.js', deps: ['utils'] },
-            'reports-display': { path: 'modules/reports-display.js', deps: ['utils'] },
-            'test-reports-enhanced': { path: 'test-reports-enhanced.js', deps: [
-                'reports-core', 'reports-generation', 'reports-batch', 
-                'reports-schedule', 'reports-display', 'config-loader'
-            ]},
-            
-            // Test system modules
-            'test-wizard': { path: 'modules/test-wizard.js', deps: ['utils'] },
-            'test-quick': { path: 'modules/test-quick.js', deps: ['utils'] },
-            'test-scenarios': { path: 'modules/test-scenarios.js', deps: ['utils'] },
-            'test-menu-enhanced': { path: 'test-menu-enhanced.js', deps: [
-                'test-wizard', 'test-quick', 'test-scenarios', 'config-loader'
-            ]},
-            
-            // Device data system modules
-            'sensor-monitoring': { path: 'modules/sensor-monitoring.js', deps: ['utils'] },
-            'pressure-visualization': { path: 'modules/pressure-visualization.js', deps: ['utils'] },
-            'device-history': { path: 'modules/device-history.js', deps: ['utils'] },
-            'alarm-management': { path: 'modules/alarm-management.js', deps: ['utils'] },
-            'device-data-enhanced': { path: 'device-data-enhanced.js', deps: [
-                'sensor-monitoring', 'pressure-visualization', 
-                'device-history', 'alarm-management', 'config-loader'
-            ]},
-            
-            // Application modules
-            'keyboard': { path: 'keyboard.js', deps: ['utils'] },
-            'app': { path: 'app.js', deps: [
-                'utils', 'auth', 'menu', 'i18n', 'router', 'keyboard',
-                'system-settings-enhanced', 'workshop-enhanced', 
-                'test-reports-enhanced', 'test-menu-enhanced', 'device-data-enhanced'
-            ]},
-            'ui-tester': { path: 'ui-tester.js', deps: ['app'] }
-        };
-        
-        // Register all modules with the dependency loader
-        Object.keys(moduleConfig).forEach(moduleName => {
-            const config = moduleConfig[moduleName];
-            loader.define(moduleName, config.deps, config.path);
-        });
-        
-        // Load the application
-        loader.require(['app', 'ui-tester'], function(app, uiTester) {
+        // Load the main application module
+        // Dependencies will be automatically resolved by the dependency loader
+        // based on define() calls within each module file
+        loader.require(['app'], function(app) {
             console.log('🚀 MASKSERVICE C20 application loaded successfully');
             if (window.MASKSERVICE_CONFIG.debug) {
-                console.log('📊 Dependency loader stats:', loader.getLoadStats());
+                console.log('📊 Dependency loader stats:', loader.getStats());
             }
         }).catch(function(error) {
             console.error('❌ Failed to load MASKSERVICE C20 application:', error);

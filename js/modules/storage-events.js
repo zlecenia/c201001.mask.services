@@ -4,7 +4,7 @@
  */
 
 // AMD/RequireJS module definition
-define('storage-events', [], function() {
+define('modules/storage-events', [], function() {
 
 class StorageEvents {
     constructor() {

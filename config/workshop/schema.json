@@ -1,178 +1,323 @@
 {
-  "spare_parts": {
-    "default_parts": [
-      {
-        "id": "F001",
-        "name": "Filtr P3 uniwersalny",
-        "category": "FILTER",
-        "quantity": 25,
-        "min_level": 5,
-        "price": 45.50,
-        "supplier": "SafetyTech Sp. z o.o.",
-        "part_number": "ST-P3-001",
-        "shelf_life_days": 1095
+  "type": "object",
+  "title": "Zarządzanie Warsztatem",
+  "description": "Kompleksowe zarządzanie częściami zamiennymi, narzędziami, konserwacją i dostawcami",
+  "properties": {
+    "spare_parts": {
+      "type": "object",
+      "title": "Części Zamienne",
+      "description": "Katalog i zarządzanie magazynem części zamiennych",
+      "properties": {
+        "default_parts": {
+          "type": "array",
+          "title": "Katalog Części",
+          "description": "Lista dostępnych części zamiennych",
+          "items": {
+            "$ref": "#/definitions/sparePart"
+          }
+        }
       },
-      {
-        "id": "S001", 
-        "name": "Uszczelka główna",
-        "category": "SEAL",
-        "quantity": 15,
-        "min_level": 3,
-        "price": 12.80,
-        "supplier": "ProSeal Ltd.",
-        "part_number": "PS-MAIN-001"
+      "required": ["default_parts"]
+    },
+    "tools": {
+      "type": "object",
+      "title": "Narzędzia Kalibracyjne",
+      "description": "Zarządzanie narzędziami pomiarowymi i kalibracyjnymi",
+      "properties": {
+        "calibration_tools": {
+          "type": "array",
+          "title": "Narzędzia Kalibracyjne",
+          "description": "Lista narzędzi wymagających okresowej kalibracji",
+          "items": {
+            "$ref": "#/definitions/calibrationTool"
+          }
+        }
       },
-      {
-        "id": "V001",
-        "name": "Zawór wydechowy",
-        "category": "VALVE",
-        "quantity": 8,
-        "min_level": 2,
-        "price": 89.00,
-        "supplier": "ValveTech GmbH",
-        "part_number": "VT-EXH-001"
+      "required": ["calibration_tools"]
+    },
+    "maintenance": {
+      "type": "object",
+      "title": "Harmonogramy Konserwacji",
+      "description": "Planowanie i zarządzanie konserwacją urządzeń",
+      "properties": {
+        "default_schedules": {
+          "type": "array",
+          "title": "Harmonogramy",
+          "description": "Domyślne harmonogramy konserwacji",
+          "items": {
+            "$ref": "#/definitions/maintenanceSchedule"
+          }
+        }
       },
-      {
-        "id": "ST001",
-        "name": "Pas nośny regulowany", 
-        "category": "STRAP",
-        "quantity": 12,
-        "min_level": 2,
-        "price": 34.20,
-        "supplier": "ComfortGear Inc.",
-        "part_number": "CG-STRAP-001"
+      "required": ["default_schedules"]
+    },
+    "suppliers": {
+      "type": "object",
+      "title": "Dostawcy",
+      "description": "Baza danych dostawców i kontrahentów",
+      "properties": {
+        "default_suppliers": {
+          "type": "array",
+          "title": "Lista Dostawców",
+          "description": "Dane kontaktowe i warunki współpracy",
+          "items": {
+            "$ref": "#/definitions/supplier"
+          }
+        }
       },
-      {
-        "id": "V002",
-        "name": "Wizjer panoramiczny",
-        "category": "VISOR",
-        "quantity": 6,
-        "min_level": 1,
-        "price": 156.70,
-        "supplier": "ClearView Systems",
-        "part_number": "CV-PANO-001"
+      "required": ["default_suppliers"]
+    },
+    "categories": {
+      "type": "object",
+      "title": "Kategorie Części",
+      "description": "Klasyfikacja części zamiennych",
+      "patternProperties": {
+        "^[A-Z_]+$": {
+          "$ref": "#/definitions/partCategory"
+        }
       }
-    ]
-  },
-  "tools": {
-    "calibration_tools": [
-      {
-        "id": "CAL001",
-        "name": "Manometr wzorcowy ±50mbar",
-        "location": "LAB-001",
-        "last_calibration": "2024-01-15",
-        "next_calibration": "2025-01-15",
-        "status": "OK",
-        "calibration_interval": 365,
-        "serial_number": "MAN-2024-001"
-      },
-      {
-        "id": "CAL002", 
-        "name": "Generator podciśnienia",
-        "location": "LAB-001",
-        "last_calibration": "2024-01-10",
-        "next_calibration": "2025-01-10",
-        "status": "OK",
-        "calibration_interval": 365,
-        "serial_number": "GEN-VAC-002"
-      },
-      {
-        "id": "CAL003",
-        "name": "Rotametr wzorcowy 0-50L/min",
-        "location": "LAB-002", 
-        "last_calibration": "2023-12-20",
-        "next_calibration": "2024-12-20",
-        "status": "ATTENTION",
-        "calibration_interval": 365,
-        "serial_number": "ROT-STD-003"
-      }
-    ]
-  },
-  "maintenance": {
-    "default_schedules": [
-      {
-        "id": "MAINT001",
-        "device": "PRESS-STATION-01",
-        "type": "Kalibracja stanowiska",
-        "frequency": "monthly",
-        "estimated_duration": 120,
-        "required_tools": ["CAL001", "CAL002"],
-        "technician_level": "certified"
-      },
-      {
-        "id": "MAINT002",
-        "device": "LEAK-TESTER-01", 
-        "type": "Przegląd szczelności",
-        "frequency": "weekly",
-        "estimated_duration": 60,
-        "required_tools": ["CAL001"],
-        "technician_level": "standard"
-      },
-      {
-        "id": "MAINT003",
-        "device": "FLOW-METER-01",
-        "type": "Sprawdzenie przepływomierza",
-        "frequency": "quarterly",
-        "estimated_duration": 90,
-        "required_tools": ["CAL003"],
-        "technician_level": "certified"
-      }
-    ]
-  },
-  "suppliers": {
-    "default_suppliers": [
-      {
-        "id": "SUP001",
-        "name": "SafetyTech Sp. z o.o.",
-        "contact_person": "Jan Kowalski",
-        "email": "j.kowalski@safetytech.pl",
-        "phone": "+48 22 123 45 67",
-        "address": "ul. Bezpieczna 10, 00-001 Warszawa",
-        "payment_terms": 30,
-        "delivery_time": 7
-      },
-      {
-        "id": "SUP002",
-        "name": "ProSeal Ltd.",
-        "contact_person": "Anna Nowak",
-        "email": "a.nowak@proseal.com",
-        "phone": "+48 61 987 65 43",
-        "address": "ul. Uszczelkowa 5, 60-001 Poznań",
-        "payment_terms": 14,
-        "delivery_time": 5
-      }
-    ]
-  },
-  "categories": {
-    "FILTER": {
-      "name": "Filtry",
-      "description": "Filtry ochronne wszystkich typów",
-      "icon": "🔽"
-    },
-    "SEAL": {
-      "name": "Uszczelki",
-      "description": "Uszczelki i elementy uszczelniające",
-      "icon": "⭕"
-    },
-    "VALVE": {
-      "name": "Zawory",
-      "description": "Zawory wydechowe i regulacyjne", 
-      "icon": "🔧"
-    },
-    "STRAP": {
-      "name": "Pasy",
-      "description": "Pasy nośne i elementy mocujące",
-      "icon": "🎽"
-    },
-    "VISOR": {
-      "name": "Wizjery",
-      "description": "Szyby i wizjery panoramiczne",
-      "icon": "👁️"
-    },
-    "OTHER": {
-      "name": "Inne",
-      "description": "Pozostałe części zamienne",
-      "icon": "🔹"
     }
-  }
+  },
+  "definitions": {
+    "sparePart": {
+      "type": "object",
+      "title": "Część Zamienna",
+      "description": "Definicja części zamiennej z parametrami magazynowymi",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z]\\d{3}$",
+          "description": "Unikalny identyfikator części (format: X999)"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "description": "Nazwa części"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["FILTER", "SEAL", "VALVE", "STRAP", "VISOR", "OTHER"],
+          "description": "Kategoria części"
+        },
+        "quantity": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9999,
+          "description": "Aktualny stan magazynowy"
+        },
+        "min_level": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "description": "Minimalny stan magazynowy"
+        },
+        "price": {
+          "type": "number",
+          "minimum": 0,
+          "multipleOf": 0.01,
+          "description": "Cena jednostkowa"
+        },
+        "supplier": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 100,
+          "description": "Nazwa dostawcy"
+        },
+        "part_number": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 50,
+          "description": "Numer katalogowy producenta"
+        },
+        "shelf_life_days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 7300,
+          "description": "Okres przydatności w dniach (opcjonalnie)"
+        }
+      },
+      "required": ["id", "name", "category", "quantity", "min_level", "price", "supplier", "part_number"],
+      "additionalProperties": false
+    },
+    "calibrationTool": {
+      "type": "object",
+      "title": "Narzędzie Kalibracyjne",
+      "description": "Narzędzie pomiarowe wymagające okresowej kalibracji",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^CAL\\d{3}$",
+          "description": "Identyfikator narzędzia (format: CAL999)"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 100,
+          "description": "Nazwa narzędzia"
+        },
+        "location": {
+          "type": "string",
+          "pattern": "^[A-Z]+-\\d{3}$",
+          "description": "Lokalizacja (format: LAB-001)"
+        },
+        "last_calibration": {
+          "type": "string",
+          "format": "date",
+          "description": "Data ostatniej kalibracji (YYYY-MM-DD)"
+        },
+        "next_calibration": {
+          "type": "string",
+          "format": "date",
+          "description": "Data następnej kalibracji (YYYY-MM-DD)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["OK", "ATTENTION", "FAILED", "OUT_OF_SERVICE"],
+          "description": "Status narzędzia"
+        },
+        "calibration_interval": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 1095,
+          "description": "Interwał kalibracji w dniach"
+        },
+        "serial_number": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50,
+          "description": "Numer seryjny narzędzia"
+        }
+      },
+      "required": ["id", "name", "location", "last_calibration", "next_calibration", "status", "calibration_interval", "serial_number"],
+      "additionalProperties": false
+    },
+    "maintenanceSchedule": {
+      "type": "object",
+      "title": "Harmonogram Konserwacji",
+      "description": "Plan okresowej konserwacji urządzenia",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^MAINT\\d{3}$",
+          "description": "Identyfikator harmonogramu (format: MAINT999)"
+        },
+        "device": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 50,
+          "description": "Identyfikator urządzenia"
+        },
+        "type": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 100,
+          "description": "Typ konserwacji"
+        },
+        "frequency": {
+          "type": "string",
+          "enum": ["daily", "weekly", "monthly", "quarterly", "yearly"],
+          "description": "Częstotliwość konserwacji"
+        },
+        "estimated_duration": {
+          "type": "integer",
+          "minimum": 15,
+          "maximum": 480,
+          "description": "Szacowany czas trwania w minutach"
+        },
+        "required_tools": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^CAL\\d{3}$"
+          },
+          "description": "Lista wymaganych narzędzi (ID)"
+        },
+        "technician_level": {
+          "type": "string",
+          "enum": ["basic", "standard", "certified", "expert"],
+          "description": "Wymagany poziom uprawnień technika"
+        }
+      },
+      "required": ["id", "device", "type", "frequency", "estimated_duration", "technician_level"],
+      "additionalProperties": false
+    },
+    "supplier": {
+      "type": "object",
+      "title": "Dostawca",
+      "description": "Dane kontaktowe i warunki współpracy z dostawcą",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^SUP\\d{3}$",
+          "description": "Identyfikator dostawcy (format: SUP999)"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "description": "Nazwa firmy dostawcy"
+        },
+        "contact_person": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 100,
+          "description": "Osoba kontaktowa"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Adres email kontaktowy"
+        },
+        "phone": {
+          "type": "string",
+          "pattern": "^\\+?[0-9\\s\\-\\(\\)]{7,20}$",
+          "description": "Numer telefonu"
+        },
+        "address": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 200,
+          "description": "Adres siedziby"
+        },
+        "payment_terms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 365,
+          "description": "Terminy płatności w dniach"
+        },
+        "delivery_time": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 90,
+          "description": "Standardowy czas dostawy w dniach"
+        }
+      },
+      "required": ["id", "name", "contact_person", "email", "phone", "address", "payment_terms", "delivery_time"],
+      "additionalProperties": false
+    },
+    "partCategory": {
+      "type": "object",
+      "title": "Kategoria Części",
+      "description": "Definicja kategorii części zamiennych",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Nazwa kategorii"
+        },
+        "description": {
+          "type": "string",
+          "description": "Opis kategorii"
+        },
+        "icon": {
+          "type": "string",
+          "description": "Emoji lub kod ikony"
+        }
+      },
+      "required": ["name", "description", "icon"],
+      "additionalProperties": false
+    }
+  },
+  "required": ["spare_parts", "tools", "categories"],
+  "additionalProperties": false
 }
