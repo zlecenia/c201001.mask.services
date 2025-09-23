@@ -37,6 +37,10 @@
     "login_failed": "Logowanie nieudane",
     "invalid_credentials": "Nieprawidłowe dane logowania"
   },
+  "loading": {
+    "title": "Logowanie...",
+    "message": "Proszę czekać"
+  },
   "keyboard": {
     "caps": "Caps",
     "shift": "Shift",

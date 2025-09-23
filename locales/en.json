@@ -37,6 +37,10 @@
     "login_failed": "Login failed",
     "invalid_credentials": "Invalid credentials"
   },
+  "loading": {
+    "title": "Logging in...",
+    "message": "Please wait"
+  },
   "keyboard": {
     "caps": "Caps",
     "shift": "Shift",

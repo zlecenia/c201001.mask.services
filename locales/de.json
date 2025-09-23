@@ -37,6 +37,10 @@
     "login_failed": "Anmeldung fehlgeschlagen",
     "invalid_credentials": "Ungültige Anmeldedaten"
   },
+  "loading": {
+    "title": "Anmelden...",
+    "message": "Bitte warten"
+  },
   "keyboard": {
     "caps": "Caps",
     "shift": "Shift",

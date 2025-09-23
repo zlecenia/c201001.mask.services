@@ -41,6 +41,8 @@
                 <!--                    <div class="menu-header" data-i18n="login.menu_header">LOGIN MENU</div>-->
                 <div class="menu-layout">
                     <div class="menu-sidebar">
+                             <span class="start-buttons">
+
                         <button id="login-scanner-btn" class="menu-item"
                                 onclick="navigateAction('login-scanner-btn'); selectLoginMethod('scanner')"
                                 data-i18n="login.scanner">Scanner
@@ -49,6 +51,28 @@
                                 onclick="navigateAction('login-keyword-btn'); selectLoginMethod('keyword')"
                                 data-i18n="login.keyword">Keyword
                         </button>
+
+                                    </span>
+                        <span class="login-buttons">
+                                        <button id="login-operator-btn" class="menu-item btn-green"
+                                                onclick="navigateAction('login-operator-btn'); mockLogin('OPERATOR')">
+                                            Login as OPERATOR
+                                        </button>
+                                        <button id="login-admin-btn" class="menu-item btn-yellow"
+                                                onclick="navigateAction('login-admin-btn'); mockLogin('ADMIN')">Login as
+                                            ADMIN
+                                        </button>
+                                        <button id="login-superuser-btn" class="menu-item btn-red"
+                                                onclick="navigateAction('login-superuser-btn'); mockLogin('SUPERUSER')">
+                                            Login as SUPERUSER
+                                        </button>
+                                        <button id="login-serwisant-btn" class="menu-item btn-blue"
+                                                onclick="navigateAction('login-serwisant-btn'); mockLogin('SERWISANT')">
+                                            Login as SERWISANT
+                                        </button>
+
+                                    </span>
+
                     </div>
                     <div class="menu-content">
                         <div id="login-keyword" class="login-method active">
@@ -177,28 +201,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="login-buttons">
-                                        <button id="login-operator-btn" class="btn btn-green"
-                                                onclick="navigateAction('login-operator-btn'); mockLogin('OPERATOR')">
-                                            Login as OPERATOR
-                                        </button>
-                                        <button id="login-admin-btn" class="btn btn-yellow"
-                                                onclick="navigateAction('login-admin-btn'); mockLogin('ADMIN')">Login as
-                                            ADMIN
-                                        </button>
-                                        <button id="login-superuser-btn" class="btn btn-red"
-                                                onclick="navigateAction('login-superuser-btn'); mockLogin('SUPERUSER')">
-                                            Login as SUPERUSER
-                                        </button>
-                                        <button id="login-serwisant-btn" class="btn btn-blue"
-                                                onclick="navigateAction('login-serwisant-btn'); mockLogin('SERWISANT')">
-                                            Login as SERWISANT
-                                        </button>
-                                        <button id="data-sensors-btn" class="btn btn-purple"
-                                                onclick="navigateAction('data-sensors-btn'); focusDataSensors()">
-                                            DATA SENSORS
-                                        </button>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
@@ -285,17 +288,20 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-left">
-                        <p>
+
+            <p>
+                <span id="device_name" class="footer-label">CONNECT 500</span>
+
+            </p>
+
+            <p>
             <span id="user-info" style="display:none;">
 <!--                    <span id="username">-&#45;&#45;</span>-->
                     <span id="user-name">USERNAME</span>
                     <span id="user-role" class="role-badge">---</span>
                 </span>
             </p>
-            <p>
-                <span id="footer-date">--/--/----</span>
-                <span id="footer-time">--:--:--</span>
-            </p>
+
 
 
         </div>
@@ -304,15 +310,14 @@
             <span id="device_connection_status" class="status-indicator">
                 <span id="device_url" class="footer-host">c201001.mask.services</span>
                 <span class="status-dot"></span>
-                <span id="status-text" data-i18n="global.offline" >OFFLINE</span>
+                <span id="status-text" data-i18n="global.offline">OFFLINE</span>
             </span>
         </div>
 
         <div class="footer-right">
-
             <p>
-                <span id="device_name" class="footer-label">CONNECT 500</span>
-
+                <span id="footer-date">--/--/----</span>
+                <span id="footer-time">--:--:--</span>
             </p>
 
         </div>

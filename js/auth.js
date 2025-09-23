@@ -53,8 +53,14 @@ class AuthManager {
             window.hideLoading();
         }
         
-        // Update UI screens
-        this.switchScreen('login-screen', 'system-screen');
+        // Navigate to system screen using router - CRITICAL FIX!
+        if (window.navigateAction) {
+            // Use router navigation instead of just DOM manipulation
+            window.navigateAction('system-screen-default');
+        } else {
+            // Fallback to switchScreen if router not available
+            this.switchScreen('login-screen', 'system-screen');
+        }
         
         // Show user menu based on role
         if (window.MenuManager) {
@@ -85,8 +91,14 @@ class AuthManager {
             this.inactivityTimer = null;
         }
         
-        // Switch back to login screen
-        this.switchScreen('system-screen', 'login-screen');
+        // Navigate back to login screen using router - CRITICAL FIX!
+        if (window.navigateAction) {
+            // Use router navigation instead of just DOM manipulation
+            window.navigateAction('login-screen-default');
+        } else {
+            // Fallback to switchScreen if router not available
+            this.switchScreen('system-screen', 'login-screen');
+        }
         
         // Hide footer user info
         this.hideFooterUserInfo();

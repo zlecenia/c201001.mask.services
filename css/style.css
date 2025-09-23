@@ -582,12 +582,10 @@ button:active {
 }
 
 .login-buttons {
+    margin-top: 1rem;
+
     display: flex;    flex-direction: column;
-    gap: 0.8rem;
-    margin-top: 6px;
-    padding-left: 6px;
-    min-width: 250px;
-    max-width: 220px;
+
     align-self: flex-start;
 }
 .login-buttons button {
