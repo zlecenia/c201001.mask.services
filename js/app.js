@@ -32,6 +32,9 @@ class MasktronicApp {
                 console.log('✅ Router system initialized');
             }
             
+            // Initialize enhanced modules with modular architecture
+            this.initializeEnhancedModules();
+            
             // Initialize modular components
             this.setupEventListeners();
             this.startClock();
@@ -76,6 +79,48 @@ class MasktronicApp {
             document.getElementById(screenId).classList.add('active');
         }
         this.currentScreen = screenId;
+    }
+
+    /**
+     * Initialize enhanced modules with new modular architecture
+     * This method ensures proper initialization of all enhanced modules
+     */
+    initializeEnhancedModules() {
+        try {
+            // Initialize System Settings with modular components
+            if (window.SystemSettingsEnhanced) {
+                window.systemSettingsEnhanced = new SystemSettingsEnhanced();
+                console.log('✅ SystemSettingsEnhanced initialized with modular components');
+            }
+            
+            // Initialize Workshop Enhanced module
+            if (window.WorkshopEnhanced) {
+                window.workshopEnhanced = new WorkshopEnhanced();
+                console.log('✅ WorkshopEnhanced initialized');
+            }
+            
+            // Initialize Test Reports Enhanced module
+            if (window.TestReportsEnhanced) {
+                window.testReportsEnhanced = new TestReportsEnhanced();
+                console.log('✅ TestReportsEnhanced initialized');
+            }
+            
+            // Initialize Test Menu Enhanced module
+            if (window.TestMenuEnhanced) {
+                window.testMenuEnhanced = new TestMenuEnhanced();
+                console.log('✅ TestMenuEnhanced initialized');
+            }
+            
+            // Initialize Device Data Enhanced module
+            if (window.DeviceDataEnhanced) {
+                window.deviceDataEnhanced = new DeviceDataEnhanced();
+                console.log('✅ DeviceDataEnhanced initialized');
+            }
+            
+            console.log('✅ All enhanced modules initialized successfully');
+        } catch (error) {
+            console.error('❌ Error initializing enhanced modules:', error);
+        }
     }
 
     async loadMockData() {

@@ -25,7 +25,9 @@
         </div>
         <div class="header-center">
           <span id="device_connection_status" class="status-indicator">
-                <span id="device_url" class="footer-host">c201001.mask.services</span>
+                <span id="device_url" class="footer-host">
+                    <a href="https://c201001.mask.services">c201001.mask.services</a>
+                </span>
                 <span class="status-dot"></span>
                 <span id="status-text" data-i18n="global.offline">OFFLINE</span>
             </span>
@@ -527,6 +529,20 @@
     document.write('<script src="js/i18n.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/router.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Modular settings components (load before enhanced modules)
+    document.write('<script src="js/modules/settings-core.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/settings-scenarios.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/settings-integration.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/settings-standards.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/settings-system.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Modular workshop components (load before enhanced modules)
+    document.write('<script src="js/modules/workshop-core.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/workshop-parts.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/workshop-maintenance.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/workshop-tools.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/workshop-inventory.js?v=' + cacheBuster + '"><\/script>');
     
     // Enhanced modules for MASKSERVICE C20 functionality
     document.write('<script src="js/test-menu-enhanced.js?v=' + cacheBuster + '"><\/script>');
