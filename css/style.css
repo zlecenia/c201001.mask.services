@@ -1978,6 +1978,121 @@ button:active {
     background: linear-gradient(135deg, #1d4ed8, var(--primary-color));
 }
 
+/* Export Section Styling */
+.export-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.export-section h3 {
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.export-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-export {
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-export::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-export:hover::before {
+    left: 100%;
+}
+
+.btn-export:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-export.btn-json {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+}
+
+.btn-export.btn-json:hover {
+    background: linear-gradient(135deg, #059669, #047857);
+    box-shadow: 0 6px 15px rgba(16, 185, 129, 0.4);
+}
+
+.btn-export.btn-xml {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: white;
+}
+
+.btn-export.btn-xml:hover {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4);
+}
+
+.btn-export.btn-csv {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+}
+
+.btn-export.btn-csv:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
+.btn-export.btn-pdf {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+}
+
+.btn-export.btn-pdf:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4);
+}
+
+/* Responsive Export Buttons */
+@media (max-width: 768px) {
+    .export-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .btn-export {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
 /* Empty State */
 .users-list:empty::before {
     content: "No users found. Click 'Add User' to create the first user.";

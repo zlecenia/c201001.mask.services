@@ -370,6 +370,17 @@
                 <p data-i18n="test.test_scenario">Scenariusz testowy</p>
             </button>
         </div>
+        
+        <!-- Export Section -->
+        <div class="export-section">
+            <h3 data-i18n="export.title">Export Test Data</h3>
+            <div class="export-buttons">
+                <button class="btn-export btn-json" onclick="exportTestData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-xml" onclick="exportTestData('xml')" data-i18n="export.xml">XML</button>
+                <button class="btn-export btn-csv" onclick="exportTestData('csv')" data-i18n="export.csv">CSV</button>
+                <button class="btn-export btn-pdf" onclick="exportTestData('pdf')" data-i18n="export.pdf">PDF</button>
+            </div>
+        </div>
     </div>
 
     <!-- Device Selection Template -->
@@ -416,6 +427,17 @@
                 <h3 data-i18n="user.session_info">Session Info</h3>
                 <p data-i18n="user.login_time">Login time: <span id="login-time">---</span></p>
                 <p data-i18n="user.last_activity">Last activity: <span id="last-activity">---</span></p>
+            </div>
+        </div>
+        
+        <!-- Export Section -->
+        <div class="export-section">
+            <h3 data-i18n="export.title">Export User Data</h3>
+            <div class="export-buttons">
+                <button class="btn-export btn-json" onclick="exportUserData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-xml" onclick="exportUserData('xml')" data-i18n="export.xml">XML</button>
+                <button class="btn-export btn-csv" onclick="exportUserData('csv')" data-i18n="export.csv">CSV</button>
+                <button class="btn-export btn-pdf" onclick="exportUserData('pdf')" data-i18n="export.pdf">PDF</button>
             </div>
         </div>
     </div>
@@ -477,6 +499,17 @@
             </div>
         </div>
         <button class="btn btn-primary" data-i18n="users.add_user">Add User</button>
+        
+        <!-- Export Section -->
+        <div class="export-section">
+            <h3 data-i18n="export.title">Export Users List</h3>
+            <div class="export-buttons">
+                <button class="btn-export btn-json" onclick="exportUsersData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-xml" onclick="exportUsersData('xml')" data-i18n="export.xml">XML</button>
+                <button class="btn-export btn-csv" onclick="exportUsersData('csv')" data-i18n="export.csv">CSV</button>
+                <button class="btn-export btn-pdf" onclick="exportUsersData('pdf')" data-i18n="export.pdf">PDF</button>
+            </div>
+        </div>
     </div>
 
     <!-- Service Menu Template (ADMIN) -->
@@ -496,6 +529,17 @@
                 <p data-i18n="service.backup_desc">Kopia zapasowa danych</p>
             </button>
         </div>
+        
+        <!-- Export Section -->
+        <div class="export-section">
+            <h3 data-i18n="export.title">Export Service Data</h3>
+            <div class="export-buttons">
+                <button class="btn-export btn-json" onclick="exportServiceData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-xml" onclick="exportServiceData('xml')" data-i18n="export.xml">XML</button>
+                <button class="btn-export btn-csv" onclick="exportServiceData('csv')" data-i18n="export.csv">CSV</button>
+                <button class="btn-export btn-pdf" onclick="exportServiceData('pdf')" data-i18n="export.pdf">PDF</button>
+            </div>
+        </div>
     </div>
 
     <!-- System Settings Template (SUPERUSER) -->
@@ -514,6 +558,17 @@
             </div>
         </div>
         <button class="btn btn-primary" data-i18n="actions.save_settings">Save Settings</button>
+        
+        <!-- Export Section -->
+        <div class="export-section">
+            <h3 data-i18n="export.title">Export System Settings</h3>
+            <div class="export-buttons">
+                <button class="btn-export btn-json" onclick="exportSettingsData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-xml" onclick="exportSettingsData('xml')" data-i18n="export.xml">XML</button>
+                <button class="btn-export btn-csv" onclick="exportSettingsData('csv')" data-i18n="export.csv">CSV</button>
+                <button class="btn-export btn-pdf" onclick="exportSettingsData('pdf')" data-i18n="export.pdf">PDF</button>
+            </div>
+        </div>
     </div>
 </div>
 

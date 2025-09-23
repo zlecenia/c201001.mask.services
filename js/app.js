@@ -446,3 +446,108 @@ console.log('✅ App.js - Simple global class system loaded');
 
 // Export to global scope
 window.MasktronicApp = MasktronicApp;
+
+// Export Functions for Templates - using DataExportManager
+window.exportTestData = function(format) {
+    console.log(`📊 Exporting Test Data as ${format.toUpperCase()}`);
+    
+    const testData = {
+        testType: "Device Selection Test",
+        timestamp: new Date().toISOString(),
+        devices: ["PP_MASK", "NP_MASK", "SCBA", "CPS"],
+        testFlow: "Standard Test Scenario",
+        user: window.authManager?.getCurrentUser()?.username || "unknown"
+    };
+    
+    if (window.dataExporter) {
+        window.dataExporter.exportData(testData, `test-data-${Date.now()}`, format);
+    } else {
+        console.error('DataExportManager not available');
+    }
+};
+
+window.exportUserData = function(format) {
+    console.log(`📊 Exporting User Data as ${format.toUpperCase()}`);
+    
+    const currentUser = window.authManager?.getCurrentUser();
+    const userData = {
+        currentUser: currentUser?.username || "---",
+        role: currentUser?.role || "---",
+        loginTime: currentUser?.lastLogin || "---",
+        sessionInfo: {
+            lastActivity: new Date().toISOString(),
+            sessionDuration: "Active"
+        }
+    };
+    
+    if (window.dataExporter) {
+        window.dataExporter.exportData(userData, `user-data-${Date.now()}`, format);
+    } else {
+        console.error('DataExportManager not available');
+    }
+};
+
+window.exportUsersData = function(format) {
+    console.log(`📊 Exporting Users List as ${format.toUpperCase()}`);
+    
+    const usersData = {
+        usersList: [
+            { username: "operator1", role: "OPERATOR", active: true },
+            { username: "admin1", role: "ADMIN", active: true },
+            { username: "superuser", role: "SUPERUSER", active: true }
+        ],
+        exportedBy: window.authManager?.getCurrentUser()?.username || "system",
+        exportDate: new Date().toISOString(),
+        totalUsers: 3
+    };
+    
+    if (window.dataExporter) {
+        window.dataExporter.exportData(usersData, `users-list-${Date.now()}`, format);
+    } else {
+        console.error('DataExportManager not available');
+    }
+};
+
+window.exportServiceData = function(format) {
+    console.log(`📊 Exporting Service Data as ${format.toUpperCase()}`);
+    
+    const serviceData = {
+        serviceOperations: [
+            { operation: "System Diagnostics", status: "Available", lastRun: "2024-01-15" },
+            { operation: "Calibration", status: "Available", lastRun: "2024-01-10" },
+            { operation: "Backup", status: "Available", lastRun: "2024-01-14" }
+        ],
+        systemStatus: "Operational",
+        exportedBy: window.authManager?.getCurrentUser()?.username || "system",
+        exportDate: new Date().toISOString()
+    };
+    
+    if (window.dataExporter) {
+        window.dataExporter.exportData(serviceData, `service-data-${Date.now()}`, format);
+    } else {
+        console.error('DataExportManager not available');
+    }
+};
+
+window.exportSettingsData = function(format) {
+    console.log(`📊 Exporting Settings Data as ${format.toUpperCase()}`);
+    
+    const settingsData = {
+        networkSettings: {
+            ipAddress: "192.168.1.10",
+            port: "8080"
+        },
+        systemConfiguration: {
+            updateInterval: 5,
+            debugMode: false
+        },
+        exportedBy: window.authManager?.getCurrentUser()?.username || "system",
+        exportDate: new Date().toISOString()
+    };
+    
+    if (window.dataExporter) {
+        window.dataExporter.exportData(settingsData, `settings-data-${Date.now()}`, format);
+    } else {
+        console.error('DataExportManager not available');
+    }
+};
