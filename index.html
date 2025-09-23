@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASKTRONIC C20 - System Mock</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app" class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <span class="logo">MASKTRONIC C20</span>
+                <span class="version">v2.0 MOCK</span>
+            </div>
+            <div class="header-right">
+                <span id="clock">--:--:--</span>
+                <span id="status" class="status-indicator">
+                    <span class="status-dot"></span>
+                    <span id="status-text">OFFLINE</span>
+                </span>
+                <span id="user-info" style="display:none;">
+                    <span id="username">---</span>
+                    <span id="user-role" class="role-badge">---</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Login Screen -->
+            <div id="login-screen" class="screen active">
+                <div class="menu-container">
+                    <div class="menu-header">LOGIN MENU</div>
+                    <div class="menu-layout">
+                        <div class="menu-sidebar">
+                            <button class="menu-item" onclick="selectLoginMethod('scanner')">Scanner</button>
+                            <button class="menu-item active" onclick="selectLoginMethod('keyword')">Keyword</button>
+                        </div>
+                        <div class="menu-content">
+                            <div id="login-keyword" class="login-method active">
+                                <h2>User Login By Keyword</h2>
+                                <div class="login-form">
+                                    <input type="text" id="username-input" placeholder="Username">
+                                    <input type="password" id="password-input" placeholder="Password">
+                                    <div class="number-pad">
+                                        <button onclick="addToPassword('1')">1</button>
+                                        <button onclick="addToPassword('2')">2</button>
+                                        <button onclick="addToPassword('3')">3</button>
+                                        <button onclick="addToPassword('4')">4</button>
+                                        <button onclick="addToPassword('5')">5</button>
+                                        <button onclick="addToPassword('6')">6</button>
+                                        <button onclick="addToPassword('7')">7</button>
+                                        <button onclick="addToPassword('8')">8</button>
+                                        <button onclick="addToPassword('9')">9</button>
+                                        <button onclick="addToPassword('0')">0</button>
+                                    </div>
+                                    <div class="login-buttons">
+                                        <button class="btn btn-green" onclick="mockLogin('OPERATOR')">Login as OPERATOR</button>
+                                        <button class="btn btn-yellow" onclick="mockLogin('ADMIN')">Login as ADMIN</button>
+                                        <button class="btn btn-red" onclick="mockLogin('SUPERUSER')">Login as SUPERUSER</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="login-scanner" class="login-method">
+                                <h2>User Login by QR-CODE / BARCODE</h2>
+                                <div class="scanner-mock">
+                                    <div class="scanner-animation">
+                                        <div class="scanner-line"></div>
+                                    </div>
+                                    <p class="error-msg">+ Skaner nie został wykryty</p>
+                                    <p>kod nie został poprawnie sczytany</p>
+                                    <button class="btn" onclick="selectLoginMethod('keyword')">Użyj klawiatury</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Start Screen -->
+            <div id="system-screen" class="screen">
+                <div class="menu-container">
+                    <div class="menu-header">SYSTEM</div>
+                    <div class="system-content">
+                        <h1>Welcome</h1>
+                        <div class="system-logo">MASKTRONIC</div>
+                        <div class="loading-bar">
+                            <div class="loading-progress" id="loading-progress"></div>
+                        </div>
+                        <p id="loading-text">System starting in Progress...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Menu Screen -->
+            <div id="user-menu-screen" class="screen">
+                <div class="menu-container">
+                    <div class="menu-header">
+                        USER MENU
+                        <span id="menu-role-badge" class="role-badge"></span>
+                    </div>
+                    <div class="menu-layout">
+                        <div class="menu-sidebar" id="user-menu-items">
+                            <!-- Dynamic menu items based on role -->
+                        </div>
+                        <div class="menu-content" id="menu-content">
+                            <div class="welcome-message">
+                                <h2>Wybierz opcję z menu</h2>
+                                <p>System gotowy do pracy</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pressure Display Panel -->
+            <aside id="pressure-panel" class="pressure-panel" style="display:none;">
+                <h3>DATA SENSORS</h3>
+                <div class="pressure-box">
+                    <h4>PRESSURE</h4>
+                    <div class="pressure-item">
+                        <span>Low</span>
+                        <span id="pressure-low">10 mbar</span>
+                    </div>
+                    <div class="pressure-item">
+                        <span>Medium</span>
+                        <span id="pressure-medium">20 bar</span>
+                    </div>
+                    <div class="pressure-item">
+                        <span>High</span>
+                        <span id="pressure-high">30 bar</span>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-left">
+                <span id="footer-user">SERWISANT: ---</span>
+                <span id="footer-date">--/--/----</span>
+            </div>
+            <div class="footer-right">
+                <span>CONNECT 500</span>
+                <span>192.168.1.10:8081</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Menu Templates -->
+    <div id="templates" style="display:none;">
+        <!-- Test Menu Template -->
+        <div id="test-menu-template">
+            <h2>Test Menu</h2>
+            <div class="menu-grid">
+                <button class="menu-card" onclick="selectTestOption('device')">
+                    <h3>Kind of Device</h3>
+                    <p>Wybierz rodzaj urządzenia</p>
+                </button>
+                <button class="menu-card" onclick="selectTestOption('type')">
+                    <h3>Device Type</h3>
+                    <p>Wybierz typ urządzenia</p>
+                </button>
+                <button class="menu-card" onclick="selectTestOption('test')">
+                    <h3>Kind of Test</h3>
+                    <p>Wybierz rodzaj testu</p>
+                </button>
+                <button class="menu-card" onclick="selectTestOption('flow')">
+                    <h3>Test Flow</h3>
+                    <p>Scenariusz testowy</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Device Selection Template -->
+        <div id="device-select-template">
+            <h2>Kind of Device</h2>
+            <div class="device-list">
+                <button class="device-item" onclick="selectDevice('PP_MASK')">PP Mask</button>
+                <button class="device-item" onclick="selectDevice('NP_MASK')">NP Mask</button>
+                <button class="device-item" onclick="selectDevice('SCBA')">SCBA</button>
+                <button class="device-item" onclick="selectDevice('CPS')">CPS Protection Suit</button>
+            </div>
+            <button class="btn btn-back" onclick="backToMenu()">← Powrót</button>
+        </div>
+
+        <!-- Workshop Template -->
+        <div id="workshop-template">
+            <h2>Workshop</h2>
+            <div class="menu-grid">
+                <button class="menu-card">
+                    <h3>Equipment List</h3>
+                    <p>Lista sprzętu</p>
+                </button>
+                <button class="menu-card">
+                    <h3>Spare Parts</h3>
+                    <p>Części zamienne</p>
+                </button>
+                <button class="menu-card">
+                    <h3>Maintenance</h3>
+                    <p>Harmonogram przeglądów</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- User Data Template -->
+        <div id="user-data-template">
+            <h2>User Data</h2>
+            <div class="user-info-grid">
+                <div class="info-card">
+                    <h3>Current User</h3>
+                    <p id="current-user-name">---</p>
+                    <p id="current-user-role">---</p>
+                </div>
+                <div class="info-card">
+                    <h3>Session Info</h3>
+                    <p>Login time: <span id="login-time">---</span></p>
+                    <p>Last activity: <span id="last-activity">---</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Device Data Template -->
+        <div id="device-data-template">
+            <h2>Device Data</h2>
+            <div class="device-info">
+                <div class="device-card">
+                    <h3>Device Status</h3>
+                    <p>Device ID: <span id="device-id">RPI_MOCK_001</span></p>
+                    <p>Status: <span id="device-status" class="status-online">ONLINE</span></p>
+                    <p>Uptime: <span id="device-uptime">---</span></p>
+                </div>
+                <div class="sensor-grid">
+                    <div class="sensor-card">
+                        <h4>Temperature</h4>
+                        <span id="temp-value">22.5°C</span>
+                    </div>
+                    <div class="sensor-card">
+                        <h4>Humidity</h4>
+                        <span id="humidity-value">45%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Reports Template -->
+        <div id="test-reports-template">
+            <h2>Test Reports</h2>
+            <div class="reports-list">
+                <div class="report-item">
+                    <span>Report #001</span>
+                    <span>2024-01-15</span>
+                    <button class="btn-small">PDF</button>
+                </div>
+                <div class="report-item">
+                    <span>Report #002</span>
+                    <span>2024-01-16</span>
+                    <button class="btn-small">PDF</button>
+                </div>
+            </div>
+            <button class="btn btn-primary">Generate New Report</button>
+        </div>
+
+        <!-- Users Template (ADMIN) -->
+        <div id="users-template">
+            <h2>Users Management</h2>
+            <div class="users-list">
+                <div class="user-item">
+                    <span>operator1</span>
+                    <span class="role-badge role-operator">OPERATOR</span>
+                    <button class="btn-small">Edit</button>
+                </div>
+                <div class="user-item">
+                    <span>admin1</span>
+                    <span class="role-badge role-admin">ADMIN</span>
+                    <button class="btn-small">Edit</button>
+                </div>
+            </div>
+            <button class="btn btn-primary">Add User</button>
+        </div>
+
+        <!-- Service Menu Template (ADMIN) -->
+        <div id="service-menu-template">
+            <h2>Service Menu</h2>
+            <div class="service-grid">
+                <button class="service-card">
+                    <h3>System Diagnostics</h3>
+                    <p>Sprawdź stan systemu</p>
+                </button>
+                <button class="service-card">
+                    <h3>Calibration</h3>
+                    <p>Kalibracja czujników</p>
+                </button>
+                <button class="service-card">
+                    <h3>Backup</h3>
+                    <p>Kopia zapasowa danych</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- System Settings Template (SUPERUSER) -->
+        <div id="system-settings-template">
+            <h2>System Settings</h2>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <h3>Network Settings</h3>
+                    <label>IP Address: <input type="text" value="192.168.1.10"></label>
+                    <label>Port: <input type="text" value="8080"></label>
+                </div>
+                <div class="setting-group">
+                    <h3>System Configuration</h3>
+                    <label>Update Interval: <input type="number" value="5"> seconds</label>
+                    <label>Debug Mode: <input type="checkbox"></label>
+                </div>
+            </div>
+            <button class="btn btn-primary">Save Settings</button>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/menu.js"></script>
+</body>
+</html>
