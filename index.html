@@ -351,92 +351,92 @@
 <div id="templates" style="display:none;">
     <!-- Test Menu Template -->
     <div id="test-menu-template">
-        <h2>Test Menu</h2>
+        <h2 data-i18n="test.menu_title">Test Menu</h2>
         <div class="menu-grid">
             <button class="menu-card" onclick="selectTestOption('device')">
-                <h3>Kind of Device</h3>
-                <p>Wybierz rodzaj urządzenia</p>
+                <h3 data-i18n="test.kind_of_device">Kind of Device</h3>
+                <p data-i18n="test.select_device_type">Wybierz rodzaj urządzenia</p>
             </button>
             <button class="menu-card" onclick="selectTestOption('type')">
-                <h3>Device Type</h3>
-                <p>Wybierz typ urządzenia</p>
+                <h3 data-i18n="test.device_type">Device Type</h3>
+                <p data-i18n="test.select_device_model">Wybierz typ urządzenia</p>
             </button>
             <button class="menu-card" onclick="selectTestOption('test')">
-                <h3>Kind of Test</h3>
-                <p>Wybierz rodzaj testu</p>
+                <h3 data-i18n="test.kind_of_test">Kind of Test</h3>
+                <p data-i18n="test.select_test_type">Wybierz rodzaj testu</p>
             </button>
             <button class="menu-card" onclick="selectTestOption('flow')">
-                <h3>Test Flow</h3>
-                <p>Scenariusz testowy</p>
+                <h3 data-i18n="test.test_flow">Test Flow</h3>
+                <p data-i18n="test.test_scenario">Scenariusz testowy</p>
             </button>
         </div>
     </div>
 
     <!-- Device Selection Template -->
     <div id="device-select-template">
-        <h2>Kind of Device</h2>
+        <h2 data-i18n="test.kind_of_device">Kind of Device</h2>
         <div class="device-list">
-            <button class="device-item" onclick="selectDevice('PP_MASK')">PP Mask</button>
-            <button class="device-item" onclick="selectDevice('NP_MASK')">NP Mask</button>
-            <button class="device-item" onclick="selectDevice('SCBA')">SCBA</button>
-            <button class="device-item" onclick="selectDevice('CPS')">CPS Protection Suit</button>
+            <button class="device-item" onclick="selectDevice('PP_MASK')" data-i18n="devices.pp_mask">PP Mask</button>
+            <button class="device-item" onclick="selectDevice('NP_MASK')" data-i18n="devices.np_mask">NP Mask</button>
+            <button class="device-item" onclick="selectDevice('SCBA')" data-i18n="devices.scba">SCBA</button>
+            <button class="device-item" onclick="selectDevice('CPS')" data-i18n="devices.cps">CPS Protection Suit</button>
         </div>
-        <button class="btn btn-back" onclick="backToMenu()">← Powrót</button>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
     </div>
 
     <!-- Workshop Template -->
     <div id="workshop-template">
-        <h2>Workshop</h2>
+        <h2 data-i18n="workshop.title">Workshop</h2>
         <div class="menu-grid">
             <button class="menu-card">
-                <h3>Equipment List</h3>
-                <p>Lista sprzętu</p>
+                <h3 data-i18n="workshop.equipment_list">Equipment List</h3>
+                <p data-i18n="workshop.equipment_description">Lista sprzętu</p>
             </button>
             <button class="menu-card">
-                <h3>Spare Parts</h3>
-                <p>Części zamienne</p>
+                <h3 data-i18n="workshop.spare_parts">Spare Parts</h3>
+                <p data-i18n="workshop.spare_parts_description">Części zamienne</p>
             </button>
             <button class="menu-card">
-                <h3>Maintenance</h3>
-                <p>Harmonogram przeglądów</p>
+                <h3 data-i18n="workshop.maintenance">Maintenance</h3>
+                <p data-i18n="workshop.maintenance_description">Harmonogram przeglądów</p>
             </button>
         </div>
     </div>
 
     <!-- User Data Template -->
     <div id="user-data-template">
-        <h2>User Data</h2>
+        <h2 data-i18n="user.title">User Data</h2>
         <div class="user-info-grid">
             <div class="info-card">
-                <h3>Current User</h3>
+                <h3 data-i18n="user.current_user">Current User</h3>
                 <p id="current-user-name">---</p>
                 <p id="current-user-role">---</p>
             </div>
             <div class="info-card">
-                <h3>Session Info</h3>
-                <p>Login time: <span id="login-time">---</span></p>
-                <p>Last activity: <span id="last-activity">---</span></p>
+                <h3 data-i18n="user.session_info">Session Info</h3>
+                <p data-i18n="user.login_time">Login time: <span id="login-time">---</span></p>
+                <p data-i18n="user.last_activity">Last activity: <span id="last-activity">---</span></p>
             </div>
         </div>
     </div>
 
     <!-- Device Data Template -->
     <div id="device-data-template">
-        <h2>Device Data</h2>
+        <h2 data-i18n="device.title">Device Data</h2>
         <div class="device-info">
             <div class="device-card">
-                <h3>Device Status</h3>
-                <p>Device ID: <span id="device-id">RPI_MOCK_001</span></p>
-                <p>Status: <span id="device-status" class="status-online">ONLINE</span></p>
-                <p>Uptime: <span id="device-uptime">---</span></p>
+                <h3 data-i18n="device.status_title">Device Status</h3>
+                <p data-i18n="device.device_id_label">Device ID: <span id="device-id">RPI_MOCK_001</span></p>
+                <p data-i18n="device.status_label">Status: <span id="device-status" class="status-online">ONLINE</span></p>
+                <p data-i18n="device.uptime_label">Uptime: <span id="device-uptime">---</span></p>
             </div>
             <div class="sensor-grid">
                 <div class="sensor-card">
-                    <h4>Temperature</h4>
+                    <h4 data-i18n="sensors.temperature">Temperature</h4>
                     <span id="temp-value">22.5°C</span>
                 </div>
                 <div class="sensor-card">
-                    <h4>Humidity</h4>
+                    <h4 data-i18n="sensors.humidity">Humidity</h4>
                     <span id="humidity-value">45%</span>
                 </div>
             </div>
@@ -445,75 +445,75 @@
 
     <!-- Test Reports Template -->
     <div id="test-reports-template">
-        <h2>Test Reports</h2>
+        <h2 data-i18n="reports.title">Test Reports</h2>
         <div class="reports-list">
             <div class="report-item">
                 <span>Report #001</span>
                 <span>2024-01-15</span>
-                <button class="btn-small">PDF</button>
+                <button class="btn-small" data-i18n="reports.pdf_button">PDF</button>
             </div>
             <div class="report-item">
                 <span>Report #002</span>
                 <span>2024-01-16</span>
-                <button class="btn-small">PDF</button>
+                <button class="btn-small" data-i18n="reports.pdf_button">PDF</button>
             </div>
         </div>
-        <button class="btn btn-primary">Generate New Report</button>
+        <button class="btn btn-primary" data-i18n="reports.generate_new">Generate New Report</button>
     </div>
 
     <!-- Users Template (ADMIN) -->
     <div id="users-template">
-        <h2>Users Management</h2>
+        <h2 data-i18n="users.management_title">Users Management</h2>
         <div class="users-list">
             <div class="user-item">
                 <span>operator1</span>
-                <span class="role-badge role-operator">OPERATOR</span>
-                <button class="btn-small">Edit</button>
+                <span class="role-badge role-operator" data-i18n="roles.operator">OPERATOR</span>
+                <button class="btn-small" data-i18n="actions.edit">Edit</button>
             </div>
             <div class="user-item">
                 <span>admin1</span>
-                <span class="role-badge role-admin">ADMIN</span>
-                <button class="btn-small">Edit</button>
+                <span class="role-badge role-admin" data-i18n="roles.admin">ADMIN</span>
+                <button class="btn-small" data-i18n="actions.edit">Edit</button>
             </div>
         </div>
-        <button class="btn btn-primary">Add User</button>
+        <button class="btn btn-primary" data-i18n="users.add_user">Add User</button>
     </div>
 
     <!-- Service Menu Template (ADMIN) -->
     <div id="service-menu-template">
-        <h2>Service Menu</h2>
+        <h2 data-i18n="service.menu_title">Service Menu</h2>
         <div class="service-grid">
             <button class="service-card">
-                <h3>System Diagnostics</h3>
-                <p>Sprawdź stan systemu</p>
+                <h3 data-i18n="service.diagnostics">System Diagnostics</h3>
+                <p data-i18n="service.diagnostics_desc">Sprawdź stan systemu</p>
             </button>
             <button class="service-card">
-                <h3>Calibration</h3>
-                <p>Kalibracja czujników</p>
+                <h3 data-i18n="service.calibration">Calibration</h3>
+                <p data-i18n="service.calibration_desc">Kalibracja czujników</p>
             </button>
             <button class="service-card">
-                <h3>Backup</h3>
-                <p>Kopia zapasowa danych</p>
+                <h3 data-i18n="service.backup">Backup</h3>
+                <p data-i18n="service.backup_desc">Kopia zapasowa danych</p>
             </button>
         </div>
     </div>
 
     <!-- System Settings Template (SUPERUSER) -->
     <div id="system-settings-template">
-        <h2>System Settings</h2>
+        <h2 data-i18n="settings.title">System Settings</h2>
         <div class="settings-grid">
             <div class="setting-group">
-                <h3>Network Settings</h3>
-                <label>IP Address: <input type="text" value="192.168.1.10"></label>
-                <label>Port: <input type="text" value="8080"></label>
+                <h3 data-i18n="settings.network">Network Settings</h3>
+                <label data-i18n="settings.ip_address">IP Address: <input type="text" value="192.168.1.10"></label>
+                <label data-i18n="settings.port">Port: <input type="text" value="8080"></label>
             </div>
             <div class="setting-group">
-                <h3>System Configuration</h3>
-                <label>Update Interval: <input type="number" value="5"> seconds</label>
-                <label>Debug Mode: <input type="checkbox"></label>
+                <h3 data-i18n="settings.system_config">System Configuration</h3>
+                <label data-i18n="settings.update_interval">Update Interval: <input type="number" value="5"> seconds</label>
+                <label data-i18n="settings.debug_mode">Debug Mode: <input type="checkbox"></label>
             </div>
         </div>
-        <button class="btn btn-primary">Save Settings</button>
+        <button class="btn btn-primary" data-i18n="actions.save_settings">Save Settings</button>
     </div>
 </div>
 
