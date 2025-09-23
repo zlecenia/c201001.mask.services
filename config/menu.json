@@ -3,27 +3,15 @@
     { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
     { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
     { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
-    { "key": "user_data", "label": "User Data", "icon": "👤" },
-    { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
     { "key": "device_history", "label": "Device History", "icon": "📜" },
     { "key": "reports_view", "label": "View Reports", "icon": "📄" },
     { "key": "reports_batch", "label": "Batch Reports", "icon": "📊" },
-    { "key": "reports_schedule", "label": "Report Schedule", "icon": "⏰" },
-    { "key": "workshop_parts", "label": "Workshop Parts", "icon": "🔧" },
-    { "key": "workshop_maintenance", "label": "Maintenance Schedule", "icon": "📅" },
-    { "key": "workshop_tools", "label": "Calibration Tools", "icon": "⚙️" },
-    { "key": "workshop_inventory", "label": "Inventory", "icon": "📦" }
+    { "key": "reports_schedule", "label": "Report Schedule", "icon": "⏰" }
   ],
   "ADMIN": [
-    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
-    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
     { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
-    { "key": "device_history", "label": "Device History", "icon": "📜" },
-    { "key": "reports_view", "label": "View Reports", "icon": "📄" },
-    { "key": "reports_batch", "label": "Batch Reports", "icon": "📊" },
-    { "key": "reports_schedule", "label": "Report Schedule", "icon": "⏰" },
     { "key": "workshop_parts", "label": "Workshop Parts", "icon": "🔧" },
     { "key": "workshop_maintenance", "label": "Maintenance Schedule", "icon": "📅" },
     { "key": "workshop_tools", "label": "Calibration Tools", "icon": "⚙️" },
@@ -32,12 +20,8 @@
     { "key": "service_menu", "label": "Service Menu", "icon": "🛡️" }
   ],
   "SUPERUSER": [
-    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
-    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
-    { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
-    { "key": "device_history", "label": "Device History", "icon": "📜" },
     { "key": "reports_view", "label": "View Reports", "icon": "📄" },
     { "key": "reports_batch", "label": "Batch Reports", "icon": "📊" },
     { "key": "reports_schedule", "label": "Report Schedule", "icon": "⏰" },
@@ -53,8 +37,6 @@
     { "key": "settings_system", "label": "System Config", "icon": "⚙️" }
   ],
   "SERWISANT": [
-    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
-    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
     { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
