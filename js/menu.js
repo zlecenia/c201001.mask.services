@@ -61,8 +61,12 @@ class MenuManager {
         this.currentMenu = menuItems;
         
         // Create menu HTML
-        let menuHtml = `<h2>Menu - ${role}</h2><div class="menu-items">`;
-        
+        //let menuHtml = `<h2>Menu - ${role}</h2><div class="menu-items">`;
+//                <span>Inactive: <span id="inactive-time">0s</span></span>
+        let menuHtml = `            <div id="session-info" class="session-info">
+                <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>
+            </div>`;
+
         menuItems.forEach(item => {
             menuHtml += `
                 <div class="menu-item" onclick="window.MenuManager.selectMenuOption('${item.key}')">
@@ -213,6 +217,56 @@ class MenuManager {
         };
     }
 }
+
+/**
+ * Global template button functions
+ * These functions are called by buttons inside loaded templates
+ */
+
+// Test menu option selection
+window.selectTestOption = function(option) {
+    console.log(`🎯 Test option selected: ${option}`);
+    
+    switch(option) {
+        case 'device':
+            console.log('Loading device selection...');
+            window.MenuManager.loadTemplate('device-select-template');
+            break;
+        case 'type':
+            console.log('Loading device type selection...');
+            alert('Device Type selection - Feature coming soon!');
+            break;
+        case 'test':
+            console.log('Loading test selection...');
+            alert('Test Kind selection - Feature coming soon!');
+            break;
+        case 'flow':
+            console.log('Loading test flow...');
+            alert('Test Flow selection - Feature coming soon!');
+            break;
+        default:
+            console.log(`Test option ${option} not implemented yet`);
+            alert(`Test option "${option}" - Feature coming soon!`);
+    }
+};
+
+// Device selection 
+window.selectDevice = function(device) {
+    console.log(`🎯 Device selected: ${device}`);
+    alert(`Device "${device}" selected! \nTest configuration - Feature coming soon!`);
+};
+
+// Back to menu function
+window.backToMenu = function() {
+    console.log('🔙 Returning to main menu...');
+    const menuContent = document.getElementById('menu-content');
+    if (menuContent) {
+        menuContent.innerHTML = `<div class="welcome-message">
+            <h2>Wybierz opcję z menu</h2>
+            <p>System gotowy do pracy</p>
+        </div>`;
+    }
+};
 
 // Helper functions for compatibility
 function clearPasswordInput() {

@@ -871,6 +871,10 @@ button:active {
     justify-content: space-between;
     padding: 0.5rem 0;
 }
+.session-info{
+    padding: 0.5rem 1rem;
+
+}
 
 /* Footer */
 .footer {
