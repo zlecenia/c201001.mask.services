@@ -18,8 +18,10 @@ class VirtualKeyboard {
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
                 this.activeInput = input;
-                // Show keyboard when input is focused
-                this.showKeyboard();
+                // Show keyboard when input is focused (method implementation below)
+                if (this.keyboardElement) {
+                    this.keyboardElement.style.display = 'flex';
+                }
                 input.setAttribute('data-focused', 'true');
             });
 
