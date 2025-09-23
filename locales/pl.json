@@ -68,9 +68,15 @@
     "workshop_maintenance": "Harmonogram przeglądów",
     "workshop_tools": "Narzędzia kalibracyjne",
     "workshop_inventory": "Magazyn",
+    "test_wizard": "Kreator testów",
+    "test_quick": "Szybki test",
+    "test_scenarios": "Scenariusze testowe",
+    "settings_scenarios": "Scenariusze testowe",
+    "settings_integration": "Integracje",
+    "settings_standards": "Standardy",
+    "settings_system": "Konfiguracja systemu",
     "users": "Użytkownicy",
     "service_menu": "Menu Serwisowe",
-    "system_settings": "Ustawienia Systemu",
     "advanced_diagnostics": "Zaawansowana Diagnostyka"
   },
   "system": {

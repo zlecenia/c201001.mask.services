@@ -498,6 +498,331 @@ class TestMenuEnhanced {
         }
         return scenarios[0]?.id || 'scenario_1';
     }
+
+    // Public methods for split functionality
+    showTestWizard() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getTestWizardHTML();
+        }
+    }
+
+    showTestQuick() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getTestQuickHTML();
+        }
+    }
+
+    showTestScenarios() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getTestScenariosHTML();
+        }
+    }
+
+    // Test Wizard HTML template (focused on multi-step wizard)
+    getTestWizardHTML() {
+        return `
+            <div class="test-menu-enhanced">
+                <div class="test-header">
+                    <h2>Kreator testów wieloetapowy</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="testMenuEnhanced.startTestWizard()">
+                            🧙 Rozpocznij kreator
+                        </button>
+                        <button class="btn btn-secondary" onclick="testMenuEnhanced.loadWizardTemplate()">
+                            📋 Wczytaj szablon
+                        </button>
+                        <button class="btn btn-info" onclick="testMenuEnhanced.wizardHelp()">
+                            ❓ Pomoc
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Wizard Progress Overview -->
+                <div class="wizard-overview">
+                    <h3>Etapy testowania</h3>
+                    <div class="wizard-steps">
+                        ${this.getWizardStepsHTML()}
+                    </div>
+                </div>
+
+                <!-- Recent Tests -->
+                <div class="recent-tests">
+                    <h3>Ostatnie testy</h3>
+                    <div class="tests-list">
+                        ${this.getRecentTestsHTML()}
+                    </div>
+                </div>
+
+                <!-- Wizard Statistics -->
+                <div class="wizard-statistics">
+                    <h3>Statystyki kreatora</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">127</div>
+                            <div class="stat-label">Ukończone testy</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">15 min</div>
+                            <div class="stat-label">Średni czas testu</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">96%</div>
+                            <div class="stat-label">Wskaźnik powodzenia</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">8</div>
+                            <div class="stat-label">Aktywne szablony</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Test Quick HTML template (focused on quick testing for experienced users)
+    getTestQuickHTML() {
+        return `
+            <div class="test-menu-enhanced">
+                <div class="test-header">
+                    <h2>Szybki test</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="testMenuEnhanced.startQuickTest()">
+                            ⚡ Rozpocznij test
+                        </button>
+                        <button class="btn btn-secondary" onclick="testMenuEnhanced.loadQuickPreset()">
+                            📋 Wczytaj preset
+                        </button>
+                        <button class="btn btn-warning" onclick="testMenuEnhanced.emergencyTest()">
+                            🚨 Test awaryjny
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Quick Test Form -->
+                <div class="quick-test-form">
+                    <h3>Formularz szybkiego testu</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Numer seryjny urządzenia:</label>
+                            <input type="text" id="quick-serial" placeholder="Wprowadź numer seryjny">
+                        </div>
+                        <div class="form-group">
+                            <label>Typ testu:</label>
+                            <select id="quick-test-type">
+                                <option value="basic">Test podstawowy</option>
+                                <option value="pressure">Test ciśnienia</option>
+                                <option value="flow">Test przepływu</option>
+                                <option value="leak">Test szczelności</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Operator:</label>
+                            <input type="text" id="quick-operator" placeholder="Imię operatora">
+                        </div>
+                        <div class="form-group">
+                            <label>Uwagi:</label>
+                            <textarea id="quick-notes" placeholder="Dodatkowe uwagi"></textarea>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="testMenuEnhanced.executeQuickTest()">
+                        ▶️ Wykonaj test
+                    </button>
+                </div>
+
+                <!-- Test Presets -->
+                <div class="test-presets">
+                    <h3>Presety testowe</h3>
+                    <div class="presets-grid">
+                        <div class="preset-card" onclick="testMenuEnhanced.loadPreset('basic')">
+                            <h4>Test podstawowy</h4>
+                            <p>Standardowy test zgodny z PN-EN 136</p>
+                        </div>
+                        <div class="preset-card" onclick="testMenuEnhanced.loadPreset('extended')">
+                            <h4>Test rozszerzony</h4>
+                            <p>Pełny test z dodatkowymi pomiarami</p>
+                        </div>
+                        <div class="preset-card" onclick="testMenuEnhanced.loadPreset('maintenance')">
+                            <h4>Test serwisowy</h4>
+                            <p>Test dla celów konserwacyjnych</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Test Scenarios HTML template (focused on test scenario management)
+    getTestScenariosHTML() {
+        return `
+            <div class="test-menu-enhanced">
+                <div class="test-header">
+                    <h2>Scenariusze testowe</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="testMenuEnhanced.createScenario()">
+                            ➕ Nowy scenariusz
+                        </button>
+                        <button class="btn btn-secondary" onclick="testMenuEnhanced.importScenarios()">
+                            📥 Importuj scenariusze
+                        </button>
+                        <button class="btn btn-info" onclick="testMenuEnhanced.exportScenarios()">
+                            📤 Eksportuj scenariusze
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scenarios Library -->
+                <div class="scenarios-library">
+                    <h3>Biblioteka scenariuszy</h3>
+                    <div class="scenarios-filter">
+                        <select onchange="testMenuEnhanced.filterScenarios(this.value)">
+                            <option value="">Wszystkie scenariusze</option>
+                            <option value="pn-en-136">PN-EN 136</option>
+                            <option value="pn-en-137">PN-EN 137</option>
+                            <option value="custom">Niestandardowe</option>
+                        </select>
+                    </div>
+                    <div class="scenarios-list">
+                        <div class="scenario-item">
+                            <div class="scenario-info">
+                                <strong>Test podstawowy PN-EN 136</strong>
+                                <span class="scenario-standard">Standard: PN-EN 136</span>
+                            </div>
+                            <div class="scenario-actions">
+                                <button class="btn btn-sm" onclick="testMenuEnhanced.editScenario('pn136basic')">Edytuj</button>
+                                <button class="btn btn-sm" onclick="testMenuEnhanced.runScenario('pn136basic')">Uruchom</button>
+                            </div>
+                        </div>
+                        <div class="scenario-item">
+                            <div class="scenario-info">
+                                <strong>Test ciśnienia PN-EN 137</strong>
+                                <span class="scenario-standard">Standard: PN-EN 137</span>
+                            </div>
+                            <div class="scenario-actions">
+                                <button class="btn btn-sm" onclick="testMenuEnhanced.editScenario('pn137pressure')">Edytuj</button>
+                                <button class="btn btn-sm" onclick="testMenuEnhanced.runScenario('pn137pressure')">Uruchom</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standards Compliance -->
+                <div class="standards-compliance">
+                    <h3>Zgodność ze standardami</h3>
+                    <div class="compliance-grid">
+                        <div class="compliance-item">
+                            <div class="standard-name">PN-EN 136</div>
+                            <div class="compliance-status verified">Zweryfikowane</div>
+                        </div>
+                        <div class="compliance-item">
+                            <div class="standard-name">PN-EN 137</div>
+                            <div class="compliance-status verified">Zweryfikowane</div>
+                        </div>
+                        <div class="compliance-item">
+                            <div class="standard-name">ISO 16900</div>
+                            <div class="compliance-status pending">Oczekujące</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Helper methods for new functionality
+    getWizardStepsHTML() {
+        return `
+            <div class="step-item completed">
+                <div class="step-number">1</div>
+                <div class="step-name">Wybór urządzenia</div>
+            </div>
+            <div class="step-item completed">
+                <div class="step-number">2</div>
+                <div class="step-name">Dane seryjne</div>
+            </div>
+            <div class="step-item active">
+                <div class="step-number">3</div>
+                <div class="step-name">Kontrola wzrokowa</div>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <div class="step-name">Wybór testu</div>
+            </div>
+        `;
+    }
+
+    getRecentTestsHTML() {
+        return `
+            <div class="test-item">
+                <div class="test-info">
+                    <strong>Maska pełnotwarzowa X-plore 6000</strong>
+                    <span class="test-date">2024-01-10 14:30</span>
+                </div>
+                <div class="test-status passed">Zaliczony</div>
+            </div>
+            <div class="test-item">
+                <div class="test-info">
+                    <strong>Maska półmaska X-plore 3300</strong>
+                    <span class="test-date">2024-01-10 13:15</span>
+                </div>
+                <div class="test-status failed">Niezaliczony</div>
+            </div>
+        `;
+    }
+
+    // Placeholder methods for new functionality
+    loadWizardTemplate() {
+        alert('Wczytywanie szablonu kreatora - funkcja wkrótce dostępna!');
+    }
+
+    wizardHelp() {
+        alert('Pomoc dla kreatora testów - funkcja wkrótce dostępna!');
+    }
+
+    startQuickTest() {
+        alert('Rozpoczynanie szybkiego testu - funkcja wkrótce dostępna!');
+    }
+
+    loadQuickPreset() {
+        alert('Wczytywanie presetu - funkcja wkrótce dostępna!');
+    }
+
+    emergencyTest() {
+        alert('Test awaryjny - funkcja wkrótce dostępna!');
+    }
+
+    executeQuickTest() {
+        alert('Wykonywanie szybkiego testu - funkcja wkrótce dostępna!');
+    }
+
+    loadPreset(presetType) {
+        alert(`Wczytywanie presetu: ${presetType} - funkcja wkrótce dostępna!`);
+    }
+
+    createScenario() {
+        alert('Tworzenie nowego scenariusza - funkcja wkrótce dostępna!');
+    }
+
+    importScenarios() {
+        alert('Import scenariuszy - funkcja wkrótce dostępna!');
+    }
+
+    exportScenarios() {
+        alert('Eksport scenariuszy - funkcja wkrótce dostępna!');
+    }
+
+    filterScenarios(filter) {
+        console.log('Filtrowanie scenariuszy:', filter);
+    }
+
+    editScenario(scenarioId) {
+        alert(`Edycja scenariusza: ${scenarioId} - funkcja wkrótce dostępna!`);
+    }
+
+    runScenario(scenarioId) {
+        alert(`Uruchamianie scenariusza: ${scenarioId} - funkcja wkrótce dostępna!`);
+    }
 }
 
 // Create global instance

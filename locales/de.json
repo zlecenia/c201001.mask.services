@@ -68,9 +68,15 @@
     "workshop_maintenance": "Wartungsplan",
     "workshop_tools": "Kalibrierwerkzeuge",
     "workshop_inventory": "Lager",
+    "test_wizard": "Test-Assistent",
+    "test_quick": "Schnelltest",
+    "test_scenarios": "Test-Szenarien",
+    "settings_scenarios": "Test-Szenarien",
+    "settings_integration": "Integrationen",
+    "settings_standards": "Standards",
+    "settings_system": "Systemkonfiguration",
     "users": "Benutzer",
     "service_menu": "Service-Menü",
-    "system_settings": "Systemeinstellungen",
     "advanced_diagnostics": "Erweiterte Diagnose"
   },
   "system": {

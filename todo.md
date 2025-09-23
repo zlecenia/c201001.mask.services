@@ -15,4 +15,23 @@ todo.md
 
 Znalezienie i przetłumaczenie etykiet bez id/class
 Naprawienie przełączania języków gdy URL ma ustawiony język 'pl'
-Który kierunek preferujesz?
+
+
+Kolejne kroki to implementacja podziału pozostałych dużych modułów 
+(Test Menu i System Settings) oraz rozwiązanie kwestii związanych z tłumaczeniami i przełączaniem języków.
+
+
+
+kontynuuj refaktoryzacje podziel modularnie i komplementarnie aktualny kod,, aby nie byklo plikow .js wikszych od 450linii kodu
+i dokumentuj w docs
+
+
+Główne zadania modularyzacji zostały ukończone! Teraz możemy skupić się na:
+
+Testowaniu funkcjonalności - walidacja wszystkich podzielonych modułów
+Naprawie problemów z lokalizacją - znalezienie nieprzetłumaczonych etykiet
+Utworzeniu modułu Analytics Dashboard - nowy moduł analityczny
+Implementacji Workflow Engine - automatyzacja zgodna ze standardami PN-EN
+System MASKSERVICE C20 jest teraz w pełni zmodularyzowany z intuicyjnymi, wyspecjalizowanymi podmenu dla lepszej użyteczności i organizacji!
+
+

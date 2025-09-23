@@ -97,8 +97,14 @@ class MenuManager {
 
         // Handle different menu options
         switch (optionKey) {
-            case 'test_menu':
-                this.showTestMenu();
+            case 'test_wizard':
+                this.showTestWizard();
+                break;
+            case 'test_quick':
+                this.showTestQuick();
+                break;
+            case 'test_scenarios':
+                this.showTestScenarios();
                 break;
             case 'user_data':
                 this.showUserData();
@@ -136,8 +142,17 @@ class MenuManager {
             case 'service_menu':
                 this.showServiceMenu();
                 break;
-            case 'system_settings':
-                this.showSystemSettings();
+            case 'settings_scenarios':
+                this.showSettingsScenarios();
+                break;
+            case 'settings_integration':
+                this.showSettingsIntegration();
+                break;
+            case 'settings_standards':
+                this.showSettingsStandards();
+                break;
+            case 'settings_system':
+                this.showSettingsSystem();
                 break;
             case 'advanced_diagnostics':
                 this.showAdvancedDiagnostics();
@@ -150,35 +165,31 @@ class MenuManager {
     /**
      * Menu option implementations - Enhanced with new modules
      */
-    showTestMenu() {
-        console.log('Opening Enhanced Test Menu...');
-        // Check if enhanced module is available
+    showTestWizard() {
+        console.log('Opening Test Wizard...');
+        // Use enhanced module if available
         if (window.testMenuEnhanced) {
-            // Show enhanced wizard option or standard template
-            const content = document.getElementById('menu-content');
-            content.innerHTML = `
-                <div class="test-menu-options">
-                    <h2>Test Menu</h2>
-                    <div class="menu-grid">
-                        <button class="menu-card enhanced" onclick="testMenuEnhanced.startTestWizard()">
-                            <h3>🧪 Wizard testowania</h3>
-                            <p>Wieloetapowy proces testowania z automatyzacją</p>
-                        </button>
-                        <button class="menu-card" onclick="selectTestOption('device')">
-                            <h3>Kind of Device</h3>
-                            <p>Wybierz rodzaj urządzenia</p>
-                        </button>
-                        <button class="menu-card" onclick="selectTestOption('type')">
-                            <h3>Device Type</h3>
-                            <p>Wybierz typ urządzenia</p>
-                        </button>
-                        <button class="menu-card" onclick="selectTestOption('test')">
-                            <h3>Kind of Test</h3>
-                            <p>Wybierz rodzaj testu</p>
-                        </button>
-                    </div>
-                </div>
-            `;
+            testMenuEnhanced.showTestWizard();
+        } else {
+            this.loadTemplate('test-menu-template');
+        }
+    }
+
+    showTestQuick() {
+        console.log('Opening Quick Test...');
+        // Use enhanced module if available
+        if (window.testMenuEnhanced) {
+            testMenuEnhanced.showTestQuick();
+        } else {
+            this.loadTemplate('test-menu-template');
+        }
+    }
+
+    showTestScenarios() {
+        console.log('Opening Test Scenarios...');
+        // Use enhanced module if available
+        if (window.testMenuEnhanced) {
+            testMenuEnhanced.showTestScenarios();
         } else {
             this.loadTemplate('test-menu-template');
         }
@@ -289,11 +300,41 @@ class MenuManager {
         this.loadTemplate('service-menu-template');
     }
 
-    showSystemSettings() {
-        console.log('Opening Enhanced System Settings...');
+    showSettingsScenarios() {
+        console.log('Opening Settings Scenarios...');
         // Use enhanced module if available
         if (window.systemSettingsEnhanced) {
-            systemSettingsEnhanced.showEnhancedSystemSettings();
+            systemSettingsEnhanced.showSettingsScenarios();
+        } else {
+            this.loadTemplate('system-settings-template');
+        }
+    }
+
+    showSettingsIntegration() {
+        console.log('Opening Settings Integration...');
+        // Use enhanced module if available
+        if (window.systemSettingsEnhanced) {
+            systemSettingsEnhanced.showSettingsIntegration();
+        } else {
+            this.loadTemplate('system-settings-template');
+        }
+    }
+
+    showSettingsStandards() {
+        console.log('Opening Settings Standards...');
+        // Use enhanced module if available
+        if (window.systemSettingsEnhanced) {
+            systemSettingsEnhanced.showSettingsStandards();
+        } else {
+            this.loadTemplate('system-settings-template');
+        }
+    }
+
+    showSettingsSystem() {
+        console.log('Opening Settings System...');
+        // Use enhanced module if available
+        if (window.systemSettingsEnhanced) {
+            systemSettingsEnhanced.showSettingsSystem();
         } else {
             this.loadTemplate('system-settings-template');
         }

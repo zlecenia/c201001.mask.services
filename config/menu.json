@@ -1,6 +1,8 @@
 {
   "OPERATOR": [
-    { "key": "test_menu", "label": "Test Menu", "icon": "📋" },
+    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
+    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
+    { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
     { "key": "device_history", "label": "Device History", "icon": "📜" },
@@ -13,7 +15,9 @@
     { "key": "workshop_inventory", "label": "Inventory", "icon": "📦" }
   ],
   "ADMIN": [
-    { "key": "test_menu", "label": "Test Menu", "icon": "📋" },
+    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
+    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
+    { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
     { "key": "device_history", "label": "Device History", "icon": "📜" },
@@ -28,7 +32,9 @@
     { "key": "service_menu", "label": "Service Menu", "icon": "🛡️" }
   ],
   "SUPERUSER": [
-    { "key": "test_menu", "label": "Test Menu", "icon": "📋" },
+    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
+    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
+    { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
     { "key": "device_history", "label": "Device History", "icon": "📜" },
@@ -41,10 +47,15 @@
     { "key": "workshop_inventory", "label": "Inventory", "icon": "📦" },
     { "key": "users", "label": "Users", "icon": "👥" },
     { "key": "service_menu", "label": "Service Menu", "icon": "🛡️" },
-    { "key": "system_settings", "label": "System Settings", "icon": "⚙️" }
+    { "key": "settings_scenarios", "label": "Test Scenarios", "icon": "📝" },
+    { "key": "settings_integration", "label": "Integrations", "icon": "🔗" },
+    { "key": "settings_standards", "label": "Standards", "icon": "📋" },
+    { "key": "settings_system", "label": "System Config", "icon": "⚙️" }
   ],
   "SERWISANT": [
-    { "key": "test_menu", "label": "Test Menu", "icon": "📋" },
+    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
+    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" },
+    { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },
     { "key": "device_history", "label": "Device History", "icon": "📜" },
@@ -57,7 +68,10 @@
     { "key": "workshop_inventory", "label": "Inventory", "icon": "📦" },
     { "key": "users", "label": "Users", "icon": "👥" },
     { "key": "service_menu", "label": "Service Menu", "icon": "🛡️" },
-    { "key": "system_settings", "label": "System Settings", "icon": "⚙️" },
+    { "key": "settings_scenarios", "label": "Test Scenarios", "icon": "📝" },
+    { "key": "settings_integration", "label": "Integrations", "icon": "🔗" },
+    { "key": "settings_standards", "label": "Standards", "icon": "📋" },
+    { "key": "settings_system", "label": "System Config", "icon": "⚙️" },
     { "key": "advanced_diagnostics", "label": "Advanced Diagnostics", "icon": "🔍" }
   ]
 }

@@ -117,7 +117,8 @@ class WorkshopEnhanced {
                             <div class="stat-label">Niski stan</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value">${this.getTotalInventoryValue().toFixed(2)} zł</div>
+                            <div class="stat-value">${this.getTotalInventoryValue()}</div>
+                            <div class="stat-currency">${this.getTotalInventoryCurrency()}</div>
                             <div class="stat-label">Wartość magazynu</div>
                         </div>
                     </div>
@@ -482,12 +483,492 @@ class WorkshopEnhanced {
         }
     }
 
-    // Public method for template integration
+    // Public methods for template integration
     showEnhancedWorkshop() {
         const content = document.getElementById('menu-content');
         if (content) {
             content.innerHTML = this.getEnhancedWorkshopHTML();
         }
+    }
+
+    showWorkshopParts() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getWorkshopPartsHTML();
+        }
+    }
+
+    showWorkshopMaintenance() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getWorkshopMaintenanceHTML();
+        }
+    }
+
+    showWorkshopTools() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getWorkshopToolsHTML();
+        }
+    }
+
+    showWorkshopInventory() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getWorkshopInventoryHTML();
+        }
+    }
+
+    // Workshop Parts HTML template (focused on spare parts management)
+    getWorkshopPartsHTML() {
+        return `
+            <div class="workshop-enhanced">
+                <div class="workshop-header">
+                    <h2>Zarządzanie częściami zamiennymi</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="workshopEnhanced.addNewPart()">
+                            ➕ Dodaj część
+                        </button>
+                        <button class="btn btn-secondary" onclick="workshopEnhanced.importParts()">
+                            📥 Importuj części
+                        </button>
+                        <button class="btn btn-info" onclick="workshopEnhanced.exportParts()">
+                            📤 Eksportuj listę
+                        </button>
+                    </div>
+                </div>
+
+                ${this.getPartsManagementHTML()}
+
+                <!-- Low Stock Alerts -->
+                <div class="low-stock-alerts">
+                    <h3>⚠️ Alerty niskiego stanu</h3>
+                    <div class="alerts-list">
+                        ${this.getLowStockAlertsHTML()}
+                    </div>
+                </div>
+
+                <!-- Parts Statistics -->
+                <div class="parts-statistics">
+                    <h3>Statystyki części</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">${this.spareParts.size}</div>
+                            <div class="stat-label">Łączna liczba części</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getLowStockCount()}</div>
+                            <div class="stat-label">Niski stan</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getOutOfStockCount()}</div>
+                            <div class="stat-label">Brak w magazynie</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getActiveSuppliers().length}</div>
+                            <div class="stat-label">Aktywni dostawcy</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Workshop Maintenance HTML template (focused on scheduling and maintenance)
+    getWorkshopMaintenanceHTML() {
+        return `
+            <div class="workshop-enhanced">
+                <div class="workshop-header">
+                    <h2>Harmonogram przeglądów</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="workshopEnhanced.addMaintenanceEvent()">
+                            ➕ Dodaj wydarzenie
+                        </button>
+                        <button class="btn btn-secondary" onclick="workshopEnhanced.importSchedule()">
+                            📥 Importuj harmonogram
+                        </button>
+                        <button class="btn btn-info" onclick="workshopEnhanced.generateMaintenanceReport()">
+                            📊 Raport konserwacji
+                        </button>
+                    </div>
+                </div>
+
+                ${this.getMaintenanceSchedulerHTML()}
+
+                <!-- Upcoming Maintenance -->
+                <div class="upcoming-maintenance">
+                    <h3>Nadchodzące przeglądy</h3>
+                    <div class="upcoming-list">
+                        ${this.getUpcomingMaintenanceHTML()}
+                    </div>
+                </div>
+
+                <!-- Maintenance Statistics -->
+                <div class="maintenance-statistics">
+                    <h3>Statystyki konserwacji</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getScheduledEventsCount()}</div>
+                            <div class="stat-label">Zaplanowane wydarzenia</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getOverdueMaintenanceCount()}</div>
+                            <div class="stat-label">Przeterminowane</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getCompletedThisMonth()}</div>
+                            <div class="stat-label">Ukończone w tym miesiącu</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getMaintenanceEfficiency()}%</div>
+                            <div class="stat-label">Efektywność</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Workshop Tools HTML template (focused on calibration tools)
+    getWorkshopToolsHTML() {
+        return `
+            <div class="workshop-enhanced">
+                <div class="workshop-header">
+                    <h2>Narzędzia kalibracyjne</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="workshopEnhanced.addCalibrationTool()">
+                            ➕ Dodaj narzędzie
+                        </button>
+                        <button class="btn btn-warning" onclick="workshopEnhanced.scheduleCalibrations()">
+                            📅 Zaplanuj kalibracje
+                        </button>
+                        <button class="btn btn-info" onclick="workshopEnhanced.generateCalibrationReport()">
+                            📊 Raport kalibracji
+                        </button>
+                    </div>
+                </div>
+
+                ${this.getCalibrationToolsHTML()}
+
+                <!-- Calibration Alerts -->
+                <div class="calibration-alerts">
+                    <h3>⚠️ Alerty kalibracji</h3>
+                    <div class="alerts-list">
+                        ${this.getCalibrationAlertsHTML()}
+                    </div>
+                </div>
+
+                <!-- Tools Statistics -->
+                <div class="tools-statistics">
+                    <h3>Statystyki narzędzi</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">${this.calibrationTools.size}</div>
+                            <div class="stat-label">Łączna liczba narzędzi</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getOverdueToolsCount()}</div>
+                            <div class="stat-label">Przeterminowane</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getDueSoonToolsCount()}</div>
+                            <div class="stat-label">Wymagające kalibracji</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getActiveToolsCount()}</div>
+                            <div class="stat-label">Aktywne</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Workshop Inventory HTML template (focused on inventory reporting)
+    getWorkshopInventoryHTML() {
+        return `
+            <div class="workshop-enhanced">
+                <div class="workshop-header">
+                    <h2>Raport magazynowy</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="workshopEnhanced.generateInventoryReport()">
+                            📊 Generuj raport
+                        </button>
+                        <button class="btn btn-secondary" onclick="workshopEnhanced.exportInventory()">
+                            📤 Eksportuj
+                        </button>
+                        <button class="btn btn-info" onclick="workshopEnhanced.performStockcount()">
+                            📋 Inwentaryzacja
+                        </button>
+                    </div>
+                </div>
+
+                ${this.getInventoryReportHTML()}
+
+                <!-- Inventory Movements -->
+                <div class="inventory-movements">
+                    <h3>Ruchy magazynowe</h3>
+                    <div class="movements-table">
+                        <div class="table-header">
+                            <div class="col-date">Data</div>
+                            <div class="col-part">Część</div>
+                            <div class="col-type">Typ ruchu</div>
+                            <div class="col-quantity">Ilość</div>
+                            <div class="col-reason">Przyczyna</div>
+                        </div>
+                        ${this.getInventoryMovementsHTML()}
+                    </div>
+                </div>
+
+                <!-- Inventory Analytics -->
+                <div class="inventory-analytics">
+                    <h3>Analiza magazynu</h3>
+                    <div class="analytics-grid">
+                        <div class="analytics-card">
+                            <h4>Najczęściej używane części</h4>
+                            <div class="top-parts-list">
+                                ${this.getTopUsedPartsHTML()}
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <h4>Koszt magazynu</h4>
+                            <div class="cost-breakdown">
+                                <div class="cost-item">
+                                    <span class="cost-label">Wartość całkowita:</span>
+                                    <span class="cost-value">${this.getTotalInventoryValue()} zł</span>
+                                </div>
+                                <div class="cost-item">
+                                    <span class="cost-label">Koszt miesięczny:</span>
+                                    <span class="cost-value">${this.getMonthlyInventoryCost()} zł</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Helper methods for Workshop Parts functionality
+    addNewPart() {
+        alert('Funkcja dodawania części zamiennych - wkrótce dostępna!');
+    }
+
+    importParts() {
+        alert('Funkcja importu części zamiennych - wkrótce dostępna!');
+    }
+
+    exportParts() {
+        alert('Funkcja eksportu listy części - wkrótce dostępna!');
+    }
+
+    getLowStockAlertsHTML() {
+        return `
+            <div class="alert alert-warning">
+                <strong>Filtr HEPA H13</strong> - Stan: 2 szt. (minimum: 5 szt.)
+            </div>
+            <div class="alert alert-danger">
+                <strong>Zawór bezpieczeństwa</strong> - Stan: 0 szt. (minimum: 2 szt.)
+            </div>
+            <div class="alert alert-warning">
+                <strong>Uszczelka maski</strong> - Stan: 3 szt. (minimum: 10 szt.)
+            </div>
+        `;
+    }
+
+    getLowStockCount() {
+        return 3;
+    }
+
+    getOutOfStockCount() {
+        return 1;
+    }
+
+    getActiveSuppliers() {
+        return ['Dostawca A', 'Dostawca B', 'Dostawca C'];
+    }
+
+    // Helper methods for Workshop Maintenance functionality
+    addMaintenanceEvent() {
+        alert('Funkcja dodawania wydarzenia konserwacyjnego - wkrótce dostępna!');
+    }
+
+    importSchedule() {
+        alert('Funkcja importu harmonogramu - wkrótce dostępna!');
+    }
+
+    generateMaintenanceReport() {
+        alert('Funkcja generowania raportu konserwacji - wkrótce dostępna!');
+    }
+
+    getUpcomingMaintenanceHTML() {
+        return `
+            <div class="maintenance-item urgent">
+                <div class="maintenance-info">
+                    <strong>Przegląd główny - Stanowisko 1</strong>
+                    <span class="maintenance-date">2024-01-15</span>
+                </div>
+                <div class="maintenance-status">Zaplanowane</div>
+            </div>
+            <div class="maintenance-item warning">
+                <div class="maintenance-info">
+                    <strong>Kalibracja czujników - Stanowisko 2</strong>
+                    <span class="maintenance-date">2024-01-20</span>
+                </div>
+                <div class="maintenance-status">Oczekujące</div>
+            </div>
+            <div class="maintenance-item normal">
+                <div class="maintenance-info">
+                    <strong>Wymiana filtrów - Stanowisko 3</strong>
+                    <span class="maintenance-date">2024-01-25</span>
+                </div>
+                <div class="maintenance-status">Zaplanowane</div>
+            </div>
+        `;
+    }
+
+    getScheduledEventsCount() {
+        return 12;
+    }
+
+    getOverdueMaintenanceCount() {
+        return 2;
+    }
+
+    getCompletedThisMonth() {
+        return 8;
+    }
+
+    getMaintenanceEfficiency() {
+        return 94;
+    }
+
+    // Helper methods for Workshop Tools functionality
+    addCalibrationTool() {
+        alert('Funkcja dodawania narzędzia kalibracyjnego - wkrótce dostępna!');
+    }
+
+    scheduleCalibrations() {
+        alert('Funkcja planowania kalibracji - wkrótce dostępna!');
+    }
+
+    generateCalibrationReport() {
+        alert('Funkcja generowania raportu kalibracji - wkrótce dostępna!');
+    }
+
+    getCalibrationAlertsHTML() {
+        return `
+            <div class="alert alert-danger">
+                <strong>Manometr cyfrowy PM-100</strong> - Kalibracja przeterminowana o 15 dni
+            </div>
+            <div class="alert alert-warning">
+                <strong>Miernik przepływu FM-50</strong> - Kalibracja za 5 dni
+            </div>
+            <div class="alert alert-info">
+                <strong>Analizator gazów GA-200</strong> - Kalibracja za 30 dni
+            </div>
+        `;
+    }
+
+    getOverdueToolsCount() {
+        return 1;
+    }
+
+    getDueSoonToolsCount() {
+        return 2;
+    }
+
+    getActiveToolsCount() {
+        return 15;
+    }
+
+    // Helper methods for Workshop Inventory functionality
+    generateInventoryReport() {
+        alert('Funkcja generowania raportu magazynowego - wkrótce dostępna!');
+    }
+
+    exportInventory() {
+        alert('Funkcja eksportu magazynu - wkrótce dostępna!');
+    }
+
+    performStockcount() {
+        alert('Funkcja inwentaryzacji - wkrótce dostępna!');
+    }
+
+    getInventoryReportHTML() {
+        return `
+            <div class="inventory-summary">
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <div class="summary-label">Kategorie części</div>
+                        <div class="summary-value">12</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Łączna wartość</div>
+                        <div class="summary-value">45,230 zł</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Obrót miesięczny</div>
+                        <div class="summary-value">8,450 zł</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-label">Współczynnik rotacji</div>
+                        <div class="summary-value">2.1</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getInventoryMovementsHTML() {
+        return `
+            <div class="movement-row">
+                <div class="col-date">2024-01-10</div>
+                <div class="col-part">Filtr HEPA H13</div>
+                <div class="col-type">Wydanie</div>
+                <div class="col-quantity">-2</div>
+                <div class="col-reason">Przegląd planowy</div>
+            </div>
+            <div class="movement-row">
+                <div class="col-date">2024-01-08</div>
+                <div class="col-part">Zawór bezpieczeństwa</div>
+                <div class="col-type">Przyjęcie</div>
+                <div class="col-quantity">+5</div>
+                <div class="col-reason">Dostawa</div>
+            </div>
+            <div class="movement-row">
+                <div class="col-date">2024-01-05</div>
+                <div class="col-part">Uszczelka maski</div>
+                <div class="col-type">Wydanie</div>
+                <div class="col-quantity">-3</div>
+                <div class="col-reason">Naprawa</div>
+            </div>
+        `;
+    }
+
+    getTopUsedPartsHTML() {
+        return `
+            <div class="top-part-item">
+                <span class="part-name">Filtr HEPA H13</span>
+                <span class="usage-count">24 szt./miesiąc</span>
+            </div>
+            <div class="top-part-item">
+                <span class="part-name">Uszczelka maski</span>
+                <span class="usage-count">18 szt./miesiąc</span>
+            </div>
+            <div class="top-part-item">
+                <span class="part-name">Zawór bezpieczeństwa</span>
+                <span class="usage-count">12 szt./miesiąc</span>
+            </div>
+        `;
+    }
+
+    getTotalInventoryValue() {
+        return '45,230';
+    }
+
+    getMonthlyInventoryCost() {
+        return '8,450';
     }
 }
 

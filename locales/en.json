@@ -68,9 +68,15 @@
     "workshop_maintenance": "Maintenance Schedule",
     "workshop_tools": "Calibration Tools",
     "workshop_inventory": "Inventory",
+    "test_wizard": "Test Wizard",
+    "test_quick": "Quick Test",
+    "test_scenarios": "Test Scenarios",
+    "settings_scenarios": "Test Scenarios",
+    "settings_integration": "Integrations",
+    "settings_standards": "Standards",
+    "settings_system": "System Config",
     "users": "Users",
     "service_menu": "Service Menu",
-    "system_settings": "System Settings",
     "advanced_diagnostics": "Advanced Diagnostics"
   },
   "system": {

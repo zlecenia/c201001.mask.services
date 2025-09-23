@@ -68,9 +68,15 @@ class I18nManager {
             '[data-menu-key="workshop_maintenance"]': 'menu.workshop_maintenance',
             '[data-menu-key="workshop_tools"]': 'menu.workshop_tools',
             '[data-menu-key="workshop_inventory"]': 'menu.workshop_inventory',
+            '[data-menu-key="test_wizard"]': 'menu.test_wizard',
+            '[data-menu-key="test_quick"]': 'menu.test_quick',
+            '[data-menu-key="test_scenarios"]': 'menu.test_scenarios',
+            '[data-menu-key="settings_scenarios"]': 'menu.settings_scenarios',
+            '[data-menu-key="settings_integration"]': 'menu.settings_integration',
+            '[data-menu-key="settings_standards"]': 'menu.settings_standards',
+            '[data-menu-key="settings_system"]': 'menu.settings_system',
             '[data-menu-key="users"]': 'menu.users',
             '[data-menu-key="service_menu"]': 'menu.service_menu',
-            '[data-menu-key="system_settings"]': 'menu.system_settings',
             '[data-menu-key="advanced_diagnostics"]': 'menu.advanced_diagnostics',
             
             // System screen

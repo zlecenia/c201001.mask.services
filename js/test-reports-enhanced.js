@@ -797,6 +797,113 @@ ${reportData.id};${reportData.date};${reportData.deviceSerial};${reportData.devi
             </div>
         `;
     }
+
+    // Helper methods for Reports functionality
+    getBatchGeneratorHTML() {
+        return `
+            <div class="batch-generator">
+                <h3>Generator raportów wsadowych</h3>
+                <div class="batch-controls">
+                    <div class="control-group">
+                        <label>Zakres dat:</label>
+                        <input type="date" id="batch-start-date">
+                        <input type="date" id="batch-end-date">
+                    </div>
+                    <div class="control-group">
+                        <label>Format:</label>
+                        <select id="batch-format">
+                            <option value="pdf">PDF</option>
+                            <option value="excel">Excel</option>
+                            <option value="csv">CSV</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="testReportsEnhanced.generateBatchReport()">
+                        Generuj raporty
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    getActiveSchedulesHTML() {
+        return `
+            <div class="schedule-item">
+                <div class="schedule-info">
+                    <strong>Raport miesięczny</strong>
+                    <span class="schedule-frequency">Co miesiąc, 1 dzień</span>
+                </div>
+                <div class="schedule-status active">Aktywny</div>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-info">
+                    <strong>Raport tygodniowy</strong>
+                    <span class="schedule-frequency">Co tydzień, poniedziałek</span>
+                </div>
+                <div class="schedule-status active">Aktywny</div>
+            </div>
+        `;
+    }
+
+    getUniqueCustomers() {
+        return [
+            { id: 1, name: 'Klient A' },
+            { id: 2, name: 'Klient B' },
+            { id: 3, name: 'Klient C' }
+        ];
+    }
+
+    getUniqueDevices() {
+        return [
+            { id: 1, name: 'Stanowisko 1' },
+            { id: 2, name: 'Stanowisko 2' },
+            { id: 3, name: 'Stanowisko 3' }
+        ];
+    }
+
+    getUniqueOperators() {
+        return [
+            { id: 1, name: 'Operator 1' },
+            { id: 2, name: 'Operator 2' },
+            { id: 3, name: 'Operator 3' }
+        ];
+    }
+
+    // Placeholder methods for functionality
+    refreshReports() {
+        alert('Odświeżanie raportów - funkcja wkrótce dostępna!');
+    }
+
+    exportCurrentView() {
+        alert('Eksport bieżącego widoku - funkcja wkrótce dostępna!');
+    }
+
+    filterByCustomer(customerId) {
+        console.log('Filtrowanie po kliencie:', customerId);
+    }
+
+    filterByDevice(deviceId) {
+        console.log('Filtrowanie po urządzeniu:', deviceId);
+    }
+
+    filterByOperator(operatorId) {
+        console.log('Filtrowanie po operatorze:', operatorId);
+    }
+
+    generateBatchReport() {
+        alert('Generowanie raportów wsadowych - funkcja wkrótce dostępna!');
+    }
+
+    addSchedule() {
+        alert('Dodawanie harmonogramu - funkcja wkrótce dostępna!');
+    }
+
+    importSchedule() {
+        alert('Import harmonogramu - funkcja wkrótce dostępna!');
+    }
+
+    exportSchedules() {
+        alert('Eksport harmonogramów - funkcja wkrótce dostępna!');
+    }
 }
 
 // Create global instance
