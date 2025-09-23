@@ -424,6 +424,21 @@ class WorkshopEnhanced {
         return Array.from(this.spareParts.values()).reduce((sum, part) => sum + (part.quantity * part.price), 0);
     }
 
+    getTotalInventoryCurrency() {
+        // Return currency symbol based on locale or system settings
+        const systemConfig = window.config || {};
+        const currency = systemConfig.currency || 'PLN';
+        
+        const currencySymbols = {
+            'PLN': 'zł',
+            'EUR': '€',
+            'USD': '$',
+            'GBP': '£'
+        };
+        
+        return currencySymbols[currency] || 'zł';
+    }
+
     getToolsInStatus(status) {
         return Array.from(this.calibrationTools.values()).filter(tool => tool.status === status).length;
     }
