@@ -130,11 +130,40 @@ class MenuManager {
     }
 
     /**
-     * Menu option implementations
+     * Menu option implementations - Enhanced with new modules
      */
     showTestMenu() {
-        console.log('Opening Test Menu...');
-        this.loadTemplate('test-menu-template');
+        console.log('Opening Enhanced Test Menu...');
+        // Check if enhanced module is available
+        if (window.testMenuEnhanced) {
+            // Show enhanced wizard option or standard template
+            const content = document.getElementById('menu-content');
+            content.innerHTML = `
+                <div class="test-menu-options">
+                    <h2>Test Menu</h2>
+                    <div class="menu-grid">
+                        <button class="menu-card enhanced" onclick="testMenuEnhanced.startTestWizard()">
+                            <h3>🧪 Wizard testowania</h3>
+                            <p>Wieloetapowy proces testowania z automatyzacją</p>
+                        </button>
+                        <button class="menu-card" onclick="selectTestOption('device')">
+                            <h3>Kind of Device</h3>
+                            <p>Wybierz rodzaj urządzenia</p>
+                        </button>
+                        <button class="menu-card" onclick="selectTestOption('type')">
+                            <h3>Device Type</h3>
+                            <p>Wybierz typ urządzenia</p>
+                        </button>
+                        <button class="menu-card" onclick="selectTestOption('test')">
+                            <h3>Kind of Test</h3>
+                            <p>Wybierz rodzaj testu</p>
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            this.loadTemplate('test-menu-template');
+        }
     }
 
     showUserData() {
@@ -143,23 +172,38 @@ class MenuManager {
     }
 
     showDeviceData() {
-        console.log('Opening Device Data...');
-        this.loadTemplate('device-data-template');
+        console.log('Opening Enhanced Device Data...');
+        // Use enhanced module if available
+        if (window.deviceDataEnhanced) {
+            deviceDataEnhanced.showEnhancedDeviceData();
+        } else {
+            this.loadTemplate('device-data-template');
+        }
     }
 
     showTestReports() {
-        console.log('Opening Test Reports...');
-        this.loadTemplate('test-menu-template'); // Test reports use test menu template
+        console.log('Opening Enhanced Test Reports...');
+        // Use enhanced module if available
+        if (window.testReportsEnhanced) {
+            testReportsEnhanced.showEnhancedReports();
+        } else {
+            this.loadTemplate('test-reports-template');
+        }
     }
 
     showWorkshop() {
-        console.log('Opening Workshop...');
-        this.loadTemplate('workshop-template');
+        console.log('Opening Enhanced Workshop...');
+        // Use enhanced module if available
+        if (window.workshopEnhanced) {
+            workshopEnhanced.showEnhancedWorkshop();
+        } else {
+            this.loadTemplate('workshop-template');
+        }
     }
 
     showUsers() {
         console.log('Opening Users Management...');
-        this.loadTemplate('user-data-template'); // Users management uses user data template
+        this.loadTemplate('users-template');
     }
 
     showServiceMenu() {
@@ -168,13 +212,18 @@ class MenuManager {
     }
 
     showSystemSettings() {
-        console.log('Opening System Settings...');
-        this.loadTemplate('system-settings-template');
+        console.log('Opening Enhanced System Settings...');
+        // Use enhanced module if available
+        if (window.systemSettingsEnhanced) {
+            systemSettingsEnhanced.showEnhancedSystemSettings();
+        } else {
+            this.loadTemplate('system-settings-template');
+        }
     }
 
     showAdvancedDiagnostics() {
         console.log('Opening Advanced Diagnostics...');
-        this.loadTemplate('service-menu-template'); // Use service menu template for diagnostics
+        this.loadTemplate('service-menu-template');
     }
 
     /**

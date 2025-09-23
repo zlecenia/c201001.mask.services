@@ -248,10 +248,10 @@
         <!-- User Menu Screen -->
         <div id="user-menu-screen" class="screen">
             <div class="menu-container">
-<!--                <div class="menu-header">-->
-<!--                    USER MENU-->
-<!--                    <span id="menu-role-badge" class="role-badge"></span>-->
-<!--                </div>-->
+                <!--                <div class="menu-header">-->
+                <!--                    USER MENU-->
+                <!--                    <span id="menu-role-badge" class="role-badge"></span>-->
+                <!--                </div>-->
                 <div class="menu-layout">
                     <div class="menu-sidebar" id="user-menu-items">
                         <!-- Dynamic menu items based on role -->
@@ -268,25 +268,30 @@
 
         <!-- Pressure Display Panel - Always Visible -->
         <aside id="pressure-panel" class="pressure-panel">
-            <h3>PRESSURE</h3>
+            <h3 id="pressure-panel-title">PRESSURE</h3>
             <div class="pressure-box">
                 <div class="pressure-item">
-                    <span>Low</span>
-                    <span id="pressure-low">10 mbar</span>
+                    <div id="pressure-low-label" class="pressure-label">Low</div>
+                    <div id="pressure-low" class="pressure-value">10</div>
+                    <div id="pressure-low-unit" class="pressure-unit">mbar</div>
                 </div>
             </div>
             <div class="pressure-box">
 
                 <div class="pressure-item">
-                    <span>Medium</span>
-                    <span id="pressure-medium">20 bar</span>
+                    <div id="pressure-medium-label" class="pressure-label">Medium</div>
+                    <div id="pressure-medium" class="pressure-value">20</div>
+                    <div id="pressure-medium-unit" class="pressure-unit">bar</div>
+
                 </div>
             </div>
             <div class="pressure-box">
 
                 <div class="pressure-item">
-                    <span>High</span>
-                    <span id="pressure-high">30 bar</span>
+                    <div id="pressure-high-label" class="pressure-label">High</div>
+                    <div id="pressure-high" class="pressure-value">30</div>
+                    <div id="pressure-high-unit" class="pressure-unit">bar</div>
+
                 </div>
             </div>
         </aside>
@@ -304,11 +309,10 @@
                     <span id="user-role" class="role-badge">---</span>
                 </span>
 
-<!--            <div id="session-info" class="session-info">-->
-<!--                <span>Inactive: <span id="inactive-time">0s</span></span>-->
-<!--                <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>-->
-<!--            </div>-->
-
+            <!--            <div id="session-info" class="session-info">-->
+            <!--                <span>Inactive: <span id="inactive-time">0s</span></span>-->
+            <!--                <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>-->
+            <!--            </div>-->
 
 
         </div>
@@ -326,7 +330,7 @@
         <div class="footer-right">
             <p>
                 <span id="footer-date">--/--/----</span>
-                <span id="footer-time">--:--:--</span>
+                <span id="footer-time">--:--</span>
             </p>
 
         </div>
@@ -523,6 +527,14 @@
     document.write('<script src="js/i18n.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/router.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Enhanced modules for MASKSERVICE C20 functionality
+    document.write('<script src="js/test-menu-enhanced.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/device-data-enhanced.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/test-reports-enhanced.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/workshop-enhanced.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/system-settings-enhanced.js?v=' + cacheBuster + '"><\/script>');
+    
     document.write('<script type="module" src="js/app.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script type="module" src="js/ui-tester.js?v=' + cacheBuster + '"><\/script>');
 </script>

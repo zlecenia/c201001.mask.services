@@ -178,13 +178,13 @@ class DeviceDataEnhanced {
         const pressureHigh = document.getElementById('pressure-high');
 
         if (pressureLow) {
-            pressureLow.textContent = `${this.sensorPanel.pressure.low.current.toFixed(1)} ${this.sensorPanel.pressure.low.unit}`;
+            pressureLow.textContent = `${this.sensorPanel.pressure.low.current.toFixed(1)}`;
         }
         if (pressureMedium) {
-            pressureMedium.textContent = `${this.sensorPanel.pressure.medium.current.toFixed(1)} ${this.sensorPanel.pressure.medium.unit}`;
+            pressureMedium.textContent = `${this.sensorPanel.pressure.medium.current.toFixed(1)}`;
         }
         if (pressureHigh) {
-            pressureHigh.textContent = `${this.sensorPanel.pressure.high.current.toFixed(1)} ${this.sensorPanel.pressure.high.unit}`;
+            pressureHigh.textContent = `${this.sensorPanel.pressure.high.current.toFixed(1)}`;
         }
 
         // Update device data template if visible
