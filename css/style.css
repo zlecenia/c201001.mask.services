@@ -492,7 +492,6 @@ button:active {
 
 /* Login form specific */
 .login-form {
-    max-width: 600px;
     margin: 0 auto;
 }
 

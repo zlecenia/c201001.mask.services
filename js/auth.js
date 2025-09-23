@@ -45,8 +45,8 @@ class AuthManager {
             window.showLoading('Logowanie...', 'Autoryzacja w toku');
         }
         
-        // Simulate login process delay for better UX
-        await new Promise(resolve => setTimeout(resolve, 1500));
+        // Brief loading display (no artificial delay)
+        await new Promise(resolve => setTimeout(resolve, 100));
         
         // Hide loading screen
         if (window.hideLoading) {

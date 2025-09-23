@@ -194,6 +194,10 @@
                                                 onclick="navigateAction('login-serwisant-btn'); mockLogin('SERWISANT')">
                                             Login as SERWISANT
                                         </button>
+                                        <button id="data-sensors-btn" class="btn btn-purple"
+                                                onclick="navigateAction('data-sensors-btn'); focusDataSensors()">
+                                            DATA SENSORS
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -257,8 +261,8 @@
             </div>
         </div>
 
-        <!-- Pressure Display Panel -->
-        <aside id="pressure-panel" class="pressure-panel" style="display:none;">
+        <!-- Pressure Display Panel - Always Visible -->
+        <aside id="pressure-panel" class="pressure-panel">
             <h3>DATA SENSORS</h3>
             <div class="pressure-box">
                 <h4>PRESSURE</h4>

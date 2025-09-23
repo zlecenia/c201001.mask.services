@@ -274,8 +274,8 @@ class C20Router {
         this.currentAction = actionId;
         this.saveToStorage();
         
-        // Update URL hash with full format
-        const newHash = `#/${this.currentView}/${this.currentLanguage}/${actionId}`;
+        // Update URL hash using standard buildRouteHash function
+        const newHash = this.buildRouteHash(this.currentView, this.currentLanguage, actionId);
         window.location.hash = newHash;
         
         console.log('🎯 Action-only navigation:', {
@@ -345,20 +345,15 @@ class C20Router {
     }
 
     /**
-     * Build hash string from route components
+     * Build hash string from route components (always full format)
      */
     buildRouteHash(view, language, action) {
-        let hash = `/${view}`;
+        // Always use full format: #/VIEW-ID/LANGUAGE/ACTION-ID
+        const viewId = view || this.currentView || 'login-screen';
+        const lang = language || this.currentLanguage || 'pl';
+        const actionId = action || 'default';
         
-        if (language) {
-            hash += `/${language}`;
-        }
-        
-        if (action) {
-            hash += `/${action}`;
-        }
-        
-        return hash;
+        return `#/${viewId}/${lang}/${actionId}`;
     }
 
     /**
