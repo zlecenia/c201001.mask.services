@@ -111,6 +111,7 @@ window.selectTestOption = selectTestOption;
 window.selectDevice = selectDevice;
 window.backToMenu = backToMenu;
 window.togglePasswordVisibility = togglePasswordVisibility;
+window.selectLoginMethod = selectLoginMethod;
 
 // Global functions for HTML onclick handlers
 function selectLoginMethod(method) {
@@ -166,7 +167,7 @@ function mockLogin(role) {
     document.getElementById('system-screen').classList.add('active');
     
     // Show user menu based on role
-    app.showUserMenu(role);
+    showUserMenu(role);
     
     // Start activity tracking
     setInterval(() => {
@@ -183,37 +184,7 @@ function mockLogin(role) {
     console.log('Login successful:', user);
 }
 
-function showUserMenu(role) {
-    app.switchScreen('user-menu-screen');
-    
-    // Build menu based on role
-    const menuItems = MENU_STRUCTURE[role] || [];
-    const menuContainer = document.getElementById('user-menu-items');
-    menuContainer.innerHTML = '<button class="menu-item" onclick="logout()">🚪 Logout</button>';
-    
-    menuItems.forEach(item => {
-        const btn = document.createElement('button');
-        btn.className = 'menu-item';
-        btn.innerHTML = `${item.icon} ${item.label}`;
-        btn.onclick = () => selectMenuItem(item.key);
-        menuContainer.appendChild(btn);
-    });
-    
-    // Show pressure panel
-    document.getElementById('pressure-panel').style.display = 'block';
-    
-    // Update role badge
-    document.getElementById('menu-role-badge').textContent = role;
-    document.getElementById('menu-role-badge').className = `role-badge role-${role.toLowerCase()}`;
-    
-    // Update footer
-    document.getElementById('footer-user').textContent = `${role}: ${app.currentUser}`;
-    
-    // Start mock data updates
-    if (CONFIG.MOCK_MODE) {
-        startMockDataUpdates();
-    }
-}
+// Removed duplicate showUserMenu function - using improved version later in file
 
 function selectMenuItem(key) {
     const content = document.getElementById('menu-content');
@@ -350,6 +321,50 @@ function backToMenu() {
     content.innerHTML = document.getElementById('test-menu-template').innerHTML;
 }
 
+// Add missing showUserMenu function for login redirect
+function showUserMenu(role) {
+    console.log('Showing menu for user role:', role);
+    
+    // Get menu configuration for the role
+    if (window.CONFIG && window.CONFIG.MENU && window.CONFIG.MENU[role]) {
+        const menuItems = window.CONFIG.MENU[role];
+        const menuContainer = document.getElementById('menu-content');
+        
+        if (menuContainer) {
+            // Create menu HTML
+            let menuHtml = `<h2>Menu - ${role}</h2><div class="menu-items">`;
+            
+            menuItems.forEach(item => {
+                menuHtml += `
+                    <div class="menu-item" onclick="selectMenuOption('${item.id}')">
+                        <h3>${item.title}</h3>
+                        <p>${item.description || ''}</p>
+                    </div>
+                `;
+            });
+            
+            menuHtml += '</div>';
+            menuContainer.innerHTML = menuHtml;
+        }
+    } else {
+        console.error('Menu configuration not found for role:', role);
+        // Fallback menu
+        const menuContainer = document.getElementById('menu-content');
+        if (menuContainer) {
+            menuContainer.innerHTML = `
+                <h2>Menu - ${role}</h2>
+                <div class="menu-items">
+                    <div class="menu-item">
+                        <h3>System Overview</h3>
+                        <p>View system status and basic controls</p>
+                    </div>
+                </div>
+            `;
+        }
+    }
+}
+
+// Restore togglePasswordVisibility function - needed for HTML onclick
 function togglePasswordVisibility() {
     const passwordInput = document.getElementById('password-input');
     const toggleButton = document.querySelector('.toggle-password');

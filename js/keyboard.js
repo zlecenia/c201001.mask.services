@@ -36,12 +36,15 @@ class VirtualKeyboard {
 
             this.keyboardElement.addEventListener('click', (e) => {
                 const key = e.target.closest('.keyboard-key');
-                if (!key) return;
+                if (!key) {
+                    console.log('🎹 Click detected but no keyboard-key found:', e.target);
+                    return;
+                }
 
                 const char = key.getAttribute('data-char');
                 const action = key.getAttribute('data-action');
                 
-                console.log('Keyboard key clicked:', { char, action, element: key });
+                console.log('🎹 VirtualKeyboard key clicked:', { char, action, element: key, keyId: key.id });
                 
                 // Add visual feedback
                 key.classList.add('key-press');
@@ -302,7 +305,10 @@ class VirtualKeyboard {
 
 // Initialize the keyboard when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    new VirtualKeyboard();
+    console.log('🎹 Initializing VirtualKeyboard class...');
+    const keyboard = new VirtualKeyboard();
+    window.virtualKeyboard = keyboard; // Expose for debugging
+    console.log('✅ VirtualKeyboard initialized:', keyboard);
 });
 
 // Add to global scope for HTML onclick handlers
