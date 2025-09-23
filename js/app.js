@@ -346,3 +346,61 @@ window.focusDataSensors = function() {
         console.error('DATA SENSORS panel not found');
     }
 };
+
+/**
+ * System-Screen Loading and Auto-Redirection to User Menu
+ * MISSING FUNCTIONALITY - IMPLEMENTING NOW!
+ */
+window.initSystemScreen = function() {
+    console.log('🚀 System-Screen loading initiated...');
+    
+    const loadingProgress = document.getElementById('loading-progress');
+    const loadingText = document.getElementById('loading-text');
+    
+    if (!loadingProgress || !loadingText) {
+        console.error('❌ System-Screen loading elements not found');
+        return;
+    }
+    
+    // Reset progress
+    loadingProgress.style.width = '0%';
+    loadingText.textContent = 'System starting in progress...';
+    
+    // Animate loading progress over 2 seconds
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress += 2; // Increment by 2% every 40ms (2000ms / 50 = 40ms)
+        loadingProgress.style.width = progress + '%';
+        
+        // Update loading text
+        if (progress <= 30) {
+            loadingText.textContent = 'Initializing system...';
+        } else if (progress <= 60) {
+            loadingText.textContent = 'Loading user interface...';
+        } else if (progress <= 90) {
+            loadingText.textContent = 'Preparing user menu...';
+        } else {
+            loadingText.textContent = 'Ready!';
+        }
+        
+        // When loading complete (2 seconds), redirect to user menu
+        if (progress >= 100) {
+            clearInterval(interval);
+            
+            setTimeout(() => {
+                console.log('✅ System-Screen loading complete, redirecting to user menu...');
+                
+                // Redirect to user-menu-screen with current language
+                if (window.navigateTo) {
+                    const currentRoute = window.getCurrentRoute();
+                    const currentLanguage = currentRoute ? currentRoute.language : 'en';
+                    window.navigateTo('user-menu-screen', currentLanguage, 'default');
+                } else {
+                    console.error('❌ Router not available for redirection');
+                }
+            }, 200); // Small delay after loading complete
+        }
+    }, 40); // Update every 40ms for smooth animation
+    
+    console.log('🎯 System-Screen 2-second loading animation started');
+};

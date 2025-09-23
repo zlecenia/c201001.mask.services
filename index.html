@@ -24,13 +24,11 @@
 
         </div>
         <div class="header-center">
-
-                <span id="language-selector" class="language-selector">
-                    <button id="lang-pl" class="lang-btn active" onclick="changeLanguage('pl')"
-                            title="Polski">🇵🇱</button>
-                    <button id="lang-en" class="lang-btn" onclick="changeLanguage('en')" title="English">🇺🇸</button>
-                    <button id="lang-de" class="lang-btn" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
-                </span>
+          <span id="device_connection_status" class="status-indicator">
+                <span id="device_url" class="footer-host">c201001.mask.services</span>
+                <span class="status-dot"></span>
+                <span id="status-text" data-i18n="global.offline">OFFLINE</span>
+            </span>
         </div>
 
         <div class="header-right">
@@ -253,10 +251,6 @@
                 <div class="menu-header">
                     USER MENU
                     <span id="menu-role-badge" class="role-badge"></span>
-                    <div class="session-info">
-                        <span>Inactive: <span id="inactive-time">0s</span></span>
-                        <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>
-                    </div>
                 </div>
                 <div class="menu-layout">
                     <div class="menu-sidebar" id="user-menu-items">
@@ -274,17 +268,22 @@
 
         <!-- Pressure Display Panel - Always Visible -->
         <aside id="pressure-panel" class="pressure-panel">
-            <h3>DATA SENSORS</h3>
+            <h3>PRESSURE</h3>
             <div class="pressure-box">
-                <h4>PRESSURE</h4>
                 <div class="pressure-item">
                     <span>Low</span>
                     <span id="pressure-low">10 mbar</span>
                 </div>
+            </div>
+            <div class="pressure-box">
+
                 <div class="pressure-item">
                     <span>Medium</span>
                     <span id="pressure-medium">20 bar</span>
                 </div>
+            </div>
+            <div class="pressure-box">
+
                 <div class="pressure-item">
                     <span>High</span>
                     <span id="pressure-high">30 bar</span>
@@ -297,7 +296,6 @@
     <footer class="footer">
         <div class="footer-left">
 
-            <p>
 
 
             <span id="user-info" style="display:none;">
@@ -305,17 +303,24 @@
                     <span id="user-name">USERNAME</span>
                     <span id="user-role" class="role-badge">---</span>
                 </span>
-            </p>
+
+            <div id="session-info" class="session-info">
+                <span>Inactive: <span id="inactive-time">0s</span></span>
+                <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>
+            </div>
+
 
 
         </div>
 
         <div class="footer-center">
-            <span id="device_connection_status" class="status-indicator">
-                <span id="device_url" class="footer-host">c201001.mask.services</span>
-                <span class="status-dot"></span>
-                <span id="status-text" data-i18n="global.offline">OFFLINE</span>
-            </span>
+
+                <span id="language-selector" class="language-selector">
+                    <button id="lang-pl" class="lang-btn active" onclick="changeLanguage('pl')"
+                            title="Polski">🇵🇱</button>
+                    <button id="lang-en" class="lang-btn" onclick="changeLanguage('en')" title="English">🇺🇸</button>
+                    <button id="lang-de" class="lang-btn" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+                </span>
         </div>
 
         <div class="footer-right">

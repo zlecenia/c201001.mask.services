@@ -53,12 +53,15 @@ class AuthManager {
             window.hideLoading();
         }
         
-        // Navigate to system screen using router - CRITICAL FIX!
-        if (window.navigateAction) {
-            // Use router navigation instead of just DOM manipulation
+        // Navigate to system screen using router - CRITICAL FIX 2!
+        if (window.navigateTo) {
+            // Use VIEW navigation to change to system-screen
+            window.navigateTo('system-screen', null, 'default');
+        } else if (window.navigateAction) {
+            // Fallback - but this was causing the bug!
             window.navigateAction('system-screen-default');
         } else {
-            // Fallback to switchScreen if router not available
+            // Final fallback to switchScreen if router not available
             this.switchScreen('login-screen', 'system-screen');
         }
         

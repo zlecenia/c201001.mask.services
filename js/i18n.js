@@ -287,6 +287,15 @@ class I18nManager {
         // Store language preference
         localStorage.setItem('preferred_language', language);
         
+        // Update router URL to reflect language change - CRITICAL FIX!
+        if (window.C20Router && typeof window.navigateTo === 'function') {
+            const currentRoute = window.getCurrentRoute();
+            if (currentRoute) {
+                // Navigate to current view with new language and current action
+                window.navigateTo(currentRoute.view, language, currentRoute.action);
+            }
+        }
+        
         console.log(`✅ Language changed to: ${language}`);
         return true;
     }

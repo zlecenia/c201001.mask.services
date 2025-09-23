@@ -70,9 +70,15 @@ class UITester {
     handleInteractiveClick(element, event) {
         const elementId = element.id || this.generateElementId(element);
         
-        // Update URL hash
+        // Use router navigation instead of direct hash manipulation - CRITICAL FIX!
         if (elementId && !window.location.hash.includes(elementId)) {
-            window.location.hash = elementId;
+            if (window.navigateAction && typeof window.navigateAction === 'function') {
+                // Use router navigation for proper URL format
+                window.navigateAction(elementId);
+            } else {
+                // Fallback to legacy hash for compatibility
+                window.location.hash = elementId;
+            }
         }
 
         // Log the interaction
@@ -155,6 +161,11 @@ class UITester {
     }
 
     isInteractiveElement(element) {
+        // Exclude language buttons to allow proper language switching
+        if (element.classList.contains('lang-btn')) {
+            return false;
+        }
+        
         return element.tagName === 'BUTTON' ||
                element.tagName === 'INPUT' ||
                element.tagName === 'SELECT' ||
@@ -209,7 +220,7 @@ class UITester {
         if (elementId.startsWith('login-') || elementId.startsWith('key-') || elementId === 'password-input') {
             return 'login-screen';
         } else if (elementId.startsWith('menu-') || elementId.includes('logout')) {
-            return 'menu-screen';
+            return 'user-menu-screen';
         } else if (elementId.includes('settings') || elementId.includes('config')) {
             return 'settings-screen';
         } else if (elementId.includes('data') || elementId.includes('pressure') || elementId.includes('sensor')) {

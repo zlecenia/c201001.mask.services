@@ -131,8 +131,8 @@ class C20Router {
                     'password-input'
                 ]
             },
-            'menu-screen': {
-                element: '#menu-screen',
+            'user-menu-screen': {
+                element: '#user-menu-screen',
                 title: 'User Menu',
                 actions: [
                     'menu-item-*',
@@ -370,6 +370,12 @@ class C20Router {
         if (targetScreen) {
             targetScreen.classList.add('active');
             console.log('✅ View shown:', viewId);
+            
+            // Trigger system-screen loading if navigating to system-screen - CRITICAL INTEGRATION!
+            if (viewId === 'system-screen' && window.initSystemScreen) {
+                console.log('🚀 Triggering system-screen loading animation...');
+                window.initSystemScreen();
+            }
         } else {
             console.warn('⚠️ View element not found:', viewId);
         }

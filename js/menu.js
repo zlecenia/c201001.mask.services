@@ -50,10 +50,10 @@ class MenuManager {
         }
 
         const menuItems = this.menuConfig[role];
-        const menuContainer = document.getElementById('menu-content');
+        const menuContainer = document.getElementById('user-menu-items');
         
         if (!menuContainer) {
-            console.error('❌ Menu container not found');
+            console.error('❌ Menu sidebar container not found');
             return false;
         }
 
@@ -130,47 +130,76 @@ class MenuManager {
      */
     showTestMenu() {
         console.log('Opening Test Menu...');
-        // Implementation for test menu
+        this.loadTemplate('test-menu-template');
     }
 
     showUserData() {
         console.log('Opening User Data...');
-        // Implementation for user data
+        this.loadTemplate('user-data-template');
     }
 
     showDeviceData() {
         console.log('Opening Device Data...');
-        // Implementation for device data
+        this.loadTemplate('device-data-template');
     }
 
     showTestReports() {
         console.log('Opening Test Reports...');
-        // Implementation for test reports
+        this.loadTemplate('test-menu-template'); // Test reports use test menu template
     }
 
     showWorkshop() {
         console.log('Opening Workshop...');
-        // Implementation for workshop
+        this.loadTemplate('workshop-template');
     }
 
     showUsers() {
         console.log('Opening Users Management...');
-        // Implementation for users management
+        this.loadTemplate('user-data-template'); // Users management uses user data template
     }
 
     showServiceMenu() {
         console.log('Opening Service Menu...');
-        // Implementation for service menu
+        this.loadTemplate('service-menu-template');
     }
 
     showSystemSettings() {
         console.log('Opening System Settings...');
-        // Implementation for system settings
+        this.loadTemplate('system-settings-template');
     }
 
     showAdvancedDiagnostics() {
         console.log('Opening Advanced Diagnostics...');
-        // Implementation for advanced diagnostics
+        this.loadTemplate('service-menu-template'); // Use service menu template for diagnostics
+    }
+
+    /**
+     * Load HTML template into menu content area
+     */
+    loadTemplate(templateId) {
+        console.log(`🎯 Loading template: ${templateId}`);
+        
+        const template = document.getElementById(templateId);
+        const menuContent = document.getElementById('menu-content');
+        
+        if (!template) {
+            console.error(`❌ Template not found: ${templateId}`);
+            menuContent.innerHTML = `<div class="error-message">
+                <h2>Template Not Found</h2>
+                <p>Template "${templateId}" is not available.</p>
+            </div>`;
+            return false;
+        }
+        
+        if (!menuContent) {
+            console.error('❌ Menu content container not found');
+            return false;
+        }
+        
+        // Clone template content and insert into menu-content
+        menuContent.innerHTML = template.innerHTML;
+        console.log(`✅ Template loaded successfully: ${templateId}`);
+        return true;
     }
 
     /**

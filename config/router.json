@@ -20,20 +20,6 @@
                 "language-change"
             ]
         },
-        "menu-screen": {
-            "name": "Menu Screen", 
-            "description": "Main navigation menu",
-            "actions": [
-                "default",
-                "menu-item-1",
-                "menu-item-2",
-                "menu-item-3",
-                "menu-item-4",
-                "menu-item-5",
-                "menu-item-6",
-                "menu-item-7"
-            ]
-        },
         "system-screen": {
             "name": "System Screen",
             "description": "System overview and controls", 
@@ -42,6 +28,20 @@
                 "pressure-display",
                 "sensor-data",
                 "status-update"
+            ]
+        },
+        "user-menu-screen": {
+            "name": "User Menu Screen",
+            "description": "Main user interface menu",
+            "actions": [
+                "default",
+                "menu-item-1",
+                "menu-item-2", 
+                "menu-item-3",
+                "menu-item-4",
+                "menu-item-5",
+                "menu-item-6",
+                "menu-item-7"
             ]
         },
         "data-screen": {
@@ -86,7 +86,7 @@
         }
     ],
     "storage": {
-        "enabled": true,
+        "enabled": false,
         "keys": {
             "lastView": "c20_last_view",
             "lastLanguage": "c20_last_language", 
@@ -95,9 +95,9 @@
         }
     },
     "navigation": {
-        "preserveView": true,
-        "preserveLanguage": true,
-        "actionOnlyChanges": true,
+        "preserveView": false,
+        "preserveLanguage": false,
+        "actionOnlyChanges": false,
         "hashPrefix": "#/"
     }
 }
