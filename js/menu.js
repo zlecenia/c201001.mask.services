@@ -3,6 +3,9 @@
  * Modular menu system - loading, rendering, navigation
  */
 
+// AMD/RequireJS module definition
+define('menu', ['utils', 'auth'], function(Utils, AuthManager) {
+
 class MenuManager {
     constructor() {
         this.menuConfig = null;
@@ -455,14 +458,19 @@ function navigateToSubmenu(menuKey, submenuKey) {
     // Implementation for submenu navigation
 }
 
-// Create global menu manager instance
-window.MenuManager = new MenuManager();
+    // Create global menu manager instance for backwards compatibility
+    const menuManager = new MenuManager();
+    window.MenuManager = menuManager;
 
-// Export functions for HTML onclick handlers and compatibility
-window.showUserMenu = (role) => window.MenuManager.showUserMenu(role);
-window.selectMenuOption = (optionKey) => window.MenuManager.selectMenuOption(optionKey);
-window.clearPasswordInput = clearPasswordInput;
-window.deleteLastPasswordChar = deleteLastPasswordChar;
-window.navigateToSubmenu = navigateToSubmenu;
+    // Export functions for HTML onclick handlers and compatibility
+    window.showUserMenu = (role) => menuManager.showUserMenu(role);
+    window.selectMenuOption = (optionKey) => menuManager.selectMenuOption(optionKey);
+    window.clearPasswordInput = clearPasswordInput;
+    window.deleteLastPasswordChar = deleteLastPasswordChar;
+    window.navigateToSubmenu = navigateToSubmenu;
 
-console.log('✅ Menu Module initialized');
+    console.log('✅ Menu Module initialized');
+
+    // Return MenuManager class for AMD/RequireJS
+    return MenuManager;
+});

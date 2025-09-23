@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edytor Konfiguracji JSON</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .controls {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .file-selector, .schema-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        select, input[type="file"] {
+            padding: 8px 12px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+            color: white;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #333;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .editor-container {
+            display: flex;
+            height: 70vh;
+        }
+
+        .editor-panel {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .preview-panel {
+            flex: 1;
+            padding: 20px;
+            background: #f8f9fa;
+            overflow-y: auto;
+        }
+
+        .json-tree {
+            font-family: 'Courier New', monospace;
+        }
+
+        .json-node {
+            margin-left: 20px;
+            margin-bottom: 8px;
+        }
+
+        .json-key {
+            color: #0066cc;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-right: 8px;
+        }
+
+        .json-key:hover {
+            background: #e3f2fd;
+        }
+
+        .json-key.editable {
+            background: #e8f5e8;
+            border: 1px dashed #4caf50;
+        }
+
+        .json-key.readonly {
+            background: #ffebee;
+            color: #666;
+        }
+
+        .json-value {
+            color: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            min-width: 100px;
+            border: 1px solid transparent;
+        }
+
+        .json-value.editable {
+            background: #fff3e0;
+            border: 1px dashed #ff9800;
+            cursor: text;
+        }
+
+        .json-value.editing {
+            background: white;
+            border: 2px solid #2196f3;
+        }
+
+        .json-value.string {
+            color: #d84315;
+        }
+
+        .json-value.number {
+            color: #1976d2;
+        }
+
+        .json-value.boolean {
+            color: #388e3c;
+        }
+
+        .json-value.null {
+            color: #757575;
+            font-style: italic;
+        }
+
+        .json-array, .json-object {
+            border-left: 3px solid #e0e0e0;
+            margin-left: 10px;
+            padding-left: 15px;
+        }
+
+        .collapse-btn {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 2px 6px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+
+        .collapse-btn:hover {
+            background: #f0f0f0;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .status-bar {
+            background: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .success {
+            color: #388e3c;
+            background: #e8f5e8;
+            padding: 8px;
+            border-radius: 4px;
+            margin: 5px 0;
+            border-left: 4px solid #388e3c;
+        }
+
+        .add-button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 5px;
+        }
+
+        .delete-button {
+            background: #f44336;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 300px;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        #jsonPreview {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ Wizualny Edytor Konfiguracji JSON</h1>
+            <p>Bezpieczna edycja plików konfiguracyjnych z walidacją schematu</p>
+        </div>
+
+        <div class="controls">
+            <div class="file-selector">
+                <label>Plik JSON:</label>
+                <input type="file" id="fileInput" accept=".json">
+            </div>
+
+            <div class="file-selector">
+                <label>Schematy:</label>
+                <input type="file" id="schemaInput" accept=".json" onchange="importSchemas(event)">
+            </div>
+
+            <div class="schema-selector">
+                <label>Schema:</label>
+                <select id="schemaSelect">
+                    <option value="">Wybierz schemat</option>
+                    <option value="app">App.json</option>
+                    <option value="menu">Menu.json</option>
+                    <option value="router">Router.json</option>
+                    <option value="system">System.json</option>
+                    <option value="test-scenarios">Test-scenarios.json</option>
+                    <option value="workshop">Workshop.json</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" onclick="loadSampleData()">📂 Załaduj Przykład</button>
+            <button class="btn-success" onclick="validateJSON()">✅ Waliduj</button>
+            <button class="btn-warning" onclick="exportJSON()">💾 Eksportuj JSON</button>
+            <button class="btn-info" onclick="exportSchemas()">📋 Eksportuj Schematy</button>
+            <button class="btn-info" onclick="resetEditor()">🔄 Reset</button>
+        </div>
+
+        <div class="editor-container">
+            <div class="editor-panel">
+                <h3>📝 Edytor Wizualny</h3>
+                <div id="errorContainer"></div>
+                <div id="jsonEditor"></div>
+            </div>
+
+            <div class="preview-panel">
+                <h3>👁️ Podgląd JSON</h3>
+                <pre id="jsonPreview"></pre>
+            </div>
+        </div>
+
+        <div class="status-bar">
+            <div id="statusLeft">Gotowy do edycji</div>
+            <div id="statusRight">Wczytaj plik lub wybierz przykład</div>
+        </div>
+    </div>
+
+    <!-- Modal do dodawania nowych elementów -->
+    <div id="addModal" class="modal">
+        <div class="modal-content">
+            <h3>Dodaj nowy element</h3>
+            <div class="input-group">
+                <label>Klucz:</label>
+                <input type="text" id="newKey" placeholder="Nazwa klucza">
+            </div>
+            <div class="input-group">
+                <label>Typ:</label>
+                <select id="newType">
+                    <option value="string">String</option>
+                    <option value="number">Number</option>
+                    <option value="boolean">Boolean</option>
+                    <option value="array">Array</option>
+                    <option value="object">Object</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Wartość:</label>
+                <input type="text" id="newValue" placeholder="Wartość">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button onclick="addNewElement()">Dodaj</button>
+                <button onclick="closeAddModal()">Anuluj</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Globalne zmienne
+        let currentJSON = {};
+        let currentSchema = {};
+        let editRules = {};
+        let currentSchemaName = '';
+
+        // 📋 SCHEMATY JSON - Definicje struktury i walidacji
+        const schemas = {
+            // Schema dla app.json - konfiguracja aplikacji
+            app: {
+                type: "object",
+                title: "Konfiguracja Aplikacji",
+                description: "Podstawowe ustawienia połączenia i trybu pracy",
+                properties: {
+                    API_URL: {
+                        type: "string",
+                        pattern: "^https?://",
+                        description: "URL API serwera (http/https)"
+                    },
+                    WS_URL: {
+                        type: "string",
+                        pattern: "^wss?://",
+                        description: "URL WebSocket (ws/wss)"
+                    },
+                    MOCK_MODE: {
+                        type: "boolean",
+                        description: "Tryb symulacji (true/false)"
+                    },
+                    UPDATE_INTERVAL: {
+                        type: "number",
+                        minimum: 1000,
+                        maximum: 60000,
+                        description: "Interwał odświeżania w ms (1000-60000)"
+                    }
+                },
+                required: ["API_URL", "WS_URL", "MOCK_MODE", "UPDATE_INTERVAL"]
+            },
+
+            // Schema dla menu.json - struktura menu ról
+            menu: {
+                type: "object",
+                title: "Struktura Menu",
+                description: "Menu dla różnych ról użytkowników",
+                properties: {
+                    OPERATOR: {
+                        type: "array",
+                        items: { $ref: "#/definitions/menuItem" },
+                        description: "Pozycje menu dla operatora"
+                    },
+                    ADMIN: {
+                        type: "array",
+                        items: { $ref: "#/definitions/menuItem" },
+                        description: "Pozycje menu dla administratora"
+                    },
+                    SUPERUSER: {
+                        type: "array",
+                        items: { $ref: "#/definitions/menuItem" },
+                        description: "Pozycje menu dla superusera"
+                    },
+                    SERWISANT: {
+                        type: "array",
+                        items: { $ref: "#/definitions/menuItem" },
+                        description: "Pozycje menu dla serwisanta"
+                    }
+                },
+                definitions: {
+                    menuItem: {
+                        type: "object",
+                        properties: {
+                            key: { type: "string", description: "Unikalny klucz pozycji" },
+                            label: { type: "string", description: "Wyświetlana nazwa" },
+                            icon: { type: "string", description: "Emoji lub ikona" }
+                        },
+                        required: ["key", "label", "icon"]
+                    }
+                }
+            },
+
+            // Schema dla router.json - konfiguracja routingu
+            router: {
+                type: "object",
+                title: "Konfiguracja Routingu",
+                description: "Ustawienia nawigacji i widoków",
+                properties: {
+                    default: {
+                        type: "object",
+                        description: "Domyślne ustawienia routera"
+                    },
+                    views: {
+                        type: "object",
+                        description: "Definicje widoków aplikacji"
+                    },
+                    languages: {
+                        type: "array",
+                        description: "Dostępne języki interfejsu"
+                    },
+                    storage: {
+                        type: "object",
+                        description: "Konfiguracja przechowywania danych"
+                    },
+                    navigation: {
+                        type: "object",
+                        description: "Ustawienia nawigacji"
+                    }
+                },
+                required: ["default", "views"]
+            },
+
+            // Schema dla system.json - konfiguracja systemu
+            system: {
+                type: "object",
+                title: "Konfiguracja Systemu",
+                description: "Role, bezpieczeństwo, sensory i raporty",
+                properties: {
+                    roles: {
+                        type: "object",
+                        description: "Definicje ról użytkowników"
+                    },
+                    authentication: {
+                        type: "object",
+                        description: "Ustawienia autentykacji"
+                    },
+                    ui: {
+                        type: "object",
+                        description: "Konfiguracja interfejsu użytkownika"
+                    },
+                    sensors: {
+                        type: "object",
+                        description: "Parametry sensorów i pomiarów"
+                    },
+                    reports: {
+                        type: "object",
+                        description: "Konfiguracja generowania raportów"
+                    },
+                    workshop: {
+                        type: "object",
+                        description: "Ustawienia warsztatu"
+                    }
+                },
+                required: ["roles", "authentication"]
+            },
+
+            // Schema dla test-scenarios.json - scenariusze testów
+            "test-scenarios": {
+                type: "object",
+                title: "Scenariusze Testów",
+                description: "Definicje testów dla urządzeń ochronnych",
+                properties: {
+                    default_scenarios: {
+                        type: "object",
+                        description: "Domyślne scenariusze testów"
+                    },
+                    test_standards: {
+                        type: "object",
+                        description: "Standardy i normy testowania"
+                    },
+                    device_types: {
+                        type: "object",
+                        description: "Typy testowanych urządzeń"
+                    }
+                },
+                required: ["default_scenarios"]
+            },
+
+            // Schema dla workshop.json - zarządzanie warsztatem
+            workshop: {
+                type: "object",
+                title: "Zarządzanie Warsztatem",
+                description: "Części zamienne, narzędzia, konserwacja",
+                properties: {
+                    spare_parts: {
+                        type: "object",
+                        description: "Katalog części zamiennych"
+                    },
+                    tools: {
+                        type: "object",
+                        description: "Narzędzia kalibracyjne"
+                    },
+                    maintenance: {
+                        type: "object",
+                        description: "Harmonogramy konserwacji"
+                    },
+                    suppliers: {
+                        type: "object",
+                        description: "Dostawcy i kontakty"
+                    },
+                    categories: {
+                        type: "object",
+                        description: "Kategorie części zamiennych"
+                    }
+                },
+                required: ["spare_parts"]
+            }
+        };
+
+        // 🔐 REGUŁY EDYCJI - Definiują uprawnienia do modyfikacji
+        const editingRules = {
+            // App.json - tylko wartości, struktura chroniona
+            app: {
+                editable: ["API_URL", "WS_URL", "MOCK_MODE", "UPDATE_INTERVAL"],
+                addable: false,  // Nie można dodawać nowych pól
+                deletable: false, // Nie można usuwać pól
+                description: "Tylko wartości konfiguracyjne, struktura chroniona"
+            },
+
+            // Menu.json - pełna edycja pozycji menu
+            menu: {
+                editable: ["*/*/key", "*/*/label", "*/*/icon"], // Wzorzec: rola/index/pole
+                addable: ["*/*"],     // Można dodawać pozycje do każdej roli
+                deletable: ["*/*"],   // Można usuwać pozycje z każdej roli
+                description: "Pełna kontrola nad pozycjami menu dla wszystkich ról"
+            },
+
+            // Router.json - wybiórcza edycja
+            router: {
+                editable: [
+                    "default/*",           // Wszystkie pola w default
+                    "languages/*/name",    // Nazwy języków
+                    "languages/*/flag",    // Flagi języków
+                    "storage/enabled"      // Status przechowywania
+                ],
+                addable: ["views/*", "languages"],  // Nowe widoki i języki
+                deletable: ["views/*"],             // Usuwanie widoków
+                description: "Konfiguracja podstawowa i języki - struktura nawigacji chroniona"
+            },
+
+            // System.json - krytyczne ustawienia
+            system: {
+                editable: [
+                    "authentication/session_timeout",      // Timeout sesji
+                    "authentication/max_login_attempts",   // Max prób logowania
+                    "ui/animations_enabled",               // Animacje UI
+                    "sensors/update_interval",             // Częstotliwość sensorów
+                    "sensors/alarm_thresholds/*"           // Progi alarmowe
+                ],
+                addable: ["sensors/alarm_thresholds"],     // Nowe progi alarmowe
+                deletable: false,  // Krytyczne - bez usuwania
+                description: "Tylko bezpieczne parametry - struktura systemu chroniona"
+            },
+
+            // Test-scenarios.json - scenariusze i parametry
+            "test-scenarios": {
+                editable: [
+                    "*/*/parameters/*",  // Parametry testów
+                    "*/*/description"    // Opisy scenariuszy
+                ],
+                addable: ["default_scenarios", "test_standards"],  // Nowe scenariusze
+                deletable: ["default_scenarios/*"],               // Usuwanie scenariuszy
+                description: "Parametry testów i opisy - normy chronione"
+            },
+
+            // Workshop.json - inwentarz i ceny
+            workshop: {
+                editable: [
+                    // Części zamienne - wszystkie pola oprócz ID
+                    "spare_parts/default_parts/*/name",           // Nazwa części
+                    "spare_parts/default_parts/*/quantity",       // Ilość w magazynie
+                    "spare_parts/default_parts/*/min_level",      // Minimalny stan
+                    "spare_parts/default_parts/*/price",          // Cena jednostkowa
+                    "spare_parts/default_parts/*/supplier",       // Dostawca
+                    "spare_parts/default_parts/*/part_number",    // Numer katalogowy
+                    "spare_parts/default_parts/*/shelf_life_days", // Okres przydatności
+
+                    // Narzędzia kalibracyjne
+                    "tools/calibration_tools/*/name",             // Nazwa narzędzia
+                    "tools/calibration_tools/*/location",         // Lokalizacja
+                    "tools/calibration_tools/*/status",           // Status (OK/ATTENTION/FAILED)
+                    "tools/calibration_tools/*/last_calibration", // Data ostatniej kalibracji
+                    "tools/calibration_tools/*/next_calibration", // Data następnej kalibracji
+
+                    // Dostawcy
+                    "suppliers/default_suppliers/*/name",         // Nazwa dostawcy
+                    "suppliers/default_suppliers/*/contact_person", // Osoba kontaktowa
+                    "suppliers/default_suppliers/*/email",        // Email
+                    "suppliers/default_suppliers/*/phone",        // Telefon
+                    "suppliers/default_suppliers/*/address",      // Adres
+                    "suppliers/default_suppliers/*/payment_terms", // Terminy płatności
+                    "suppliers/default_suppliers/*/delivery_time"  // Czas dostawy
+                ],
+                addable: [
+                    "spare_parts/default_parts",      // Dodawanie nowych części zamiennych
+                    "tools/calibration_tools",        // Dodawanie nowych narzędzi
+                    "suppliers/default_suppliers",    // Dodawanie nowych dostawców
+                    "maintenance/default_schedules"   // Dodawanie harmonogramów konserwacji
+                ],
+                deletable: [
+                    "spare_parts/default_parts/*",    // 🗑️ Usuwanie CAŁEJ części z tablicy
+                    "tools/calibration_tools/*",      // 🗑️ Usuwanie CAŁEGO narzędzia z tablicy
+                    "suppliers/default_suppliers/*",  // 🗑️ Usuwanie CAŁEGO dostawcy z tablicy
+                    "maintenance/default_schedules/*" // 🗑️ Usuwanie CAŁEGO harmonogramu
+                ],
+                description: "Zarządzanie magazynem - ID chronione, struktura kategorii chroniona"
+            }
+        };
+
+        // Przykładowe dane
+        const sampleData = {
+            app: {
+                "API_URL": "http://localhost:3000",
+                "WS_URL": "ws://localhost:3000",
+                "MOCK_MODE": true,
+                "UPDATE_INTERVAL": 5000
+            },
+            menu: {
+                "OPERATOR": [
+                    { "key": "test_wizard", "label": "Test Wizard", "icon": "🧙" },
+                    { "key": "test_quick", "label": "Quick Test", "icon": "⚡" }
+                ]
+            }
+        };
+
+        // Inicjalizacja
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('fileInput').addEventListener('change', handleFileLoad);
+            document.getElementById('schemaSelect').addEventListener('change', handleSchemaChange);
+
+            updateStatus('Gotowy do edycji', 'Wczytaj plik lub wybierz przykład');
+        });
+
+        // Obsługa wczytywania pliku
+        function handleFileLoad(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    loadJSON(json);
+                    updateStatus('Plik wczytany pomyślnie', `${file.name}`);
+                } catch (error) {
+                    showError('Błąd parsowania JSON: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Obsługa zmiany schematu
+        function handleSchemaChange(event) {
+            const schemaName = event.target.value;
+            if (schemaName && schemas[schemaName]) {
+                currentSchema = schemas[schemaName];
+                editRules = editingRules[schemaName];
+                currentSchemaName = schemaName;
+
+                if (Object.keys(currentJSON).length > 0) {
+                    renderEditor();
+                }
+
+                updateStatus('Schema załadowana', `${schemaName}.json`);
+            }
+        }
+
+        // Ładowanie przykładowych danych
+        function loadSampleData() {
+            const schemaName = document.getElementById('schemaSelect').value;
+            if (!schemaName) {
+                showError('Najpierw wybierz schemat');
+                return;
+            }
+
+            if (sampleData[schemaName]) {
+                loadJSON(sampleData[schemaName]);
+                updateStatus('Przykład załadowany', `${schemaName}.json`);
+            } else {
+                showError('Brak przykładowych danych dla tego schematu');
+            }
+        }
+
+        // Wczytywanie JSON do edytora
+        function loadJSON(json) {
+            currentJSON = JSON.parse(JSON.stringify(json)); // Deep copy
+            renderEditor();
+            updatePreview();
+        }
+
+        // Renderowanie edytora
+        function renderEditor() {
+            const container = document.getElementById('jsonEditor');
+            container.innerHTML = '';
+
+            if (Object.keys(currentJSON).length === 0) {
+                container.innerHTML = '<p style="color: #666; font-style: italic;">Brak danych do edycji</p>';
+                return;
+            }
+
+            renderObject(currentJSON, container, '');
+        }
+
+        // Renderowanie obiektu JSON
+        function renderObject(obj, container, path) {
+            for (const [key, value] of Object.entries(obj)) {
+                const currentPath = path ? `${path}/${key}` : key;
+                const nodeDiv = document.createElement('div');
+                nodeDiv.className = 'json-node';
+
+                const keySpan = document.createElement('span');
+                keySpan.className = `json-key ${isEditable(currentPath, 'key') ? 'editable' : 'readonly'}`;
+                keySpan.textContent = key;
+                keySpan.onclick = () => editKey(keySpan, currentPath);
+
+                nodeDiv.appendChild(keySpan);
+
+                if (typeof value === 'object' && value !== null) {
+                    if (Array.isArray(value)) {
+                        renderArray(value, nodeDiv, currentPath);
+                    } else {
+                        const objContainer = document.createElement('div');
+                        objContainer.className = 'json-object';
+                        renderObject(value, objContainer, currentPath);
+                        nodeDiv.appendChild(objContainer);
+                    }
+                } else {
+                    renderValue(value, nodeDiv, currentPath);
+                }
+
+                // Dodaj przyciski dla elementów, które można usuwać
+                if (isDeletable(currentPath)) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-button';
+                    deleteBtn.textContent = '🗑️';
+                    deleteBtn.onclick = () => deleteElement(currentPath);
+                    nodeDiv.appendChild(deleteBtn);
+                }
+
+                container.appendChild(nodeDiv);
+            }
+
+            // Dodaj przycisk dodawania nowych elementów
+            if (isAddable(path)) {
+                const addBtn = document.createElement('button');
+                addBtn.className = 'add-button';
+                addBtn.textContent = '➕ Dodaj element';
+                addBtn.onclick = () => showAddModal(path);
+                container.appendChild(addBtn);
+            }
+        }
+
+        // Renderowanie tablicy
+        function renderArray(arr, container, path) {
+            const arrayDiv = document.createElement('div');
+            arrayDiv.className = 'json-array';
+
+            arr.forEach((item, index) => {
+                const itemPath = `${path}/${index}`;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'json-node';
+
+                const indexSpan = document.createElement('span');
+                indexSpan.className = 'json-key readonly';
+                indexSpan.textContent = `[${index}]`;
+                itemDiv.appendChild(indexSpan);
+
+                if (typeof item === 'object' && item !== null) {
+                    if (Array.isArray(item)) {
+                        renderArray(item, itemDiv, itemPath);
+                    } else {
+                        const objContainer = document.createElement('div');
+                        objContainer.className = 'json-object';
+                        renderObject(item, objContainer, itemPath);
+                        itemDiv.appendChild(objContainer);
+                    }
+                } else {
+                    renderValue(item, itemDiv, itemPath);
+                }
+
+                if (isDeletable(itemPath)) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-button';
+                    deleteBtn.textContent = '🗑️';
+                    deleteBtn.onclick = () => deleteElement(itemPath);
+                    itemDiv.appendChild(deleteBtn);
+                }
+
+                arrayDiv.appendChild(itemDiv);
+            });
+
+            container.appendChild(arrayDiv);
+        }
+
+        // Renderowanie wartości
+        function renderValue(value, container, path) {
+            const valueSpan = document.createElement('span');
+            valueSpan.className = `json-value ${getValueType(value)} ${isEditable(path, 'value') ? 'editable' : 'readonly'}`;
+            valueSpan.textContent = JSON.stringify(value);
+            valueSpan.onclick = () => {
+                if (isEditable(path, 'value')) {
+                    editValue(valueSpan, path, value);
+                }
+            };
+
+            container.appendChild(valueSpan);
+        }
+
+        // Sprawdzenie czy element można edytować
+        function isEditable(path, type) {
+            if (!editRules.editable) return false;
+
+            return editRules.editable.some(rule => {
+                if (rule.includes('*')) {
+                    const regex = new RegExp(rule.replace(/\*/g, '[^/]+'));
+                    return regex.test(path);
+                }
+                return rule === path;
+            });
+        }
+
+        // Sprawdzenie czy można dodawać elementy
+        function isAddable(path) {
+            if (!editRules.addable || editRules.addable === false) return false;
+
+            return editRules.addable.some(rule => {
+                if (rule.includes('*')) {
+                    const regex = new RegExp(rule.replace(/\*/g, '[^/]+'));
+                    return regex.test(path);
+                }
+                return rule === path;
+            });
+        }
+
+        // Sprawdzenie czy można usuwać elementy
+        function isDeletable(path) {
+            if (!editRules.deletable || editRules.deletable === false) return false;
+
+            return editRules.deletable.some(rule => {
+                if (rule.includes('*')) {
+                    const regex = new RegExp(rule.replace(/\*/g, '[^/]+'));
+                    return regex.test(path);
+                }
+                return rule === path;
+            });
+        }
+
+        // Edycja klucza
+        function editKey(element, path) {
+            if (!isEditable(path, 'key')) return;
+
+            const currentKey = element.textContent;
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = currentKey;
+            input.style.background = '#fff';
+            input.style.border = '2px solid #2196f3';
+            input.style.borderRadius = '4px';
+            input.style.padding = '4px';
+
+            element.replaceWith(input);
+            input.focus();
+
+            const saveKey = () => {
+                const newKey = input.value.trim();
+                if (newKey && newKey !== currentKey) {
+                    updateJSONKey(path, newKey);
+                    renderEditor();
+                    updatePreview();
+                } else {
+                    element.textContent = currentKey;
+                    input.replaceWith(element);
+                }
+            };
+
+            input.onblur = saveKey;
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') saveKey();
+                if (e.key === 'Escape') {
+                    element.textContent = currentKey;
+                    input.replaceWith(element);
+                }
+            };
+        }
+
+        // Edycja wartości
+        function editValue(element, path, currentValue) {
+            if (!isEditable(path, 'value')) return;
+
+            element.classList.add('editing');
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.value = typeof currentValue === 'string' ? currentValue : JSON.stringify(currentValue);
+            input.style.background = '#fff';
+            input.style.border = '2px solid #2196f3';
+            input.style.borderRadius = '4px';
+            input.style.padding = '4px';
+            input.style.minWidth = '100px';
+
+            element.textContent = '';
+            element.appendChild(input);
+            input.focus();
+
+            const saveValue = () => {
+                let newValue = input.value.trim();
+
+                try {
+                    // Próba parsowania jako JSON
+                    if (newValue.startsWith('"') && newValue.endsWith('"')) {
+                        newValue = newValue.slice(1, -1); // Usuń cudzysłowy dla stringów
+                    } else if (newValue === 'true' || newValue === 'false') {
+                        newValue = newValue === 'true';
+                    } else if (!isNaN(newValue) && newValue !== '') {
+                        newValue = Number(newValue);
+                    } else if (newValue === 'null') {
+                        newValue = null;
+                    }
+
+                    updateJSONValue(path, newValue);
+                    renderEditor();
+                    updatePreview();
+                } catch (error) {
+                    showError('Nieprawidłowy format wartości');
+                    element.classList.remove('editing');
+                    element.textContent = JSON.stringify(currentValue);
+                }
+            };
+
+            input.onblur = saveValue;
+            input.onkeydown = (e) => {
+                if (e.key === 'Enter') saveValue();
+                if (e.key === 'Escape') {
+                    element.classList.remove('editing');
+                    element.textContent = JSON.stringify(currentValue);
+                }
+            };
+        }
+
+        // Aktualizacja klucza w JSON
+        function updateJSONKey(path, newKey) {
+            const pathParts = path.split('/');
+            const oldKey = pathParts.pop();
+            let target = currentJSON;
+
+            // Nawiguj do rodzica
+            for (const part of pathParts) {
+                target = target[part];
+            }
+
+            // Zmień klucz
+            if (target && typeof target === 'object' && oldKey in target) {
+                target[newKey] = target[oldKey];
+                delete target[oldKey];
+            }
+        }
+
+        // Aktualizacja wartości w JSON
+        function updateJSONValue(path, newValue) {
+            const pathParts = path.split('/');
+            const key = pathParts.pop();
+            let target = currentJSON;
+
+            // Nawiguj do rodzica
+            for (const part of pathParts) {
+                if (Array.isArray(target)) {
+                    target = target[parseInt(part)];
+                } else {
+                    target = target[part];
+                }
+            }
+
+            // Ustaw nową wartość
+            if (Array.isArray(target)) {
+                target[parseInt(key)] = newValue;
+            } else {
+                target[key] = newValue;
+            }
+        }
+
+        // Usuwanie elementu
+        function deleteElement(path) {
+            if (!confirm('Czy na pewno chcesz usunąć ten element?')) return;
+
+            const pathParts = path.split('/');
+            const key = pathParts.pop();
+            let target = currentJSON;
+
+            // Nawiguj do rodzica
+            for (const part of pathParts) {
+                if (Array.isArray(target)) {
+                    target = target[parseInt(part)];
+                } else {
+                    target = target[part];
+                }
+            }
+
+            // Usuń element
+            if (Array.isArray(target)) {
+                target.splice(parseInt(key), 1);
+            } else {
+                delete target[key];
+            }
+
+            renderEditor();
+            updatePreview();
+        }
+
+        // Modal dodawania nowego elementu
+        function showAddModal(path) {
+            document.getElementById('addModal').style.display = 'block';
+            document.getElementById('addModal').dataset.path = path;
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
+
+        function addNewElement() {
+            const path = document.getElementById('addModal').dataset.path;
+            const key = document.getElementById('newKey').value.trim();
+            const type = document.getElementById('newType').value;
+            let value = document.getElementById('newValue').value.trim();
+
+            if (!key) {
+                alert('Podaj nazwę klucza');
+                return;
+            }
+
+            // Konwersja wartości na odpowiedni typ
+            switch (type) {
+                case 'number':
+                    value = Number(value) || 0;
+                    break;
+                case 'boolean':
+                    value = value === 'true';
+                    break;
+                case 'array':
+                    value = [];
+                    break;
+                case 'object':
+                    value = {};
+                    break;
+                default:
+                    // string - pozostaw jako string
+                    break;
+            }
+
+            // Dodaj element do JSON
+            let target = currentJSON;
+            if (path) {
+                const pathParts = path.split('/');
+                for (const part of pathParts) {
+                    target = target[part];
+                }
+            }
+
+            target[key] = value;
+
+            renderEditor();
+            updatePreview();
+            closeAddModal();
+
+            // Wyczyść formularz
+            document.getElementById('newKey').value = '';
+            document.getElementById('newValue').value = '';
+        }
+
+        // Aktualizacja podglądu JSON
+        function updatePreview() {
+            const preview = document.getElementById('jsonPreview');
+            preview.textContent = JSON.stringify(currentJSON, null, 2);
+        }
+
+        // Walidacja JSON
+        function validateJSON() {
+            if (!currentSchema || Object.keys(currentSchema).length === 0) {
+                showError('Nie wybrano schematu walidacji');
+                return;
+            }
+
+            try {
+                const isValid = validateAgainstSchema(currentJSON, currentSchema);
+                if (isValid) {
+                    showSuccess('JSON jest prawidłowy według schematu');
+                    updateStatus('Walidacja pomyślna', 'JSON zgodny ze schematem');
+                }
+            } catch (error) {
+                showError('Błąd walidacji: ' + error.message);
+            }
+        }
+
+        // Prosta walidacja schematu
+        function validateAgainstSchema(data, schema) {
+            if (schema.type === 'object') {
+                if (typeof data !== 'object' || Array.isArray(data) || data === null) {
+                    throw new Error('Oczekiwano obiektu');
+                }
+
+                // Sprawdź wymagane pola
+                if (schema.required) {
+                    for (const field of schema.required) {
+                        if (!(field in data)) {
+                            throw new Error(`Brak wymaganego pola: ${field}`);
+                        }
+                    }
+                }
+
+                // Sprawdź właściwości
+                if (schema.properties) {
+                    for (const [key, value] of Object.entries(data)) {
+                        if (schema.properties[key]) {
+                            validateAgainstSchema(value, schema.properties[key]);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        // Eksport JSON
+        function exportJSON() {
+            if (Object.keys(currentJSON).length === 0) {
+                showError('Brak danych do eksportu');
+                return;
+            }
+
+            const jsonString = JSON.stringify(currentJSON, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${currentSchemaName || 'config'}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSuccess('Plik został zapisany');
+        }
+
+        // Import schematów z pliku
+        function importSchemas(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+
+                    // Sprawdź czy to prawidłowy plik schematów
+                    if (importedData.schemas && importedData.editingRules) {
+                        // Zastąp istniejące schematy i reguły
+                        Object.assign(schemas, importedData.schemas);
+                        Object.assign(editingRules, importedData.editingRules);
+
+                        // Zaktualizuj listę schematów w select
+                        updateSchemaSelect();
+
+                        showSuccess(`Zaimportowano ${Object.keys(importedData.schemas).length} schematów`);
+                        updateStatus('Schematy zaimportowane', `${file.name}`);
+                    } else {
+                        throw new Error('Nieprawidłowy format pliku schematów');
+                    }
+                } catch (error) {
+                    showError('Błąd importu schematów: ' + error.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Aktualizacja listy schematów w select
+        function updateSchemaSelect() {
+            const select = document.getElementById('schemaSelect');
+            const currentValue = select.value;
+
+            // Wyczyść opcje (zostaw pierwszą - "Wybierz schemat")
+            select.innerHTML = '<option value="">Wybierz schemat</option>';
+
+            // Dodaj opcje dla wszystkich dostępnych schematów
+            Object.keys(schemas).forEach(schemaName => {
+                const option = document.createElement('option');
+                option.value = schemaName;
+                option.textContent = schemas[schemaName].title || schemaName + '.json';
+                select.appendChild(option);
+            });
+
+            // Przywróć poprzednią wartość jeśli nadal istnieje
+            if (currentValue && schemas[currentValue]) {
+                select.value = currentValue;
+            }
+        }
+
+        // Eksport schematów do pliku
+        function exportSchemas() {
+            const schemaData = {
+                schemas: schemas,
+                editingRules: editingRules,
+                metadata: {
+                    version: "1.0.0",
+                    created: new Date().toISOString(),
+                    description: "Schematy walidacji i reguły edycji dla edytora JSON"
+                }
+            };
+
+            const jsonString = JSON.stringify(schemaData, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'json-editor-schemas.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showSuccess('Schematy zostały wyeksportowane');
+        }
+
+        // Reset edytora
+        function resetEditor() {
+            if (confirm('Czy na pewno chcesz zresetować edytor? Wszystkie niezapisane zmiany zostaną utracone.')) {
+                currentJSON = {};
+                currentSchema = {};
+                editRules = {};
+                currentSchemaName = '';
+                
+                document.getElementById('fileInput').value = '';
+                document.getElementById('schemaSelect').value = '';
+                
+                renderEditor();
+                updatePreview();
+                updateStatus('Edytor zresetowany', 'Gotowy do nowej edycji');
+            }
+        }
+
+        // Pomocnicze funkcje
+        function getValueType(value) {
+            if (value === null) return 'null';
+            if (typeof value === 'boolean') return 'boolean';
+            if (typeof value === 'number') return 'number';
+            return 'string';
+        }
+
+        function showError(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `<div class="error">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const container = document.getElementById('errorContainer');
+            container.innerHTML = `<div class="success">${message}</div>`;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3000);
+        }
+
+        function updateStatus(left, right) {
+            document.getElementById('statusLeft').textContent = left;
+            document.getElementById('statusRight').textContent = right;
+        }
+
+        // Zamknij modal przy kliknięciu poza nim
+        window.onclick = function(event) {
+            const modal = document.getElementById('addModal');
+            if (event.target === modal) {
+                closeAddModal();
+            }
+        };
+    </script>
+</body>
+</html>

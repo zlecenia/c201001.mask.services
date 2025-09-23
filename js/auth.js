@@ -1,7 +1,10 @@
 /**
- * MASKTRONIC C20 - Authentication Module
+ * MASKSERVICE C20 - Authentication Module
  * Modular authentication system - login, logout, user management
  */
+
+// AMD/RequireJS module definition
+define('auth', ['utils'], function(Utils) {
 
 class AuthManager {
     constructor() {
@@ -18,6 +21,13 @@ class AuthManager {
         
         if (!password) {
             console.warn('No password entered for login');
+            return false;
+        }
+
+        // Validate password using Utils
+        const validation = Utils.validatePassword(password);
+        if (!validation.valid) {
+            console.warn('Password validation failed:', validation.error);
             return false;
         }
 
@@ -53,16 +63,14 @@ class AuthManager {
             window.hideLoading();
         }
         
-        // Navigate to system screen using router - CRITICAL FIX 2!
+        // Navigate to system screen using router
         if (window.navigateTo) {
-            // Use VIEW navigation to change to system-screen
             window.navigateTo('system-screen', null, 'default');
         } else if (window.navigateAction) {
-            // Fallback - but this was causing the bug!
             window.navigateAction('system-screen-default');
         } else {
             // Final fallback to switchScreen if router not available
-            this.switchScreen('login-screen', 'system-screen');
+            Utils.switchScreen('login-screen', 'system-screen');
         }
         
         // Show user menu based on role
@@ -101,8 +109,8 @@ class AuthManager {
                 window.navigateAction('login-screen-default');
             }
             // Method 2: Use Utils.switchScreen if available
-            else if (window.Utils && window.Utils.switchScreen) {
-                window.Utils.switchScreen('user-menu-screen', 'login-screen');
+            else if (Utils && Utils.switchScreen) {
+                Utils.switchScreen('user-menu-screen', 'login-screen');
             }
             // Method 3: Direct DOM manipulation fallback
             else {
@@ -217,22 +225,6 @@ class AuthManager {
     }
 
     /**
-     * Switch between UI screens
-     */
-    switchScreen(fromScreen, toScreen) {
-        const fromElement = document.getElementById(fromScreen);
-        const toElement = document.getElementById(toScreen);
-        
-        if (fromElement) {
-            fromElement.classList.remove('active');
-        }
-        
-        if (toElement) {
-            toElement.classList.add('active');
-        }
-    }
-
-    /**
      * Start tracking user activity for auto-logout
      */
     startActivityTracking() {
@@ -279,15 +271,20 @@ class AuthManager {
     }
 }
 
-// Create global auth manager instance
-window.AuthManager = new AuthManager();
+    // Create global auth manager instance for backwards compatibility
+    const authManager = new AuthManager();
+    window.AuthManager = authManager;
 
-// Export functions for HTML onclick handlers
-window.mockLogin = (role) => window.AuthManager.mockLogin(role);
-window.logout = () => window.AuthManager.logout();
+    // Export functions for HTML onclick handlers
+    window.mockLogin = (role) => authManager.mockLogin(role);
+    window.logout = () => authManager.logout();
 
-// Track user activity on any interaction
-document.addEventListener('click', () => window.AuthManager.updateActivity());
-document.addEventListener('keypress', () => window.AuthManager.updateActivity());
+    // Track user activity on any interaction
+    document.addEventListener('click', () => authManager.updateActivity());
+    document.addEventListener('keypress', () => authManager.updateActivity());
 
-console.log('✅ Auth Module initialized');
+    console.log('✅ Auth Module initialized');
+
+    // Return AuthManager class for AMD/RequireJS
+    return AuthManager;
+});

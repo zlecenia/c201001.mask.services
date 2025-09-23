@@ -1,8 +1,11 @@
 /**
- * MASKTRONIC C20 - Utilities Module
+ * MASKSERVICE C20 - Utilities Module
  * Common utilities, helpers, and shared functions
  */
 
+// AMD/RequireJS module definition
+define('utils', [], function() {
+    
 class Utils {
     constructor() {
         this.formatters = new Map();
@@ -246,12 +249,16 @@ class Utils {
     }
 }
 
-// Create global utils instance and export static methods
-window.Utils = Utils;
+    // Create global utils instance for backwards compatibility
+    window.Utils = Utils;
 
-// Export individual functions for HTML onclick handlers
-window.togglePasswordVisibility = Utils.togglePasswordVisibility;
-window.selectLoginMethod = Utils.selectLoginMethod;
-window.switchScreen = Utils.switchScreen;
+    // Export individual functions for HTML onclick handlers
+    window.togglePasswordVisibility = Utils.togglePasswordVisibility;
+    window.selectLoginMethod = Utils.selectLoginMethod;
+    window.switchScreen = Utils.switchScreen;
 
-console.log('✅ Utils Module initialized');
+    console.log('✅ Utils Module initialized');
+
+    // Return Utils class for AMD/RequireJS
+    return Utils;
+});
