@@ -64,7 +64,7 @@ class MenuManager {
         //let menuHtml = `<h2>Menu - ${role}</h2><div class="menu-items">`;
 //                <span>Inactive: <span id="inactive-time">0s</span></span>
         let menuHtml = `            <div id="session-info" class="session-info">
-                <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>
+                <button onclick="logout()" class="btn-logout" data-i18n="menu.logout">Logout</button>
             </div>`;
 
         menuItems.forEach(item => {

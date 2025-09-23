@@ -94,13 +94,23 @@ class AuthManager {
             this.inactivityTimer = null;
         }
         
-        // Navigate back to login screen using router - CRITICAL FIX!
-        if (window.navigateAction) {
-            // Use router navigation instead of just DOM manipulation
-            window.navigateAction('login-screen-default');
-        } else {
-            // Fallback to switchScreen if router not available
-            this.switchScreen('system-screen', 'login-screen');
+        // Navigate back to login screen - multiple fallback methods
+        try {
+            // Method 1: Use router navigation if available
+            if (window.navigateAction) {
+                window.navigateAction('login-screen-default');
+            }
+            // Method 2: Use Utils.switchScreen if available
+            else if (window.Utils && window.Utils.switchScreen) {
+                window.Utils.switchScreen('user-menu-screen', 'login-screen');
+            }
+            // Method 3: Direct DOM manipulation fallback
+            else {
+                this.directScreenSwitch();
+            }
+        } catch (error) {
+            console.warn('Router navigation failed, using direct screen switch:', error);
+            this.directScreenSwitch();
         }
         
         // Hide footer user info
@@ -112,7 +122,36 @@ class AuthManager {
             passwordInput.value = '';
         }
         
-        console.log('Logout completed');
+        // Reset any menu state
+        const menuContent = document.getElementById('menu-content');
+        if (menuContent) {
+            menuContent.innerHTML = '<div class="welcome-message"><h2 data-i18n="menu.select_option">Wybierz opcję z menu</h2><p data-i18n="system.ready">System gotowy do pracy</p></div>';
+        }
+        
+        console.log('✅ Logout completed successfully');
+    }
+
+    /**
+     * Direct screen switching as fallback method
+     */
+    directScreenSwitch() {
+        // Hide all screens
+        const screens = document.querySelectorAll('.screen');
+        screens.forEach(screen => screen.classList.remove('active'));
+        
+        // Show login screen
+        const loginScreen = document.getElementById('login-screen');
+        if (loginScreen) {
+            loginScreen.classList.add('active');
+        }
+        
+        // Hide user menu screen
+        const userMenuScreen = document.getElementById('user-menu-screen');
+        if (userMenuScreen) {
+            userMenuScreen.classList.remove('active');
+        }
+        
+        console.log('🔄 Direct screen switch to login completed');
     }
 
     /**
