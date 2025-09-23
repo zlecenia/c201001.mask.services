@@ -1,11 +1,196 @@
-/* ====================
-   frontend/js/menu.js
-   ==================== */
+/**
+ * MASKTRONIC C20 - Menu Management Module
+ * Modular menu system - loading, rendering, navigation
+ */
 
-// Additional menu functionality and helpers
+class MenuManager {
+    constructor() {
+        this.menuConfig = null;
+        this.currentMenu = null;
+        this.activeRole = null;
+    }
 
+    /**
+     * Load menu configuration from CONFIG or direct fetch
+     */
+    async loadMenuConfig() {
+        if (window.CONFIG && window.CONFIG.MENU) {
+            this.menuConfig = window.CONFIG.MENU;
+            console.log('✅ Menu config loaded from window.CONFIG');
+            return true;
+        }
+
+        try {
+            const response = await fetch('/config/menu.json');
+            if (response.ok) {
+                this.menuConfig = await response.json();
+                console.log('✅ Menu config loaded from file');
+                return true;
+            }
+        } catch (error) {
+            console.error('❌ Failed to load menu config:', error);
+        }
+        return false;
+    }
+
+    /**
+     * Show user menu based on role
+     */
+    async showUserMenu(role) {
+        console.log('Showing menu for user role:', role);
+        
+        // Ensure menu config is loaded
+        if (!this.menuConfig) {
+            await this.loadMenuConfig();
+        }
+        
+        if (!this.menuConfig || !this.menuConfig[role]) {
+            console.error(`❌ Menu configuration not found for role: ${role}`);
+            return false;
+        }
+
+        const menuItems = this.menuConfig[role];
+        const menuContainer = document.getElementById('menu-content');
+        
+        if (!menuContainer) {
+            console.error('❌ Menu container not found');
+            return false;
+        }
+
+        this.activeRole = role;
+        this.currentMenu = menuItems;
+        
+        // Create menu HTML
+        let menuHtml = `<h2>Menu - ${role}</h2><div class="menu-items">`;
+        
+        menuItems.forEach(item => {
+            menuHtml += `
+                <div class="menu-item" onclick="window.MenuManager.selectMenuOption('${item.key}')">
+                    <span class="menu-icon">${item.icon}</span>
+                    <span class="menu-label">${item.label}</span>
+                </div>`;
+        });
+        
+        menuHtml += '</div>';
+        menuContainer.innerHTML = menuHtml;
+        
+        console.log(`✅ Menu displayed for ${role} with ${menuItems.length} items`);
+        return true;
+    }
+
+    /**
+     * Handle menu option selection
+     */
+    selectMenuOption(optionKey) {
+        console.log('Selected menu option:', optionKey);
+        
+        // Find the selected menu item
+        const menuItem = this.currentMenu?.find(item => item.key === optionKey);
+        if (!menuItem) {
+            console.error('Menu item not found:', optionKey);
+            return;
+        }
+
+        // Handle different menu options
+        switch (optionKey) {
+            case 'test_menu':
+                this.showTestMenu();
+                break;
+            case 'user_data':
+                this.showUserData();
+                break;
+            case 'device_data':
+                this.showDeviceData();
+                break;
+            case 'test_reports':
+                this.showTestReports();
+                break;
+            case 'workshop':
+                this.showWorkshop();
+                break;
+            case 'users':
+                this.showUsers();
+                break;
+            case 'service_menu':
+                this.showServiceMenu();
+                break;
+            case 'system_settings':
+                this.showSystemSettings();
+                break;
+            case 'advanced_diagnostics':
+                this.showAdvancedDiagnostics();
+                break;
+            default:
+                console.log(`Menu option ${optionKey} not implemented yet`);
+        }
+    }
+
+    /**
+     * Menu option implementations
+     */
+    showTestMenu() {
+        console.log('Opening Test Menu...');
+        // Implementation for test menu
+    }
+
+    showUserData() {
+        console.log('Opening User Data...');
+        // Implementation for user data
+    }
+
+    showDeviceData() {
+        console.log('Opening Device Data...');
+        // Implementation for device data
+    }
+
+    showTestReports() {
+        console.log('Opening Test Reports...');
+        // Implementation for test reports
+    }
+
+    showWorkshop() {
+        console.log('Opening Workshop...');
+        // Implementation for workshop
+    }
+
+    showUsers() {
+        console.log('Opening Users Management...');
+        // Implementation for users management
+    }
+
+    showServiceMenu() {
+        console.log('Opening Service Menu...');
+        // Implementation for service menu
+    }
+
+    showSystemSettings() {
+        console.log('Opening System Settings...');
+        // Implementation for system settings
+    }
+
+    showAdvancedDiagnostics() {
+        console.log('Opening Advanced Diagnostics...');
+        // Implementation for advanced diagnostics
+    }
+
+    /**
+     * Get current menu state
+     */
+    getCurrentMenu() {
+        return {
+            role: this.activeRole,
+            items: this.currentMenu,
+            config: this.menuConfig
+        };
+    }
+}
+
+// Helper functions for compatibility
 function clearPasswordInput() {
-    document.getElementById('password-input').value = '';
+    const passwordInput = document.getElementById('password-input');
+    if (passwordInput) {
+        passwordInput.value = '';
+    }
 }
 
 function deleteLastPasswordChar() {
@@ -16,203 +201,17 @@ function deleteLastPasswordChar() {
 // Enhanced menu navigation
 function navigateToSubmenu(menuKey, submenuKey) {
     console.log(`Navigating to ${menuKey} -> ${submenuKey}`);
-    
-    const content = document.getElementById('menu-content');
-    const submenuTemplate = document.getElementById(`${submenuKey}-template`);
-    
-    if (submenuTemplate) {
-        content.innerHTML = submenuTemplate.innerHTML;
-    } else {
-        content.innerHTML = `
-            <h2>${submenuKey.replace('_', ' ').toUpperCase()}</h2>
-            <p>Submenu w przygotowaniu...</p>
-            <button class="btn btn-back" onclick="selectMenuItem('${menuKey}')">← Powrót</button>
-        `;
-    }
+    // Implementation for submenu navigation
 }
 
-// Test simulation helpers
-function startPressureTest() {
-    console.log('Starting pressure test...');
-    alert('Test ciśnienia rozpoczęty!\n\nMonitoruj panel ciśnienia po prawej stronie.');
-}
+// Create global menu manager instance
+window.MenuManager = new MenuManager();
 
-function startLeakTest() {
-    console.log('Starting leak test...');
-    alert('Test szczelności rozpoczęty!\n\nCzas trwania: 60 sekund');
-}
+// Export functions for HTML onclick handlers and compatibility
+window.showUserMenu = (role) => window.MenuManager.showUserMenu(role);
+window.selectMenuOption = (optionKey) => window.MenuManager.selectMenuOption(optionKey);
+window.clearPasswordInput = clearPasswordInput;
+window.deleteLastPasswordChar = deleteLastPasswordChar;
+window.navigateToSubmenu = navigateToSubmenu;
 
-function startFlowTest() {
-    console.log('Starting flow test...');
-    alert('Test przepływu rozpoczęty!\n\nSprawdzanie +10 l/min');
-}
-
-// User management helpers (Admin only)
-function addNewUser() {
-    if (app.userRole !== 'ADMIN' && app.userRole !== 'SUPERUSER') {
-        alert('Brak uprawnień!');
-        return;
-    }
-    
-    const username = prompt('Nazwa użytkownika:');
-    const role = prompt('Rola (OPERATOR/ADMIN):');
-    
-    if (username && role) {
-        alert(`Użytkownik ${username} został dodany z rolą ${role}`);
-        console.log(`Added user: ${username} with role: ${role}`);
-    }
-}
-
-function editUser(username) {
-    if (app.userRole !== 'ADMIN' && app.userRole !== 'SUPERUSER') {
-        alert('Brak uprawnień!');
-        return;
-    }
-    
-    alert(`Edycja użytkownika: ${username}`);
-    console.log(`Editing user: ${username}`);
-}
-
-// System settings helpers (Superuser only)
-function saveSystemSettings() {
-    if (app.userRole !== 'SUPERUSER') {
-        alert('Brak uprawnień!');
-        return;
-    }
-    
-    alert('Ustawienia systemu zostały zapisane!');
-    console.log('System settings saved');
-}
-
-function runSystemDiagnostics() {
-    alert('Diagnostyka systemu...\n\n✅ CPU: OK\n✅ RAM: OK\n✅ Dysk: OK\n✅ Sieć: OK');
-    console.log('System diagnostics completed');
-}
-
-function calibrateSensors() {
-    alert('Kalibracja czujników...\n\nCzas trwania: 2 minuty');
-    console.log('Sensor calibration started');
-}
-
-function createSystemBackup() {
-    alert('Tworzenie kopii zapasowej...\n\nPlik: backup_' + new Date().toISOString().split('T')[0] + '.db');
-    console.log('System backup created');
-}
-
-// Report generation
-function generateTestReport() {
-    const reportId = 'RPT' + Date.now().toString().slice(-6);
-    alert(`Generowanie raportu...\n\nID: ${reportId}\nFormat: PDF\nStatus: Gotowy do pobrania`);
-    console.log(`Generated report: ${reportId}`);
-}
-
-// Workshop helpers
-function viewEquipmentList() {
-    const content = document.getElementById('menu-content');
-    content.innerHTML = `
-        <h2>Equipment List</h2>
-        <div class="equipment-list">
-            <div class="equipment-item">
-                <span>Pressure Tester PT-100</span>
-                <span class="status-online">ACTIVE</span>
-            </div>
-            <div class="equipment-item">
-                <span>Flow Meter FM-200</span>
-                <span class="status-online">ACTIVE</span>
-            </div>
-            <div class="equipment-item">
-                <span>Leak Detector LD-300</span>
-                <span style="color: orange;">MAINTENANCE</span>
-            </div>
-        </div>
-        <button class="btn btn-back" onclick="selectMenuItem('workshop')">← Powrót</button>
-    `;
-}
-
-function viewSpareParts() {
-    const content = document.getElementById('menu-content');
-    content.innerHTML = `
-        <h2>Spare Parts</h2>
-        <div class="parts-list">
-            <div class="part-item">
-                <span>Pressure Sensor PS-01</span>
-                <span>Qty: 5</span>
-            </div>
-            <div class="part-item">
-                <span>Valve Assembly VA-02</span>
-                <span>Qty: 3</span>
-            </div>
-            <div class="part-item">
-                <span>Filter Element FE-03</span>
-                <span style="color: red;">Qty: 0</span>
-            </div>
-        </div>
-        <button class="btn btn-back" onclick="selectMenuItem('workshop')">← Powrót</button>
-    `;
-}
-
-function viewMaintenanceSchedule() {
-    const content = document.getElementById('menu-content');
-    content.innerHTML = `
-        <h2>Maintenance Schedule</h2>
-        <div class="maintenance-list">
-            <div class="maintenance-item">
-                <span>Weekly Calibration</span>
-                <span>Next: 2024-01-22</span>
-            </div>
-            <div class="maintenance-item">
-                <span>Monthly Inspection</span>
-                <span>Next: 2024-02-01</span>
-            </div>
-            <div class="maintenance-item">
-                <span>Annual Service</span>
-                <span>Next: 2024-12-15</span>
-            </div>
-        </div>
-        <button class="btn btn-back" onclick="selectMenuItem('workshop')">← Powrót</button>
-    `;
-}
-
-// Keyboard shortcuts
-document.addEventListener('keydown', (e) => {
-    // F1 - Help
-    if (e.key === 'F1') {
-        e.preventDefault();
-        showHelp();
-    }
-    
-    // F5 - Refresh data
-    if (e.key === 'F5') {
-        e.preventDefault();
-        refreshData();
-    }
-    
-    // Ctrl+L - Logout
-    if (e.ctrlKey && e.key === 'l') {
-        e.preventDefault();
-        logout();
-    }
-});
-
-function showHelp() {
-    alert(`MASKTRONIC C20 - Pomoc
-
-Skróty klawiszowe:
-• ESC - Powrót do menu
-• F1 - Ta pomoc
-• F5 - Odśwież dane
-• Ctrl+L - Wyloguj
-
-Nawigacja:
-• Kliknij opcje menu po lewej stronie
-• Użyj przycisków powrotu
-• Panel ciśnienia po prawej stronie`);
-}
-
-function refreshData() {
-    console.log('Refreshing data...');
-    if (CONFIG.MOCK_MODE) {
-        startMockDataUpdates();
-    }
-    alert('Dane zostały odświeżone!');
-}
+console.log('✅ Menu Module initialized');

@@ -3,16 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MASKTRONIC C20 - System Mock</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>MASKSERVICE C20 1001 - System Mock v2.0</title>
+    <script>
+        // Cache-busting for CSS
+        const cssVersion = Date.now();
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
+    </script>
 </head>
 <body>
     <div id="app" class="container">
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <span class="logo">MASKTRONIC C20</span>
-                <span class="version">v2.0 MOCK</span>
+                <span class="logo">MASKSERVICE</span>
+                <span class="hardware">C20</span>
+                <span class="product">1001</span>
+                <span class="software">v2.0 MOCK</span>
             </div>
             <div class="header-right">
                 <span id="clock">--:--:--</span>
@@ -157,6 +163,10 @@
                     <div class="menu-header">
                         USER MENU
                         <span id="menu-role-badge" class="role-badge"></span>
+                        <div class="session-info">
+                            <span>Inactive: <span id="inactive-time">0s</span></span>
+                            <button onclick="logout()" class="btn-logout">Logout</button>
+                        </div>
                     </div>
                     <div class="menu-layout">
                         <div class="menu-sidebar" id="user-menu-items">
@@ -376,9 +386,16 @@
         </div>
     </div>
 
-    <script type="module" src="js/app.js"></script>
-    <script type="module" src="js/keyboard.js"></script>
-    <script type="module" src="js/ui-tester.js"></script>
-    <!-- keyboard.js now explicitly imported for VirtualKeyboard class -->
+    <!-- Modular JavaScript Files - Load order matters (cache-busted) -->
+    <script>
+        const cacheBuster = Date.now();
+        document.write('<script src="js/utils.js?v=' + cacheBuster + '"><\/script>');
+        document.write('<script src="js/auth.js?v=' + cacheBuster + '"><\/script>');
+        document.write('<script src="js/menu.js?v=' + cacheBuster + '"><\/script>');
+        document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
+        document.write('<script type="module" src="js/app.js?v=' + cacheBuster + '"><\/script>');
+        document.write('<script type="module" src="js/ui-tester.js?v=' + cacheBuster + '"><\/script>');
+    </script>
+    <!-- Modular architecture: utils → auth → menu → keyboard → app → ui-tester -->
 </body>
 </html>

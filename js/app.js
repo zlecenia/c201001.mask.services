@@ -1,17 +1,14 @@
-/* ====================
-   frontend/js/app.js
-   ==================== */
+/**
+ * MASKTRONIC C20 - Main Application Module
+ * Integrates with modular components: auth.js, menu.js, utils.js, keyboard.js
+ */
 
 import { CONFIG, MENU_STRUCTURE, loadConfig } from './config.js';
 
 class MasktronicApp {
     constructor() {
         this.currentScreen = 'login-screen';
-        this.currentUser = null;
-        this.userRole = null;
         this.mockData = null;
-        this.loginTime = null;
-        this.lastActivity = null;
         this.init();
     }
 
@@ -19,16 +16,19 @@ class MasktronicApp {
         try {
             // Load configuration first
             await loadConfig();
-            console.log('Configuration loaded:', CONFIG);
+            console.log('✅ Configuration loaded:', CONFIG);
             
-            // Then initialize the rest of the app
+            // Make CONFIG accessible to other modules
+            window.CONFIG = CONFIG;
+            
+            // Initialize modular components
             this.setupEventListeners();
             this.startClock();
             this.loadMockData();
-            console.log('MASKTRONIC C20 Mock - Initialized');
+            
+            console.log('✅ MASKTRONIC C20 - Fully Initialized with Modular Architecture');
         } catch (error) {
-            console.error('Failed to initialize app:', error);
-            // Show error to user
+            console.error('❌ Failed to initialize app:', error);
             alert('Failed to load application configuration. Please try refreshing the page.');
         }
     }
@@ -40,11 +40,9 @@ class MasktronicApp {
                 this.backToMenu();
             }
         });
-
-        // Update last activity
-        document.addEventListener('click', () => {
-            this.lastActivity = new Date();
-        });
+        
+        // Activity tracking is now handled by AuthManager
+        console.log('✅ Event listeners setup complete');
     }
 
     startClock() {
@@ -56,10 +54,16 @@ class MasktronicApp {
     }
 
     switchScreen(screenId) {
-        document.querySelectorAll('.screen').forEach(screen => {
-            screen.classList.remove('active');
-        });
-        document.getElementById(screenId).classList.add('active');
+        // Use modular Utils.switchScreen for consistency
+        if (window.Utils) {
+            window.Utils.switchScreen(this.currentScreen, screenId);
+        } else {
+            // Fallback for compatibility
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
         this.currentScreen = screenId;
     }
 
@@ -100,167 +104,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     // No need to call init() here as it's called in the constructor
 });
 
-// Global functions for HTML onclick handlers - Expose to window object
-window.selectLoginMethod = selectLoginMethod;
-window.addToPassword = addToPassword;
-window.mockLogin = mockLogin;
-window.showUserMenu = showUserMenu;
-window.selectMenuItem = selectMenuItem;
-window.logout = logout;
-window.selectTestOption = selectTestOption;
-window.selectDevice = selectDevice;
-window.backToMenu = backToMenu;
-window.togglePasswordVisibility = togglePasswordVisibility;
-window.selectLoginMethod = selectLoginMethod;
+// Global functions are now handled by modular components:
+// - auth.js: mockLogin, logout
+// - menu.js: showUserMenu, selectMenuOption  
+// - utils.js: selectLoginMethod, togglePasswordVisibility
+// - keyboard.js: VirtualKeyboard class
+console.log('✅ App.js - Modular integration complete');
 
-// Global functions for HTML onclick handlers
-function selectLoginMethod(method) {
-    document.querySelectorAll('.login-method').forEach(m => {
-        m.classList.remove('active');
-    });
-    document.getElementById(`login-${method}`).classList.add('active');
-    
-    document.querySelectorAll('.menu-sidebar .menu-item').forEach(item => {
-        item.classList.remove('active');
-    });
-    event.target.classList.add('active');
-}
+// selectLoginMethod is now in utils.js - removed duplicate
 
-function addToPassword(digit) {
-    const input = document.getElementById('password-input');
-    input.value += digit;
-}
+// addToPassword functionality is now handled by VirtualKeyboard class
 
-function mockLogin(role) {
-    const password = document.getElementById('password-input').value.trim();
-    
-    // Simple validation
-    if (!password) {
-        alert('Please enter a password');
-        return;
-    }
-    
-    console.log(`Logging in as ${role} with password`);
-    
-    // In a real app, this would be an API call to your backend
-    // Example: fetch(`${CONFIG.API_URL}/api/login`, { method: 'POST', body: JSON.stringify({ password, role }) })
-    
-    // Set user data
-    const user = {
-        username: role.toLowerCase(),
-        role: role,
-        token: `mock-jwt-token-${Date.now()}`,
-        lastLogin: new Date().toISOString()
-    };
-    
-    // Store user in app state
-    app.currentUser = user;
-    app.userRole = role;
-    app.loginTime = new Date();
-    app.lastActivity = new Date();
-    
-    // Clear password field
-    document.getElementById('password-input').value = '';
-    
-    // Update UI
-    document.getElementById('login-screen').classList.remove('active');
-    document.getElementById('system-screen').classList.add('active');
-    
-    // Show user menu based on role
-    showUserMenu(role);
-    
-    // Start activity tracking
-    setInterval(() => {
-        const now = new Date();
-        const inactiveTime = Math.floor((now - app.lastActivity) / 1000);
-        document.getElementById('inactive-time').textContent = `${inactiveTime}s`;
-        
-        // Auto-logout after 30 minutes of inactivity
-        if (inactiveTime > 1800) { // 30 minutes
-            app.logout();
-        }
-    }, 1000);
-    
-    console.log('Login successful:', user);
-}
+// mockLogin is now in auth.js (AuthManager class) - removed duplicate
+// Activity tracking is now handled by AuthManager in auth.js
 
-// Removed duplicate showUserMenu function - using improved version later in file
+// selectMenuItem is now handled by MenuManager.selectMenuOption in menu.js
 
-function selectMenuItem(key) {
-    const content = document.getElementById('menu-content');
-    const template = document.getElementById(`${key.replace('_','-')}-template`);
-    
-    if (template) {
-        content.innerHTML = template.innerHTML;
-        
-        // Update dynamic content based on menu item
-        updateMenuContent(key);
-    } else {
-        content.innerHTML = `
-            <h2>${key.replace('_', ' ').toUpperCase()}</h2>
-            <p>Funkcja w przygotowaniu...</p>
-        `;
-    }
-}
+// updateMenuContent is now handled within MenuManager class methods
 
-function updateMenuContent(key) {
-    switch(key) {
-        case 'user_data':
-            if (document.getElementById('current-user-name')) {
-                document.getElementById('current-user-name').textContent = app.currentUser;
-                document.getElementById('current-user-role').textContent = app.userRole;
-                document.getElementById('login-time').textContent = app.loginTime ? app.loginTime.toLocaleTimeString() : '---';
-                document.getElementById('last-activity').textContent = app.lastActivity ? app.lastActivity.toLocaleTimeString() : '---';
-            }
-            break;
-        case 'device_data':
-            updateDeviceData();
-            break;
-    }
-}
+// updateDeviceData is now part of the mock data system
+// logout is now handled by AuthManager.logout() in auth.js
 
-function updateDeviceData() {
-    if (document.getElementById('device-uptime')) {
-        const uptime = app.loginTime ? Math.floor((new Date() - app.loginTime) / 1000) : 0;
-        document.getElementById('device-uptime').textContent = `${uptime}s`;
-    }
-}
-
-function logout() {
-    app.currentUser = null;
-    app.userRole = null;
-    app.loginTime = null;
-    app.lastActivity = null;
-    app.switchScreen('login-screen');
-    app.updateStatus('OFFLINE');
-    document.getElementById('user-info').style.display = 'none';
-    document.getElementById('pressure-panel').style.display = 'none';
-    document.getElementById('footer-user').textContent = 'SERWISANT: ---';
-}
-
+// Mock data updates - keeping in app.js as part of core app functionality
 function startMockDataUpdates() {
     setInterval(() => {
         // Update pressure values
-        document.getElementById('pressure-low').textContent = 
-            (10 + Math.random() * 2).toFixed(1) + ' mbar';
-        document.getElementById('pressure-medium').textContent = 
-            (20 + Math.random() * 2).toFixed(1) + ' bar';
-        document.getElementById('pressure-high').textContent = 
-            (30 + Math.random() * 2).toFixed(1) + ' bar';
+        const pressureLow = document.getElementById('pressure-low');
+        const pressureMedium = document.getElementById('pressure-medium'); 
+        const pressureHigh = document.getElementById('pressure-high');
+        
+        if (pressureLow) pressureLow.textContent = (10 + Math.random() * 2).toFixed(1) + ' mbar';
+        if (pressureMedium) pressureMedium.textContent = (20 + Math.random() * 2).toFixed(1) + ' bar';
+        if (pressureHigh) pressureHigh.textContent = (30 + Math.random() * 2).toFixed(1) + ' bar';
             
         // Update device data if visible
-        if (document.getElementById('temp-value')) {
-            document.getElementById('temp-value').textContent = 
-                (22 + Math.random() * 4 - 2).toFixed(1) + '°C';
-        }
-        if (document.getElementById('humidity-value')) {
-            document.getElementById('humidity-value').textContent = 
-                (45 + Math.random() * 10 - 5).toFixed(0) + '%';
-        }
+        const tempValue = document.getElementById('temp-value');
+        const humidityValue = document.getElementById('humidity-value');
         
-        // Update device uptime
-        updateDeviceData();
-    }, CONFIG.UPDATE_INTERVAL);
+        if (tempValue) tempValue.textContent = (22 + Math.random() * 4 - 2).toFixed(1) + '°C';
+        if (humidityValue) humidityValue.textContent = (45 + Math.random() * 10 - 5).toFixed(0) + '%';
+    }, CONFIG?.UPDATE_INTERVAL || 1000);
 }
 
 function selectTestOption(option) {
