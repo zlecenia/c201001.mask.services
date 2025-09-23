@@ -27,6 +27,11 @@ class MasktronicApp {
                 console.log('✅ I18n system initialized');
             }
             
+            // Initialize router system
+            if (window.C20Router) {
+                console.log('✅ Router system initialized');
+            }
+            
             // Initialize modular components
             this.setupEventListeners();
             this.startClock();
@@ -54,7 +59,7 @@ class MasktronicApp {
     startClock() {
         setInterval(() => {
             const now = new Date();
-            document.getElementById('clock').textContent = now.toLocaleTimeString();
+            document.getElementById('footer-time').textContent = now.toLocaleTimeString();
             document.getElementById('footer-date').textContent = now.toLocaleDateString();
         }, 1000);
     }

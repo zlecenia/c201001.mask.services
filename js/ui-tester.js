@@ -34,10 +34,26 @@ class UITester {
         const hash = window.location.hash.substring(1); // Remove #
         if (hash) {
             console.log('Hash navigation to:', hash);
-            const element = document.getElementById(hash);
-            if (element) {
-                this.highlightElement(element);
-                this.logInteraction('hash-navigation', hash);
+            
+            // Handle new router format /view-id/language/action-id
+            if (hash.startsWith('/')) {
+                const parts = hash.split('/').filter(p => p.length > 0);
+                const actionId = parts[2]; // action-id is the third part
+                
+                if (actionId) {
+                    const element = document.getElementById(actionId);
+                    if (element) {
+                        this.highlightElement(element);
+                        this.logInteraction('hash-navigation', actionId);
+                    }
+                }
+            } else {
+                // Handle legacy format #element-id
+                const element = document.getElementById(hash);
+                if (element) {
+                    this.highlightElement(element);
+                    this.logInteraction('hash-navigation', hash);
+                }
             }
         }
     }
@@ -167,16 +183,76 @@ class UITester {
     }
 
     logInteraction(type, elementId, details = {}) {
+        // Generate new URL format: /view-id/language/action-id
+        const currentView = this.getCurrentViewForElement(elementId);
+        const currentLanguage = this.getCurrentLanguage();
+        const newRouterUrl = `${window.location.origin}${window.location.pathname}#/${currentView}/${currentLanguage}/${elementId}`;
+        
         const interaction = {
             timestamp: new Date().toISOString(),
             type: type,
             elementId: elementId,
-            url: window.location.href,
+            url: newRouterUrl, // Use new router URL format
+            legacyUrl: window.location.href, // Keep original for debugging
             details: details
         };
 
         this.testResults.push(interaction);
         console.log('UI Interaction:', interaction);
+    }
+
+    /**
+     * Get current view for a given element ID
+     */
+    getCurrentViewForElement(elementId) {
+        // Determine view based on element ID patterns
+        if (elementId.startsWith('login-') || elementId.startsWith('key-') || elementId === 'password-input') {
+            return 'login-screen';
+        } else if (elementId.startsWith('menu-') || elementId.includes('logout')) {
+            return 'menu-screen';
+        } else if (elementId.includes('settings') || elementId.includes('config')) {
+            return 'settings-screen';
+        } else if (elementId.includes('data') || elementId.includes('pressure') || elementId.includes('sensor')) {
+            return 'data-screen';
+        } else if (elementId.includes('system')) {
+            return 'system-screen';
+        }
+        
+        // Fallback: try to find the element and check its closest .screen parent
+        const element = document.getElementById(elementId);
+        if (element) {
+            const screen = element.closest('.screen');
+            if (screen) {
+                return screen.id;
+            }
+        }
+        
+        // Default fallback
+        return 'login-screen';
+    }
+
+    /**
+     * Get current language from i18n system or fallback
+     */
+    getCurrentLanguage() {
+        // Check if i18n system is available and get current language
+        if (window.I18nManager && window.I18nManager.currentLanguage) {
+            return window.I18nManager.currentLanguage;
+        }
+        
+        // Check if router system is available
+        if (window.C20Router && window.C20Router.currentLanguage) {
+            return window.C20Router.currentLanguage;
+        }
+        
+        // Check localStorage preference
+        const storedLang = localStorage.getItem('preferred_language');
+        if (storedLang) {
+            return storedLang;
+        }
+        
+        // Default fallback
+        return 'pl';
     }
 
     // Test Suite Methods

@@ -48,6 +48,9 @@ class AuthManager {
             window.MenuManager.showUserMenu(role);
         }
         
+        // Update footer UI with user info
+        this.updateFooterUserInfo(user);
+        
         // Start activity tracking
         this.startActivityTracking();
         
@@ -72,11 +75,78 @@ class AuthManager {
         // Switch back to login screen
         this.switchScreen('system-screen', 'login-screen');
         
+        // Hide footer user info
+        this.hideFooterUserInfo();
+        
         // Clear any sensitive data
         const passwordInput = document.getElementById('password-input');
         if (passwordInput) {
             passwordInput.value = '';
         }
+        
+        console.log('Logout completed');
+    }
+
+    /**
+     * Update footer UI with logged-in user information
+     */
+    updateFooterUserInfo(user) {
+        const footerUser = document.getElementById('footer-user');
+        const username = document.getElementById('username');
+        const userRole = document.getElementById('user-role');
+        const userInfo = document.getElementById('user-info');
+        
+        if (footerUser && user) {
+            footerUser.textContent = `USER: ${user.username.toUpperCase()}`;
+            footerUser.style.display = 'inline-block';
+        }
+        
+        if (username && user) {
+            username.textContent = user.username.toUpperCase();
+        }
+        
+        if (userRole && user) {
+            userRole.textContent = user.role;
+            userRole.className = `role-badge role-${user.role.toLowerCase()}`;
+        }
+        
+        if (userInfo && user) {
+            userInfo.style.display = 'inline-block';
+        }
+        
+        console.log('✅ Footer user info updated for:', user.username);
+    }
+
+    /**
+     * Hide footer user information on logout
+     */
+    hideFooterUserInfo() {
+        const footerUser = document.getElementById('footer-user');
+        const userInfo = document.getElementById('user-info');
+        
+        if (footerUser) {
+            footerUser.style.display = 'none';
+            footerUser.textContent = 'USER: ---';
+        }
+        
+        if (userInfo) {
+            userInfo.style.display = 'none';
+        }
+        
+        // Clear user data
+        const username = document.getElementById('username');
+        const userRole = document.getElementById('user-role');
+        
+        if (username) {
+            username.textContent = '---';
+        }
+        
+        if (userRole) {
+            userRole.textContent = '---';
+            userRole.className = 'role-badge';
+        }
+        
+        console.log('✅ Footer user info hidden after logout');
     }
 
     /**
