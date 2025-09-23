@@ -91,9 +91,9 @@
   },
   "roles": {
     "OPERATOR": "Operator",
-    "ADMIN": "Administrator", 
-    "SUPERUSER": "Super Użytkownik",
-    "SERWISANT": "Serwisant"
+    "ADMIN": "Admin",
+    "SUPERUSER": "Super User",
+    "SERWISANT": "Service User"
   },
   "messages": {
     "please_enter_password": "Proszę wprowadzić hasło",

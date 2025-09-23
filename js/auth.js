@@ -40,6 +40,19 @@ class AuthManager {
             passwordInput.value = '';
         }
         
+        // Show loading screen during login process
+        if (window.showLoading) {
+            window.showLoading('Logowanie...', 'Autoryzacja w toku');
+        }
+        
+        // Simulate login process delay for better UX
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Hide loading screen
+        if (window.hideLoading) {
+            window.hideLoading();
+        }
+        
         // Update UI screens
         this.switchScreen('login-screen', 'system-screen');
         

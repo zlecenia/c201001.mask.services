@@ -283,3 +283,42 @@ function togglePasswordVisibility() {
         }, 10);
     }
 }
+
+// Global Loading Functions
+window.showLoading = function(title = null, message = null) {
+    const overlay = document.getElementById('loading-overlay');
+    if (!overlay) return;
+
+    // Update text if provided
+    if (title) {
+        const titleElement = overlay.querySelector('.loading-text h3');
+        if (titleElement) titleElement.textContent = title;
+    }
+    if (message) {
+        const messageElement = overlay.querySelector('.loading-text p');
+        if (messageElement) messageElement.textContent = message;
+    }
+
+    // Show with animation
+    overlay.style.display = 'flex';
+    overlay.classList.remove('hide');
+    overlay.classList.add('show');
+    
+    console.log('Loading screen shown:', { title, message });
+};
+
+window.hideLoading = function() {
+    const overlay = document.getElementById('loading-overlay');
+    if (!overlay) return;
+
+    overlay.classList.remove('show');
+    overlay.classList.add('hide');
+    
+    // Hide after animation completes
+    setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('hide');
+    }, 300);
+    
+    console.log('Loading screen hidden');
+};
