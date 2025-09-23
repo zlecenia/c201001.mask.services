@@ -323,6 +323,46 @@ body {
     opacity: 1;
 }
 
+/* UI Tester Highlight Effects */
+.ui-test-highlight {
+    outline: 3px solid #ff6b35 !important;
+    box-shadow: 0 0 10px rgba(255, 107, 53, 0.5) !important;
+    animation: ui-test-pulse 1s ease-in-out !important;
+    z-index: 9999 !important;
+    position: relative !important;
+}
+
+@keyframes ui-test-pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(255, 107, 53, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(255, 107, 53, 0.3);
+    }
+}
+
+/* Enhanced button feedback */
+button:active {
+    transform: translateY(1px);
+    transition: transform 0.1s;
+}
+
+/* Test status indicators */
+.test-success {
+    border-left: 4px solid #4CAF50 !important;
+}
+
+.test-error {
+    border-left: 4px solid #f44336 !important;
+}
+
+.test-pending {
+    border-left: 4px solid #ff9800 !important;
+}
+
 .login-form input[type="text"],
 .login-form input[type="password"] {
     width: 100%;
@@ -342,7 +382,7 @@ body {
 
 /* Login form specific */
 .login-form {
-    max-width: 500px;
+    max-width: 600px;
     margin: 0 auto;
 }
 

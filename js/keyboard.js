@@ -266,3 +266,33 @@ function addToPassword(char) {
         input.focus();
     }
 }
+
+// Toggle password visibility function
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password-input');
+    const toggleButton = document.querySelector('.toggle-password');
+    
+    if (passwordInput && toggleButton) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.textContent = '🙈'; // Hide icon
+            toggleButton.title = 'Hide password';
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.textContent = '👁️'; // Show icon
+            toggleButton.title = 'Show password';
+        }
+        
+        // Keep focus on the input
+        passwordInput.focus();
+        
+        // Move cursor to end of input
+        setTimeout(() => {
+            passwordInput.setSelectionRange(passwordInput.value.length, passwordInput.value.length);
+        }, 10);
+    }
+}
+
+// Export functions to global scope
+window.addToPassword = addToPassword;
+window.togglePasswordVisibility = togglePasswordVisibility;

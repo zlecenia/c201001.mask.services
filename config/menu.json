@@ -24,5 +24,16 @@
     { "key": "users", "label": "Users", "icon": "👥" },
     { "key": "service_menu", "label": "Service Menu", "icon": "🛡️" },
     { "key": "system_settings", "label": "System Settings", "icon": "⚙️" }
+  ],
+  "SERWISANT": [
+    { "key": "test_menu", "label": "Test Menu", "icon": "📋" },
+    { "key": "user_data", "label": "User Data", "icon": "👤" },
+    { "key": "device_data", "label": "Device Data", "icon": "💾" },
+    { "key": "test_reports", "label": "Test Reports", "icon": "📄" },
+    { "key": "workshop", "label": "Workshop", "icon": "🔧" },
+    { "key": "users", "label": "Users", "icon": "👥" },
+    { "key": "service_menu", "label": "Service Menu", "icon": "🛡️" },
+    { "key": "system_settings", "label": "System Settings", "icon": "⚙️" },
+    { "key": "advanced_diagnostics", "label": "Advanced Diagnostics", "icon": "🔍" }
   ]
 }

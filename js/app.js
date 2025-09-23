@@ -100,6 +100,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     // No need to call init() here as it's called in the constructor
 });
 
+// Global functions for HTML onclick handlers - Expose to window object
+window.selectLoginMethod = selectLoginMethod;
+window.addToPassword = addToPassword;
+window.mockLogin = mockLogin;
+window.showUserMenu = showUserMenu;
+window.selectMenuItem = selectMenuItem;
+window.logout = logout;
+window.selectTestOption = selectTestOption;
+window.selectDevice = selectDevice;
+window.backToMenu = backToMenu;
+
 // Global functions for HTML onclick handlers
 function selectLoginMethod(method) {
     document.querySelectorAll('.login-method').forEach(m => {
