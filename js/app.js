@@ -110,6 +110,7 @@ window.logout = logout;
 window.selectTestOption = selectTestOption;
 window.selectDevice = selectDevice;
 window.backToMenu = backToMenu;
+window.togglePasswordVisibility = togglePasswordVisibility;
 
 // Global functions for HTML onclick handlers
 function selectLoginMethod(method) {
@@ -347,4 +348,29 @@ function simulateTest() {
 function backToMenu() {
     const content = document.getElementById('menu-content');
     content.innerHTML = document.getElementById('test-menu-template').innerHTML;
+}
+
+function togglePasswordVisibility() {
+    const passwordInput = document.getElementById('password-input');
+    const toggleButton = document.querySelector('.toggle-password');
+    
+    if (passwordInput && toggleButton) {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.textContent = '🙈'; // Hide icon
+            toggleButton.title = 'Hide password';
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.textContent = '👁️'; // Show icon
+            toggleButton.title = 'Show password';
+        }
+        
+        // Keep focus on the input
+        passwordInput.focus();
+        
+        // Move cursor to end of input
+        setTimeout(() => {
+            passwordInput.setSelectionRange(passwordInput.value.length, passwordInput.value.length);
+        }, 10);
+    }
 }

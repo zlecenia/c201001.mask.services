@@ -41,28 +41,32 @@ class VirtualKeyboard {
                 const char = key.getAttribute('data-char');
                 const action = key.getAttribute('data-action');
                 
+                console.log('Keyboard key clicked:', { char, action, element: key });
+                
                 // Add visual feedback
                 key.classList.add('key-press');
                 setTimeout(() => key.classList.remove('key-press'), 150);
 
                 if (action === 'backspace') {
-                    this.handleBackspace();
+                    this.backspace();
                 } else if (action === 'enter') {
                     this.handleEnter();
                 } else if (action === 'space') {
-                    this.insertAtCursor(' ');
+                    this.insertCharacter(' ');
                 } else if (action === 'shift') {
                     this.toggleShift();
                 } else if (action === 'caps') {
                     this.toggleCaps();
                 } else if (action === 'tab') {
-                    this.handleTab();
+                    this.focusNextInput();
                 } else if (action === 'clear') {
                     this.clearInput();
                 } else if (char) {
                     // Use shift character if shift is active
                     const shiftChar = key.getAttribute('data-shift-char');
-                    this.insertAtCursor(this.shiftActive && shiftChar ? shiftChar : char);
+                    const charToInsert = this.shiftActive && shiftChar ? shiftChar : char;
+                    console.log('Inserting character:', charToInsert);
+                    this.insertCharacter(charToInsert);
                     
                     // Auto-disable shift after one character
                     if (this.shiftActive) {
@@ -125,10 +129,20 @@ class VirtualKeyboard {
     }
 
     insertCharacter(char) {
-        if (!this.activeInput) return;
+        if (!this.activeInput) {
+            // Default to password input if no active input
+            this.activeInput = document.getElementById('password-input');
+        }
         
-        const start = this.activeInput.selectionStart;
-        const end = this.activeInput.selectionEnd;
+        if (!this.activeInput) {
+            console.error('No active input found for character insertion');
+            return;
+        }
+        
+        console.log('Inserting character into input:', this.activeInput.id, char);
+        
+        const start = this.activeInput.selectionStart || 0;
+        const end = this.activeInput.selectionEnd || 0;
         const value = this.activeInput.value;
         
         // Replace selected text or insert at cursor
@@ -138,16 +152,25 @@ class VirtualKeyboard {
         const newPos = start + char.length;
         this.activeInput.setSelectionRange(newPos, newPos);
         
+        // Keep focus on the input
+        this.activeInput.focus();
+        
         // Trigger input event for any listeners
         const event = new Event('input', { bubbles: true });
         this.activeInput.dispatchEvent(event);
+        
+        console.log('Character inserted, new value:', this.activeInput.value);
     }
 
     backspace() {
+        if (!this.activeInput) {
+            this.activeInput = document.getElementById('password-input');
+        }
+        
         if (!this.activeInput) return;
         
-        const start = this.activeInput.selectionStart;
-        const end = this.activeInput.selectionEnd;
+        const start = this.activeInput.selectionStart || 0;
+        const end = this.activeInput.selectionEnd || 0;
         const value = this.activeInput.value;
         
         if (start === end && start > 0) {
@@ -160,9 +183,37 @@ class VirtualKeyboard {
             this.activeInput.setSelectionRange(start, start);
         }
         
+        // Keep focus on the input
+        this.activeInput.focus();
+        
         // Trigger input event
         const event = new Event('input', { bubbles: true });
         this.activeInput.dispatchEvent(event);
+    }
+
+    handleEnter() {
+        // For login form, could trigger login if password is entered
+        if (this.activeInput && this.activeInput.id === 'password-input') {
+            const password = this.activeInput.value.trim();
+            if (password) {
+                console.log('Enter pressed on password field with value:', password);
+            }
+        }
+    }
+
+    clearInput() {
+        if (!this.activeInput) {
+            this.activeInput = document.getElementById('password-input');
+        }
+        
+        if (this.activeInput) {
+            this.activeInput.value = '';
+            this.activeInput.focus();
+            
+            // Trigger input event
+            const event = new Event('input', { bubbles: true });
+            this.activeInput.dispatchEvent(event);
+        }
     }
 
     focusNextInput() {
