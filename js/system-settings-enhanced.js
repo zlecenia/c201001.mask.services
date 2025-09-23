@@ -2,22 +2,30 @@
  * MASKSERVICE C20 - Enhanced System Settings Module
  * Advanced system configuration for SUPERUSER role
  * Test scenario management, external integrations, standards compliance
+ * @version 2.0.0 - Modularized Architecture
+ * @author MASKSERVICE Team
  */
+
+// Import modular components
+// Note: In a production environment, these would be proper ES6 imports
+// For now, we load them as script tags in the HTML
 
 class SystemSettingsEnhanced {
     constructor() {
-        this.testScenarios = new Map();
-        this.integrationSettings = new Map();
-        this.standardsConfig = new Map();
-        this.systemConfig = {};
+        // Initialize core settings module
+        this.core = new SettingsCore();
+        
+        // Initialize specialized modules
+        this.scenarios = new SettingsScenarios(this.core);
+        this.integration = new SettingsIntegration(this.core);
+        this.standards = new SettingsStandards(this.core);
+        this.system = new SettingsSystem(this.core);
+        
         this.init();
     }
 
     init() {
-        this.loadTestScenarios();
-        this.loadIntegrationSettings();
-        this.loadStandardsConfig();
-        this.loadSystemConfig();
+        console.log('✅ SystemSettingsEnhanced initialized with modular architecture');
     }
 
     // Test scenarios management
@@ -399,7 +407,7 @@ class SystemSettingsEnhanced {
         URL.revokeObjectURL(url);
     }
 
-    // Public methods for template integration
+    // Public methods for template integration - Delegated to specialized modules
     showEnhancedSystemSettings() {
         const content = document.getElementById('menu-content');
         if (content) {
@@ -408,110 +416,71 @@ class SystemSettingsEnhanced {
     }
 
     showSettingsScenarios() {
-        const content = document.getElementById('menu-content');
-        if (content) {
-            content.innerHTML = this.getSettingsScenariosHTML();
-        }
+        this.scenarios.showSettingsScenarios();
     }
 
     showSettingsIntegration() {
-        const content = document.getElementById('menu-content');
-        if (content) {
-            content.innerHTML = this.getSettingsIntegrationHTML();
-        }
+        this.integration.showSettingsIntegration();
     }
 
     showSettingsStandards() {
-        const content = document.getElementById('menu-content');
-        if (content) {
-            content.innerHTML = this.getSettingsStandardsHTML();
-        }
+        this.standards.showSettingsStandards();
     }
 
     showSettingsSystem() {
-        const content = document.getElementById('menu-content');
-        if (content) {
-            content.innerHTML = this.getSettingsSystemHTML();
-        }
+        this.system.showSettingsSystem();
     }
 
-    // Settings Scenarios HTML template (focused on test scenario management)
-    getSettingsScenariosHTML() {
-        return `
-            <div class="system-settings-enhanced">
-                <div class="settings-header">
-                    <h2>Zarządzanie scenariuszami testowymi</h2>
-                    <div class="header-actions">
-                        <button class="btn btn-primary" onclick="systemSettingsEnhanced.createTestScenario()">
-                            ➕ Nowy scenariusz
-                        </button>
-                        <button class="btn btn-secondary" onclick="systemSettingsEnhanced.importScenarios()">
-                            📥 Importuj z XML
-                        </button>
-                        <button class="btn btn-info" onclick="systemSettingsEnhanced.validateScenarios()">
-                            ✅ Waliduj normy
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Scenario Editor -->
-                <div class="scenario-editor">
-                    <h3>Edytor scenariuszy</h3>
-                    <div class="editor-workspace">
-                        <div class="scenario-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Nazwa scenariusza:</label>
-                                    <input type="text" id="scenario-name" placeholder="Wprowadź nazwę">
-                                </div>
-                                <div class="form-group">
-                                    <label>Norma:</label>
-                                    <select id="scenario-norm">
-                                        <option value="pn-en-136">PN-EN 136</option>
-                                        <option value="pn-en-137">PN-EN 137</option>
-                                        <option value="iso-16900">ISO 16900</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Typy urządzeń:</label>
-                                    <div class="checkbox-group">
-                                        <label><input type="checkbox" value="PP_MASK"> Maska pełnotwarzowa</label>
-                                        <label><input type="checkbox" value="NP_MASK"> Półmaska</label>
-                                        <label><input type="checkbox" value="FILTER"> Filtr</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Active Scenarios -->
-                <div class="active-scenarios">
-                    <h3>Aktywne scenariusze</h3>
-                    <div class="scenarios-table">
-                        ${this.getActiveScenariosHTML()}
-                    </div>
-                </div>
-
-                <!-- Scenario Mapping -->
-                <div class="scenario-mapping">
-                    <h3>Mapowanie scenariuszy</h3>
-                    <div class="mapping-matrix">
-                        <div class="matrix-header">
-                            <div class="matrix-cell">Typ urządzenia</div>
-                            <div class="matrix-cell">Interwał testowy</div>
-                            <div class="matrix-cell">Scenariusz</div>
-                        </div>
-                        ${this.getScenarioMappingHTML()}
-                    </div>
-                </div>
-            </div>
-        `;
+    // Delegate methods to specialized modules
+    createTestScenario() {
+        this.scenarios.createTestScenario();
     }
 
-    // Settings Integration HTML template (focused on external integrations)
+    importScenarios() {
+        this.scenarios.importScenarios();
+    }
+
+    validateScenarios() {
+        this.scenarios.validateScenarios();
+    }
+
+    addIntegration() {
+        this.integration.addIntegration();
+    }
+
+    testConnections() {
+        this.integration.testConnections();
+    }
+
+    syncData() {
+        this.integration.syncData();
+    }
+
+    updateStandards() {
+        this.standards.updateStandards();
+    }
+
+    validateCompliance() {
+        this.standards.validateCompliance();
+    }
+
+    generateComplianceReport() {
+        this.standards.generateComplianceReport();
+    }
+
+    saveSystemConfig() {
+        this.system.saveSystemConfig();
+    }
+
+    resetToDefaults() {
+        this.system.resetToDefaults();
+    }
+
+    restartSystem() {
+        this.system.restartSystem();
+    }
+
+    // Legacy method for backwards compatibility
     getSettingsIntegrationHTML() {
         return `
             <div class="system-settings-enhanced">
