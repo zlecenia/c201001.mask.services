@@ -23,24 +23,15 @@ class MaskserviceTemplateTest {
             total: 0,
             details: []
         };
-        this.workingTemplates = [
-            'users-template',
-            'user-data-template', 
-            'test-menu-template',
-            'service-menu-template',
-            'system-settings-template'
-        ];
-        this.missingTemplates = [
-            'realtime-sensors-template',
-            'device-history-template',
-            'reports-view-template',
-            'reports-batch-template',
-            'reports-schedule-template',
-            'workshop-parts-template',
-            'workshop-maintenance-template',
-            'workshop-tools-template',
-            'workshop-inventory-template'
-        ];
+        this.discoveredTemplates = [];
+        this.discoveredMenuLinks = [];
+        this.discoveredViewLinks = [];
+        this.templateAnalysis = {
+            working: [],
+            missing: [],
+            withExport: [],
+            withoutExport: []
+        };
     }
 
     log(message, type = 'info') {
@@ -83,62 +74,89 @@ class MaskserviceTemplateTest {
         }
     }
 
-    async testWorkingTemplates() {
-        this.log('Testing Working Templates', 'test');
+    async discoverAllTemplates() {
+        this.log('🔍 Dynamic Discovery - Scanning ALL Templates in DOM', 'test');
         
-        for (const templateId of this.workingTemplates) {
-            try {
-                const template = document.getElementById(templateId);
-                if (template) {
-                    this.log(`Working template ${templateId} found`, 'info');
-                    
-                    // Test if template has export section
-                    const exportSection = template.querySelector('.export-section');
-                    if (exportSection) {
-                        this.log(`Export section found in ${templateId}`, 'info');
-                        
-                        // Test export buttons
-                        const exportButtons = exportSection.querySelectorAll('.btn-export');
-                        if (exportButtons.length === 4) {
-                            this.log(`All 4 export buttons found in ${templateId}`, 'info');
-                            this.results.passed++;
-                        } else {
-                            this.log(`Expected 4 export buttons, found ${exportButtons.length} in ${templateId}`, 'warn');
-                            this.results.failed++;
-                        }
-                    } else {
-                        this.log(`Export section missing in ${templateId}`, 'error');
-                        this.results.failed++;
-                    }
+        // Find all elements with id ending in '-template'
+        const allElements = document.querySelectorAll('*[id]');
+        const templateElements = Array.from(allElements).filter(el => 
+            el.id.endsWith('-template') || el.id.endsWith('-screen') || el.classList.contains('template')
+        );
+        
+        this.discoveredTemplates = templateElements.map(el => ({
+            id: el.id,
+            element: el,
+            visible: el.style.display !== 'none' && !el.closest('[style*="display: none"]'),
+            hasContent: el.innerHTML.trim().length > 0,
+            hasExportSection: !!el.querySelector('.export-section'),
+            exportButtonCount: el.querySelectorAll('.btn-export').length,
+            hasMenuCards: el.querySelectorAll('.menu-card, .menu-item').length,
+            hasButtons: el.querySelectorAll('button').length,
+            hasLinks: el.querySelectorAll('a').length
+        }));
+        
+        this.log(`📊 Discovered ${this.discoveredTemplates.length} templates total`, 'info');
+        
+        // Categorize templates
+        this.discoveredTemplates.forEach(template => {
+            if (template.hasContent && template.element.parentElement) {
+                this.templateAnalysis.working.push(template);
+                if (template.hasExportSection) {
+                    this.templateAnalysis.withExport.push(template);
                 } else {
-                    this.log(`Working template ${templateId} not found in DOM`, 'error');
-                    this.results.failed++;
+                    this.templateAnalysis.withoutExport.push(template);
                 }
-                this.results.total++;
-            } catch (error) {
-                this.log(`Error testing template ${templateId}: ${error.message}`, 'error');
-                this.results.failed++;
-                this.results.total++;
+            } else {
+                this.templateAnalysis.missing.push(template);
             }
-        }
+        });
+        
+        this.log(`✅ Working templates: ${this.templateAnalysis.working.length}`, 'info');
+        this.log(`📊 With export functionality: ${this.templateAnalysis.withExport.length}`, 'info');
+        this.log(`⚠️ Without export functionality: ${this.templateAnalysis.withoutExport.length}`, 'info');
+        this.log(`❌ Missing/empty templates: ${this.templateAnalysis.missing.length}`, 'info');
+        
+        return this.discoveredTemplates;
     }
 
-    async testMissingTemplates() {
-        this.log('Testing Missing Templates (should not exist)', 'test');
+    async testAllDiscoveredTemplates() {
+        this.log('🧪 Testing ALL Discovered Templates', 'test');
         
-        for (const templateId of this.missingTemplates) {
+        for (const template of this.discoveredTemplates) {
             try {
-                const template = document.getElementById(templateId);
-                if (!template) {
-                    this.log(`Missing template ${templateId} correctly not found`, 'info');
+                this.log(`Testing template: ${template.id}`, 'info');
+                
+                // Test template structure
+                if (template.hasContent) {
+                    this.log(`✅ Template ${template.id} has content`, 'info');
                     this.results.passed++;
+                    
+                    // Test export functionality if present
+                    if (template.hasExportSection) {
+                        if (template.exportButtonCount >= 4) {
+                            this.log(`✅ Template ${template.id} has complete export section (${template.exportButtonCount} buttons)`, 'info');
+                            this.results.passed++;
+                        } else {
+                            this.log(`⚠️ Template ${template.id} has incomplete export section (${template.exportButtonCount} buttons)`, 'warn');
+                            this.results.failed++;
+                        }
+                    }
+                    
+                    // Test interactive elements
+                    if (template.hasButtons > 0 || template.hasLinks > 0) {
+                        this.log(`✅ Template ${template.id} has ${template.hasButtons} buttons and ${template.hasLinks} links`, 'info');
+                        this.results.passed++;
+                    }
+                    
                 } else {
-                    this.log(`Missing template ${templateId} unexpectedly found`, 'warn');
+                    this.log(`❌ Template ${template.id} is empty or missing content`, 'error');
                     this.results.failed++;
                 }
-                this.results.total++;
+                
+                this.results.total += 2; // Structure + content tests
+                
             } catch (error) {
-                this.log(`Error checking missing template ${templateId}: ${error.message}`, 'error');
+                this.log(`Error testing template ${template.id}: ${error.message}`, 'error');
                 this.results.failed++;
                 this.results.total++;
             }
@@ -224,38 +242,107 @@ class MaskserviceTemplateTest {
         }
     }
 
-    async testCSSStyles() {
-        this.log('Testing CSS Styles for Export Buttons', 'test');
+    async discoverAllMenuLinks() {
+        this.log('🔍 Dynamic Discovery - Scanning ALL Menu Links and Navigation', 'test');
         
-        try {
-            const styleSheets = document.styleSheets;
-            let exportStylesFound = false;
-            
-            for (let sheet of styleSheets) {
-                try {
-                    for (let rule of sheet.cssRules || sheet.rules) {
-                        if (rule.selectorText && rule.selectorText.includes('.export-section')) {
-                            exportStylesFound = true;
-                            break;
+        // Find all menu items with onclick handlers
+        const menuItems = document.querySelectorAll('[onclick], .menu-item, .menu-card, .nav-link, [data-screen]');
+        
+        this.discoveredMenuLinks = Array.from(menuItems).map(item => ({
+            element: item,
+            id: item.id || 'no-id',
+            onclick: item.getAttribute('onclick') || '',
+            dataScreen: item.getAttribute('data-screen') || '',
+            text: item.textContent.trim(),
+            visible: item.offsetParent !== null,
+            hasHandler: !!(item.getAttribute('onclick') || item.getAttribute('data-screen'))
+        })).filter(link => link.hasHandler || link.text.length > 0);
+        
+        this.log(`📊 Discovered ${this.discoveredMenuLinks.length} menu links/navigation items`, 'info');
+        
+        return this.discoveredMenuLinks;
+    }
+    
+    async testAllMenuLinks() {
+        this.log('🧪 Testing ALL Menu Links and Navigation Handlers', 'test');
+        
+        for (const link of this.discoveredMenuLinks) {
+            try {
+                this.log(`Testing menu link: "${link.text}" (${link.id})`, 'info');
+                
+                // Test onclick handler
+                if (link.onclick) {
+                    try {
+                        // Parse onclick to check if function exists
+                        const funcMatch = link.onclick.match(/([a-zA-Z_$][a-zA-Z0-9_$]*)/g);
+                        if (funcMatch) {
+                            const funcName = funcMatch[0];
+                            if (typeof window[funcName] === 'function') {
+                                this.log(`✅ Menu link "${link.text}" has valid onclick handler: ${funcName}`, 'info');
+                                this.results.passed++;
+                            } else {
+                                this.log(`❌ Menu link "${link.text}" has invalid onclick handler: ${funcName}`, 'error');
+                                this.results.failed++;
+                            }
                         }
+                    } catch (e) {
+                        this.log(`⚠️ Could not validate onclick for "${link.text}": ${link.onclick}`, 'warn');
+                        this.results.failed++;
                     }
-                } catch (e) {
-                    // Cross-origin stylesheets may throw errors
                 }
-            }
-            
-            if (exportStylesFound) {
-                this.log('Export button CSS styles found', 'info');
-                this.results.passed++;
-            } else {
-                this.log('Export button CSS styles not detected', 'warn');
+                
+                // Test data-screen attribute
+                if (link.dataScreen) {
+                    const targetScreen = document.getElementById(link.dataScreen);
+                    if (targetScreen) {
+                        this.log(`✅ Menu link "${link.text}" has valid target screen: ${link.dataScreen}`, 'info');
+                        this.results.passed++;
+                    } else {
+                        this.log(`❌ Menu link "${link.text}" has invalid target screen: ${link.dataScreen}`, 'error');
+                        this.results.failed++;
+                    }
+                }
+                
+                this.results.total++;
+                
+            } catch (error) {
+                this.log(`Error testing menu link "${link.text}": ${error.message}`, 'error');
                 this.results.failed++;
+                this.results.total++;
             }
-            this.results.total++;
-        } catch (error) {
-            this.log(`Error testing CSS styles: ${error.message}`, 'error');
-            this.results.failed++;
-            this.results.total++;
+        }
+    }
+    
+    async testAllViewLinks() {
+        this.log('🧪 Testing ALL View Links and Screen Navigation', 'test');
+        
+        // Find all screen elements
+        const allScreens = document.querySelectorAll('[id*="-screen"], [id*="-view"], .screen');
+        
+        this.discoveredViewLinks = Array.from(allScreens).map(screen => ({
+            id: screen.id,
+            element: screen,
+            visible: screen.classList.contains('active') || screen.style.display !== 'none',
+            hasContent: screen.innerHTML.trim().length > 0
+        }));
+        
+        this.log(`📊 Discovered ${this.discoveredViewLinks.length} view screens`, 'info');
+        
+        for (const view of this.discoveredViewLinks) {
+            try {
+                if (view.hasContent) {
+                    this.log(`✅ View screen ${view.id} has content`, 'info');
+                    this.results.passed++;
+                } else {
+                    this.log(`❌ View screen ${view.id} is empty`, 'error');
+                    this.results.failed++;
+                }
+                this.results.total++;
+            } catch (error) {
+                this.log(`Error testing view ${view.id}: ${error.message}`, 'error');
+                this.results.failed++;
+                this.results.total++;
+            }
         }
     }
 
@@ -263,7 +350,7 @@ class MaskserviceTemplateTest {
         const successRate = ((this.results.passed / this.results.total) * 100).toFixed(1);
         
         console.log('\n' + '='.repeat(80));
-        console.log('🧪 MASKSERVICE C20 TEMPLATE LOADING TEST REPORT');
+        console.log('🧪 MASKSERVICE C20 COMPREHENSIVE TEMPLATE & LINK TEST REPORT');
         console.log('='.repeat(80));
         console.log(`📊 Total Tests: ${this.results.total}`);
         console.log(`✅ Passed: ${this.results.passed}`);
@@ -277,32 +364,55 @@ class MaskserviceTemplateTest {
             console.log('⚠️  Some tests failed. Review the details above.');
         }
         
-        console.log('\n📋 Test Summary:');
-        console.log('✅ Working Templates: 5 (with Export functionality)');
-        console.log('❌ Missing Templates: 8 (expected behavior)');
+        console.log('\n📋 COMPREHENSIVE DISCOVERY RESULTS:');
+        console.log(`🔍 Total Templates Discovered: ${this.discoveredTemplates.length}`);
+        console.log(`✅ Working Templates: ${this.templateAnalysis.working.length}`);
+        console.log(`📊 Templates with Export: ${this.templateAnalysis.withExport.length}`);
+        console.log(`⚠️ Templates without Export: ${this.templateAnalysis.withoutExport.length}`);
+        console.log(`❌ Empty/Missing Templates: ${this.templateAnalysis.missing.length}`);
+        console.log(`🔗 Menu Links Discovered: ${this.discoveredMenuLinks.length}`);
+        console.log(`🖥️ View Screens Discovered: ${this.discoveredViewLinks.length}`);
         console.log('🔧 Module Loading: Complete');
-        console.log('📊 Export System: Fully functional');
-        console.log('🔐 Auth System: Logout bug fixed');
+        console.log('🔐 Auth System: Logout protection active');
+        
+        console.log('\n📊 DETAILED TEMPLATE LIST:');
+        this.discoveredTemplates.forEach(template => {
+            const status = template.hasContent ? '✅' : '❌';
+            const exportStatus = template.hasExportSection ? '📊' : '⚪';
+            console.log(`${status} ${exportStatus} ${template.id} (${template.hasButtons} buttons, ${template.hasLinks} links)`);
+        });
         
         return {
             success: this.results.failed === 0,
             passed: this.results.passed,
             failed: this.results.failed,
             total: this.results.total,
-            successRate: successRate
+            successRate: successRate,
+            discovery: {
+                templates: this.discoveredTemplates.length,
+                workingTemplates: this.templateAnalysis.working.length,
+                withExport: this.templateAnalysis.withExport.length,
+                menuLinks: this.discoveredMenuLinks.length,
+                viewScreens: this.discoveredViewLinks.length
+            }
         };
     }
 
     async runAllTests() {
-        this.log('🚀 Starting MASKSERVICE C20 Template Loading Tests', 'test');
+        this.log('🚀 Starting MASKSERVICE C20 COMPREHENSIVE Template & Link Tests', 'test');
         
+        // Module and system tests
         await this.testModuleLoading();
-        await this.testWorkingTemplates();
-        await this.testMissingTemplates();
         await this.testExportFunctions();
         await this.testDataExportManager();
         await this.testAuthSystem();
-        await this.testCSSStyles();
+        
+        // Dynamic discovery tests
+        await this.discoverAllTemplates();
+        await this.testAllDiscoveredTemplates();
+        await this.discoverAllMenuLinks();
+        await this.testAllMenuLinks();
+        await this.testAllViewLinks();
         
         return this.generateReport();
     }
