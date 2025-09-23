@@ -103,14 +103,32 @@ class MenuManager {
             case 'user_data':
                 this.showUserData();
                 break;
-            case 'device_data':
-                this.showDeviceData();
+            case 'realtime_sensors':
+                this.showRealtimeSensors();
                 break;
-            case 'test_reports':
-                this.showTestReports();
+            case 'device_history':
+                this.showDeviceHistory();
                 break;
-            case 'workshop':
-                this.showWorkshop();
+            case 'reports_view':
+                this.showReportsView();
+                break;
+            case 'reports_batch':
+                this.showReportsBatch();
+                break;
+            case 'reports_schedule':
+                this.showReportsSchedule();
+                break;
+            case 'workshop_parts':
+                this.showWorkshopParts();
+                break;
+            case 'workshop_maintenance':
+                this.showWorkshopMaintenance();
+                break;
+            case 'workshop_tools':
+                this.showWorkshopTools();
+                break;
+            case 'workshop_inventory':
+                this.showWorkshopInventory();
                 break;
             case 'users':
                 this.showUsers();
@@ -171,33 +189,93 @@ class MenuManager {
         this.loadTemplate('user-data-template');
     }
 
-    showDeviceData() {
-        console.log('Opening Enhanced Device Data...');
-        // Use enhanced module if available
+    showRealtimeSensors() {
+        console.log('Opening Real-time Sensors...');
+        // Use enhanced module if available to show only sensors
         if (window.deviceDataEnhanced) {
-            deviceDataEnhanced.showEnhancedDeviceData();
+            deviceDataEnhanced.showRealtimeSensors();
         } else {
-            this.loadTemplate('device-data-template');
+            this.loadTemplate('realtime-sensors-template');
         }
     }
 
-    showTestReports() {
-        console.log('Opening Enhanced Test Reports...');
+    showDeviceHistory() {
+        console.log('Opening Device History...');
+        // Use enhanced module if available to show only history
+        if (window.deviceDataEnhanced) {
+            deviceDataEnhanced.showDeviceHistory();
+        } else {
+            this.loadTemplate('device-history-template');
+        }
+    }
+
+    showReportsView() {
+        console.log('Opening Reports View...');
         // Use enhanced module if available
         if (window.testReportsEnhanced) {
-            testReportsEnhanced.showEnhancedReports();
+            testReportsEnhanced.showReportsView();
         } else {
-            this.loadTemplate('test-reports-template');
+            this.loadTemplate('reports-view-template');
         }
     }
 
-    showWorkshop() {
-        console.log('Opening Enhanced Workshop...');
+    showReportsBatch() {
+        console.log('Opening Batch Reports Generator...');
+        // Use enhanced module if available
+        if (window.testReportsEnhanced) {
+            testReportsEnhanced.showReportsBatch();
+        } else {
+            this.loadTemplate('reports-batch-template');
+        }
+    }
+
+    showReportsSchedule() {
+        console.log('Opening Reports Schedule...');
+        // Use enhanced module if available
+        if (window.testReportsEnhanced) {
+            testReportsEnhanced.showReportsSchedule();
+        } else {
+            this.loadTemplate('reports-schedule-template');
+        }
+    }
+
+    showWorkshopParts() {
+        console.log('Opening Workshop Parts...');
         // Use enhanced module if available
         if (window.workshopEnhanced) {
-            workshopEnhanced.showEnhancedWorkshop();
+            workshopEnhanced.showWorkshopParts();
         } else {
-            this.loadTemplate('workshop-template');
+            this.loadTemplate('workshop-parts-template');
+        }
+    }
+
+    showWorkshopMaintenance() {
+        console.log('Opening Workshop Maintenance...');
+        // Use enhanced module if available
+        if (window.workshopEnhanced) {
+            workshopEnhanced.showWorkshopMaintenance();
+        } else {
+            this.loadTemplate('workshop-maintenance-template');
+        }
+    }
+
+    showWorkshopTools() {
+        console.log('Opening Workshop Tools...');
+        // Use enhanced module if available
+        if (window.workshopEnhanced) {
+            workshopEnhanced.showWorkshopTools();
+        } else {
+            this.loadTemplate('workshop-tools-template');
+        }
+    }
+
+    showWorkshopInventory() {
+        console.log('Opening Workshop Inventory...');
+        // Use enhanced module if available
+        if (window.workshopEnhanced) {
+            workshopEnhanced.showWorkshopInventory();
+        } else {
+            this.loadTemplate('workshop-inventory-template');
         }
     }
 

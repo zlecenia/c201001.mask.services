@@ -468,6 +468,143 @@ class DeviceDataEnhanced {
         `;
     }
 
+    // Real-time Sensors HTML template
+    getRealtimeSensorsHTML() {
+        return `
+            <div class="device-data-enhanced">
+                <div class="device-header">
+                    <h2>Czujniki w czasie rzeczywistym</h2>
+                    <div class="device-status-indicator">
+                        <span class="status-dot online"></span>
+                        <span>ONLINE</span>
+                    </div>
+                </div>
+
+                <!-- Real-time Sensor Panel -->
+                <div class="sensor-panel-enhanced">
+                    <h3>Monitoring sensorów w czasie rzeczywistym</h3>
+                    <div class="sensor-grid">
+                        <div class="sensor-group pressure-group">
+                            <h4>Ciśnienie</h4>
+                            <div class="sensor-readings">
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Niskie:</span>
+                                    <span class="sensor-value" id="pressure-low-enhanced">${this.sensorPanel.pressure.low.current.toFixed(1)} ${this.sensorPanel.pressure.low.unit}</span>
+                                    <div class="sensor-range">(${this.sensorPanel.pressure.low.min}-${this.sensorPanel.pressure.low.max} ${this.sensorPanel.pressure.low.unit})</div>
+                                </div>
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Średnie:</span>
+                                    <span class="sensor-value" id="pressure-medium-enhanced">${this.sensorPanel.pressure.medium.current.toFixed(1)} ${this.sensorPanel.pressure.medium.unit}</span>
+                                    <div class="sensor-range">(${this.sensorPanel.pressure.medium.min}-${this.sensorPanel.pressure.medium.max} ${this.sensorPanel.pressure.medium.unit})</div>
+                                </div>
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Wysokie:</span>
+                                    <span class="sensor-value" id="pressure-high-enhanced">${this.sensorPanel.pressure.high.current.toFixed(1)} ${this.sensorPanel.pressure.high.unit}</span>
+                                    <div class="sensor-range">(${this.sensorPanel.pressure.high.min}-${this.sensorPanel.pressure.high.max} ${this.sensorPanel.pressure.high.unit})</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sensor-group flow-group">
+                            <h4>Przepływ</h4>
+                            <div class="sensor-readings">
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Wlot:</span>
+                                    <span class="sensor-value" id="flow-inlet-enhanced">${this.sensorPanel.flow.inlet.current.toFixed(1)} ${this.sensorPanel.flow.inlet.unit}</span>
+                                </div>
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Wylot:</span>
+                                    <span class="sensor-value" id="flow-outlet-enhanced">${this.sensorPanel.flow.outlet.current.toFixed(1)} ${this.sensorPanel.flow.outlet.unit}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sensor-group environment-group">
+                            <h4>Środowisko</h4>
+                            <div class="sensor-readings">
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Temperatura:</span>
+                                    <span class="sensor-value" id="temperature-enhanced">${this.sensorPanel.temperature.current.toFixed(1)}${this.sensorPanel.temperature.unit}</span>
+                                </div>
+                                <div class="sensor-item">
+                                    <span class="sensor-label">Wilgotność:</span>
+                                    <span class="sensor-value" id="humidity-enhanced">${this.sensorPanel.humidity.current.toFixed(0)}${this.sensorPanel.humidity.unit}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sensor Actions -->
+                <div class="device-actions">
+                    <button class="btn btn-primary" onclick="deviceDataEnhanced.exportSensorData()">📊 Eksportuj dane sensorów</button>
+                    <button class="btn btn-warning" onclick="deviceDataEnhanced.calibrateDevice()">⚙️ Kalibruj sensory</button>
+                    <button class="btn btn-secondary" onclick="deviceDataEnhanced.showAlarmSettings()">🔔 Ustawienia alarmów</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // Device History HTML template
+    getDeviceHistoryHTML() {
+        const currentDevice = 'PP001'; // Mock current device
+        const maintenance = this.calculatePredictiveMaintenance(currentDevice);
+        const history = this.deviceHistory.get(currentDevice);
+
+        return `
+            <div class="device-data-enhanced">
+                <div class="device-header">
+                    <h2>Historia urządzenia</h2>
+                    <div class="device-status-indicator">
+                        <span class="status-dot online"></span>
+                        <span>PP001</span>
+                    </div>
+                </div>
+
+                <!-- Device History -->
+                <div class="device-history-section">
+                    <h3>Historia urządzenia</h3>
+                    <div class="history-tabs">
+                        <button class="tab-btn active" onclick="deviceDataEnhanced.showHistoryTab('tests')">Ostatnie testy</button>
+                        <button class="tab-btn" onclick="deviceDataEnhanced.showHistoryTab('maintenance')">Konserwacja</button>
+                        <button class="tab-btn" onclick="deviceDataEnhanced.showHistoryTab('calibration')">Kalibracja</button>
+                        <button class="tab-btn" onclick="deviceDataEnhanced.showHistoryTab('failures')">Awarie</button>
+                    </div>
+                    <div class="history-content" id="history-content">
+                        ${this.getTestHistoryHTML(history?.lastTests || [])}
+                    </div>
+                </div>
+
+                <!-- Predictive Maintenance -->
+                <div class="predictive-maintenance-section">
+                    <h3>Predykcyjna konserwacja</h3>
+                    <div class="maintenance-info">
+                        <div class="maintenance-item">
+                            <span class="maintenance-label">Następny test:</span>
+                            <span class="maintenance-value">${maintenance?.nextTestDate?.toLocaleDateString() || 'N/A'}</span>
+                        </div>
+                        <div class="maintenance-item">
+                            <span class="maintenance-label">Komponenty do sprawdzenia:</span>
+                            <span class="maintenance-value">${maintenance?.componentsToCheck?.join(', ') || 'Brak'}</span>
+                        </div>
+                        <div class="maintenance-item">
+                            <span class="maintenance-label">Szacowana żywotność:</span>
+                            <span class="maintenance-value">${maintenance?.estimatedLifespan || 'N/A'} lat</span>
+                        </div>
+                    </div>
+                    ${maintenance?.riskFactors?.length > 0 ? this.getRiskFactorsHTML(maintenance.riskFactors) : ''}
+                </div>
+
+                <!-- History Actions -->
+                <div class="device-actions">
+                    <button class="btn btn-primary" onclick="deviceDataEnhanced.exportDeviceData()">📊 Eksportuj historię</button>
+                    <button class="btn btn-secondary" onclick="deviceDataEnhanced.scheduleMaintenance()">🔧 Zaplanuj konserwację</button>
+                    <button class="btn btn-info" onclick="deviceDataEnhanced.generateReport()">📋 Generuj raport</button>
+                </div>
+            </div>
+        `;
+    }
+
     getTestHistoryHTML(tests) {
         if (!tests || tests.length === 0) {
             return '<p>Brak danych o testach</p>';
@@ -609,6 +746,20 @@ class DeviceDataEnhanced {
         const content = document.getElementById('menu-content');
         if (content) {
             content.innerHTML = this.getEnhancedDeviceDataHTML();
+        }
+    }
+
+    showRealtimeSensors() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getRealtimeSensorsHTML();
+        }
+    }
+
+    showDeviceHistory() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getDeviceHistoryHTML();
         }
     }
 

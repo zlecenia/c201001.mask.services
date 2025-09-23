@@ -594,12 +594,208 @@ ${reportData.id};${reportData.date};${reportData.deviceSerial};${reportData.devi
         return 'BATCH-' + Date.now().toString().slice(-6);
     }
 
-    // Public method for template integration
+    // Public methods for template integration
     showEnhancedReports() {
         const content = document.getElementById('menu-content');
         if (content) {
             content.innerHTML = this.getEnhancedReportsHTML();
         }
+    }
+
+    showReportsView() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getReportsViewHTML();
+        }
+    }
+
+    showReportsBatch() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getBatchGeneratorHTML();
+        }
+    }
+
+    showReportsSchedule() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getReportsScheduleHTML();
+        }
+    }
+
+    // Reports View HTML template (focused on viewing and filtering)
+    getReportsViewHTML() {
+        return `
+            <div class="test-reports-enhanced">
+                <div class="reports-header">
+                    <h2>Przeglądanie raportów</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="testReportsEnhanced.refreshReports()">
+                            🔄 Odśwież
+                        </button>
+                        <button class="btn btn-secondary" onclick="testReportsEnhanced.exportCurrentView()">
+                            📤 Eksportuj widok
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="report-filters">
+                    <h3>Filtry raportów</h3>
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label>Klient:</label>
+                            <select onchange="testReportsEnhanced.filterByCustomer(this.value)">
+                                <option value="">Wszyscy klienci</option>
+                                ${this.getUniqueCustomers().map(customer => 
+                                    `<option value="${customer}">${customer}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Status:</label>
+                            <select onchange="testReportsEnhanced.filterByStatus(this.value)">
+                                <option value="">Wszystkie</option>
+                                <option value="PASSED">Pozytywne</option>
+                                <option value="FAILED">Negatywne</option>
+                                <option value="PENDING">Oczekujące</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Okres od:</label>
+                            <input type="date" onchange="testReportsEnhanced.filterByDateFrom(this.value)">
+                        </div>
+                        <div class="filter-group">
+                            <label>Okres do:</label>
+                            <input type="date" onchange="testReportsEnhanced.filterByDateTo(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports List -->
+                <div class="reports-list-enhanced">
+                    <h3>Lista raportów</h3>
+                    <div class="reports-table">
+                        <div class="table-header">
+                            <div class="col-id">ID</div>
+                            <div class="col-date">Data</div>
+                            <div class="col-customer">Klient</div>
+                            <div class="col-device">Urządzenie</div>
+                            <div class="col-result">Wynik</div>
+                            <div class="col-actions">Akcje</div>
+                        </div>
+                        ${this.getReportsListHTML()}
+                    </div>
+                </div>
+
+                <!-- Statistics Panel -->
+                <div class="statistics-panel">
+                    <h3>Statystyki</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">${this.reports.size}</div>
+                            <div class="stat-label">Łączna liczba raportów</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getPassedReportsCount()}</div>
+                            <div class="stat-label">Pozytywne</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getFailedReportsCount()}</div>
+                            <div class="stat-label">Negatywne</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getUniqueCustomersCount()}</div>
+                            <div class="stat-label">Klienci</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Reports Schedule HTML template (focused on scheduling and automation)
+    getReportsScheduleHTML() {
+        return `
+            <div class="test-reports-enhanced">
+                <div class="reports-header">
+                    <h2>Harmonogram raportów</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="testReportsEnhanced.createSchedule()">
+                            ➕ Nowy harmonogram
+                        </button>
+                        <button class="btn btn-secondary" onclick="testReportsEnhanced.importSchedule()">
+                            📥 Importuj harmonogram
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Schedules -->
+                <div class="schedules-section">
+                    <h3>Aktywne harmonogramy</h3>
+                    <div class="schedules-list">
+                        ${this.getActiveSchedulesHTML()}
+                    </div>
+                </div>
+
+                <!-- Schedule Templates -->
+                <div class="schedule-templates">
+                    <h3>Szablony harmonogramów</h3>
+                    <div class="templates-grid">
+                        <div class="template-card" onclick="testReportsEnhanced.useTemplate('daily')">
+                            <div class="template-icon">📅</div>
+                            <div class="template-name">Dzienny</div>
+                            <div class="template-desc">Raporty generowane codziennie</div>
+                        </div>
+                        <div class="template-card" onclick="testReportsEnhanced.useTemplate('weekly')">
+                            <div class="template-icon">📊</div>
+                            <div class="template-name">Tygodniowy</div>
+                            <div class="template-desc">Raporty zbiorcze co tydzień</div>
+                        </div>
+                        <div class="template-card" onclick="testReportsEnhanced.useTemplate('monthly')">
+                            <div class="template-icon">📈</div>
+                            <div class="template-name">Miesięczny</div>
+                            <div class="template-desc">Raporty miesięczne z analizą</div>
+                        </div>
+                        <div class="template-card" onclick="testReportsEnhanced.useTemplate('custom')">
+                            <div class="template-icon">⚙️</div>
+                            <div class="template-name">Niestandardowy</div>
+                            <div class="template-desc">Własne ustawienia</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scheduled Reports Queue -->
+                <div class="scheduled-queue">
+                    <h3>Kolejka zaplanowanych raportów</h3>
+                    <div class="queue-list">
+                        ${this.getScheduledQueueHTML()}
+                    </div>
+                </div>
+
+                <!-- Schedule Settings -->
+                <div class="schedule-settings">
+                    <h3>Ustawienia harmonogramów</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" checked> Powiadomienia email
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" checked> Automatyczne archiwizowanie
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox"> Backup w chmurze
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 }
 
