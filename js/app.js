@@ -322,3 +322,27 @@ window.hideLoading = function() {
     
     console.log('Loading screen hidden');
 };
+
+// Focus Data Sensors Panel Function
+window.focusDataSensors = function() {
+    const sensorsPanel = document.getElementById('pressure-panel');
+    if (sensorsPanel) {
+        // Scroll to the panel with smooth behavior
+        sensorsPanel.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+        
+        // Add highlight effect temporarily
+        sensorsPanel.classList.add('ui-test-highlight');
+        
+        // Remove highlight after 2 seconds
+        setTimeout(() => {
+            sensorsPanel.classList.remove('ui-test-highlight');
+        }, 2000);
+        
+        console.log('DATA SENSORS panel focused and highlighted');
+    } else {
+        console.error('DATA SENSORS panel not found');
+    }
+};

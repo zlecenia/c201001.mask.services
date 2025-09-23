@@ -285,21 +285,36 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-left">
-            <span id="footer-user" style="display:none;">USER: ---</span>
-            <span id="footer-date">--/--/----</span>
-            <span id="footer-time">--:--:--</span>
-            <span id="status" class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span id="status-text" data-i18n="global.offline">OFFLINE</span>
-                </span>
+                        <p>
             <span id="user-info" style="display:none;">
-                    <span id="username">---</span>
+<!--                    <span id="username">-&#45;&#45;</span>-->
+                    <span id="user-name">USERNAME</span>
                     <span id="user-role" class="role-badge">---</span>
                 </span>
+            </p>
+            <p>
+                <span id="footer-date">--/--/----</span>
+                <span id="footer-time">--:--:--</span>
+            </p>
+
+
         </div>
+
+        <div class="footer-center">
+            <span id="device_connection_status" class="status-indicator">
+                <span id="device_url" class="footer-host">c201001.mask.services</span>
+                <span class="status-dot"></span>
+                <span id="status-text" data-i18n="global.offline" >OFFLINE</span>
+            </span>
+        </div>
+
         <div class="footer-right">
-            <span class="footer-label">CONNECT 500</span>
-            <span class="footer-host">c201001.mask.services</span>
+
+            <p>
+                <span id="device_name" class="footer-label">CONNECT 500</span>
+
+            </p>
+
         </div>
     </footer>
 </div>

@@ -555,6 +555,16 @@ button:active {
     color: white;
 }
 
+.btn-blue {
+    background: #3b82f6;
+    color: white;
+}
+
+.btn-purple {
+    background: #8b5cf6;
+    color: white;
+}
+
 .btn-primary {
     background: var(--primary-color);
     color: white;
@@ -1048,7 +1058,9 @@ button:active {
     }
     
     .pressure-panel {
-        display: none !important;
+        width: 100%;
+        margin-top: 1rem;
+        position: static;
     }
     
     .menu-grid {
