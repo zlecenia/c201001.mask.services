@@ -1,10 +1,8 @@
 /**
  * MASKTRONIC C20 - Menu Management Module
  * Modular menu system - loading, rendering, navigation
+ * Simple global class system - no AMD dependencies
  */
-
-// AMD/RequireJS module definition
-define('menu', ['utils', 'auth'], function(Utils, AuthManager) {
 
 class MenuManager {
     constructor() {
@@ -757,19 +755,18 @@ function navigateToSubmenu(menuKey, submenuKey) {
     // Implementation for submenu navigation
 }
 
-    // Create global menu manager instance for backwards compatibility
-    const menuManager = new MenuManager();
-    window.MenuManager = menuManager;
+// Create global menu manager instance for backwards compatibility
+const menuManager = new MenuManager();
 
-    // Export functions for HTML onclick handlers and compatibility
-    window.showUserMenu = (role) => menuManager.showUserMenu(role);
-    window.selectMenuOption = (optionKey) => menuManager.selectMenuOption(optionKey);
-    window.clearPasswordInput = clearPasswordInput;
-    window.deleteLastPasswordChar = deleteLastPasswordChar;
-    window.navigateToSubmenu = navigateToSubmenu;
+// Export both class and instance to global scope
+window.MenuManagerClass = MenuManager;  // Class constructor
+window.MenuManager = menuManager;       // Instance ready to use
 
-    console.log('✅ Menu Module initialized');
+// Export functions for HTML onclick handlers and compatibility
+window.showUserMenu = (role) => menuManager.showUserMenu(role);
+window.selectMenuOption = (optionKey) => menuManager.selectMenuOption(optionKey);
+window.clearPasswordInput = clearPasswordInput;
+window.deleteLastPasswordChar = deleteLastPasswordChar;
+window.navigateToSubmenu = navigateToSubmenu;
 
-    // Return MenuManager class for AMD/RequireJS
-    return MenuManager;
-});
+console.log('✅ Menu Module initialized');

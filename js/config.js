@@ -1,10 +1,8 @@
 /**
  * MASKSERVICE C20 - Configuration Management Module
  * Handles loading and management of application configuration
+ * Simple global class system - no AMD dependencies
  */
-
-// AMD/RequireJS module definition
-define('config', [], function() {
 
 class ConfigManager {
     constructor() {
@@ -91,15 +89,14 @@ class ConfigManager {
     }
 }
 
-    // Create global config manager instance for backwards compatibility
-    const configManager = new ConfigManager();
-    window.ConfigManager = configManager;
+// Create global config manager instance for backwards compatibility
+const configManager = new ConfigManager();
 
-    // Export functions for global access
-    window.loadConfig = () => configManager.loadConfig();
+// Export both class and instance to global scope
+window.ConfigManagerClass = ConfigManager;  // Class constructor
+window.ConfigManager = configManager;       // Instance ready to use
 
-    console.log('✅ Config Module initialized');
+// Export functions for global access
+window.loadConfig = () => configManager.loadConfig();
 
-    // Return ConfigManager class for AMD/RequireJS
-    return ConfigManager;
-});
+console.log('✅ Config Module initialized');

@@ -1,11 +1,9 @@
 /**
  * MASKSERVICE C20 - Utilities Module
  * Common utilities, helpers, and shared functions
+ * Simple global class system - no AMD dependencies
  */
 
-// AMD/RequireJS module definition
-define('utils', [], function() {
-    
 class Utils {
     constructor() {
         this.formatters = new Map();
@@ -258,7 +256,3 @@ class Utils {
     window.switchScreen = Utils.switchScreen;
 
     console.log('✅ Utils Module initialized');
-
-    // Return Utils class for AMD/RequireJS
-    return Utils;
-});

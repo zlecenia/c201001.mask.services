@@ -1,10 +1,8 @@
 /**
  * MASKSERVICE C20 - Authentication Module
  * Modular authentication system - login, logout, user management
+ * Simple global class system - no AMD dependencies
  */
-
-// AMD/RequireJS module definition
-define('auth', ['utils'], function(Utils) {
 
 class AuthManager {
     constructor() {
@@ -92,33 +90,15 @@ class AuthManager {
      * Logout function - clears user session
      */
     logout() {
-        console.log('Logging out user:', this.currentUser?.role);
+        console.log('🔴 Logout initiated for user:', this.currentUser?.role);
         
+        // Clear user session first
         this.currentUser = null;
         this.lastActivity = new Date();
         
         if (this.inactivityTimer) {
             clearInterval(this.inactivityTimer);
             this.inactivityTimer = null;
-        }
-        
-        // Navigate back to login screen - multiple fallback methods
-        try {
-            // Method 1: Use router navigation if available
-            if (window.navigateAction) {
-                window.navigateAction('login-screen-default');
-            }
-            // Method 2: Use Utils.switchScreen if available
-            else if (Utils && Utils.switchScreen) {
-                Utils.switchScreen('user-menu-screen', 'login-screen');
-            }
-            // Method 3: Direct DOM manipulation fallback
-            else {
-                this.directScreenSwitch();
-            }
-        } catch (error) {
-            console.warn('Router navigation failed, using direct screen switch:', error);
-            this.directScreenSwitch();
         }
         
         // Hide footer user info
@@ -130,11 +110,15 @@ class AuthManager {
             passwordInput.value = '';
         }
         
-        // Reset any menu state
+        // Reset menu content
         const menuContent = document.getElementById('menu-content');
         if (menuContent) {
             menuContent.innerHTML = '<div class="welcome-message"><h2 data-i18n="menu.select_option">Wybierz opcję z menu</h2><p data-i18n="system.ready">System gotowy do pracy</p></div>';
         }
+        
+        // Single navigation method - use direct screen switch to avoid conflicts
+        console.log('🔄 Navigating to login screen...');
+        this.directScreenSwitch();
         
         console.log('✅ Logout completed successfully');
     }
@@ -143,20 +127,37 @@ class AuthManager {
      * Direct screen switching as fallback method
      */
     directScreenSwitch() {
-        // Hide all screens
+        console.log('🔄 Starting direct screen switch to login...');
+        
+        // Hide all screens first
         const screens = document.querySelectorAll('.screen');
-        screens.forEach(screen => screen.classList.remove('active'));
+        console.log(`Found ${screens.length} screens to hide`);
+        screens.forEach(screen => {
+            screen.classList.remove('active');
+            console.log(`Hidden screen: ${screen.id}`);
+        });
         
         // Show login screen
         const loginScreen = document.getElementById('login-screen');
         if (loginScreen) {
             loginScreen.classList.add('active');
+            console.log('✅ Login screen activated');
+        } else {
+            console.error('❌ Login screen not found!');
         }
         
-        // Hide user menu screen
+        // Explicitly hide user menu screen and system screen
         const userMenuScreen = document.getElementById('user-menu-screen');
+        const systemScreen = document.getElementById('system-screen');
+        
         if (userMenuScreen) {
             userMenuScreen.classList.remove('active');
+            console.log('✅ User menu screen hidden');
+        }
+        
+        if (systemScreen) {
+            systemScreen.classList.remove('active');
+            console.log('✅ System screen hidden');
         }
         
         console.log('🔄 Direct screen switch to login completed');
@@ -271,20 +272,27 @@ class AuthManager {
     }
 }
 
-    // Create global auth manager instance for backwards compatibility
-    const authManager = new AuthManager();
-    window.AuthManager = authManager;
+// Create global auth manager instance for backwards compatibility
+const authManager = new AuthManager();
 
-    // Export functions for HTML onclick handlers
-    window.mockLogin = (role) => authManager.mockLogin(role);
-    window.logout = () => authManager.logout();
+// Export to global scope - single point of truth
+window.AuthManager = authManager;  // Instance for compatibility
+window.authManager = authManager;  // Instance reference
+window.AuthManagerClass = AuthManager;  // Class reference
 
-    // Track user activity on any interaction
-    document.addEventListener('click', () => authManager.updateActivity());
-    document.addEventListener('keypress', () => authManager.updateActivity());
+// Export functions for HTML onclick handlers - single binding
+window.mockLogin = (role) => authManager.mockLogin(role);
+window.logout = () => {
+    console.log('🔴 Logout called - preventing multiple calls');
+    if (authManager.currentUser) {
+        authManager.logout();
+    } else {
+        console.warn('Already logged out - ignoring duplicate logout call');
+    }
+};
 
-    console.log('✅ Auth Module initialized');
+// Track user activity on any interaction
+document.addEventListener('click', () => authManager.updateActivity());
+document.addEventListener('keypress', () => authManager.updateActivity());
 
-    // Return AuthManager class for AMD/RequireJS
-    return AuthManager;
-});
+console.log('✅ Auth Module initialized');

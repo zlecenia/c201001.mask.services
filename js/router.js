@@ -9,9 +9,8 @@
  * - ConfigLoader: Configuration loading and caching
  */
 
-// AMD/RequireJS module definition with dependencies
+// Simple global class system - no AMD dependencies
 // TEMPORARY: Removed storage-manager dependency to fix 404 errors
-define('router', [], function() {
 
 class C20Router {
     constructor() {
@@ -800,6 +799,5 @@ class C20Router {
 
     console.log('✅ Router Module initialized');
 
-    // Return C20Router class for AMD/RequireJS
-    return C20Router;
-});
+// Export to global scope
+window.C20Router = C20Router;

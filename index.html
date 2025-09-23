@@ -528,52 +528,51 @@
     </div>
 </div>
 
-<!-- MASKSERVICE C20 - Dependency Loader Bootstrap -->
+<!-- MASKSERVICE C20 - Simple Script Loading -->
 <script>
+    // Global configuration for MASKSERVICE C20
     const cacheBuster = Date.now();
-    
-    // Load Dependency Loader first
-    document.write('<script src="js/modules/dependency-loader.js?v=' + cacheBuster + '"><\/script>');
-    
-    // Configuration for dependency loading
     window.MASKSERVICE_CONFIG = {
+        version: '2.0.1001',
         cacheBuster: cacheBuster,
-        debug: window.location.search.includes('debug=true'),
-        loadTimeout: 30000,
-        baseUrl: 'js/',
-        modulesUrl: 'js/modules/'
+        debug: window.location.search.includes('debug=true')
     };
+    
+    console.log('🔧 MASKSERVICE C20 v' + window.MASKSERVICE_CONFIG.version + ' - Simple Script Loading');
+    console.log('⚡ Cache buster: ' + cacheBuster);
+</script>
+
+<!-- Core modules loaded in dependency order with cache buster -->
+<script>
+    // Dynamic script loading with cache buster
+    const scripts = [
+        'js/utils.js',
+        'js/config.js', 
+        'js/auth.js',
+        'js/keyboard.js',
+        'js/menu.js',
+        'js/modules/data-export.js',
+        'js/router.js',
+        'js/app.js'
+    ];
+    
+    scripts.forEach(function(src) {
+        document.write('<script src="' + src + '?v=' + cacheBuster + '"><\/script>');
+    });
 </script>
 
 <script>
-    // Bootstrap application after dependency loader is available
+    // Initialize application after all scripts are loaded
     document.addEventListener('DOMContentLoaded', function() {
-        if (typeof window.DependencyLoader === 'undefined') {
-            console.error('❌ DependencyLoader not available');
-            return;
+        console.log('🚀 MASKSERVICE C20 application starting...');
+        
+        // Initialize the application
+        if (typeof window.MasktronicApp !== 'undefined') {
+            window.app = new MasktronicApp();
+            console.log('✅ MASKSERVICE C20 application loaded successfully');
+        } else {
+            console.error('❌ MasktronicApp not available');
         }
-
-        const loader = new DependencyLoader();
-        
-        // Configure loader
-        loader.setBaseUrl(window.MASKSERVICE_CONFIG.baseUrl);
-        loader.setCacheBuster(window.MASKSERVICE_CONFIG.cacheBuster);
-        loader.setTimeout(window.MASKSERVICE_CONFIG.loadTimeout);
-        
-        // Load the main application module
-        // Dependencies will be automatically resolved by the dependency loader
-        // based on define() calls within each module file
-        loader.require(['app'], function(app) {
-            console.log('🚀 MASKSERVICE C20 application loaded successfully');
-            if (window.MASKSERVICE_CONFIG.debug) {
-                console.log('📊 Dependency loader stats:', loader.getStats());
-            }
-        }).catch(function(error) {
-            console.error('❌ Failed to load MASKSERVICE C20 application:', error);
-            // Fallback to legacy loading if dependency loader fails
-            console.warn('⚠️ Falling back to legacy script loading...');
-            window.location.reload();
-        });
     });
 </script>
 

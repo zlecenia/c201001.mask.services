@@ -2,14 +2,13 @@
  * MASKTRONIC C20 - Data Export Module
  * Standardized import/export system for JSON, XML, CSV, and PDF formats
  * Supports direct PDF generation from JavaScript without server dependencies
+ * Simple global class system - no AMD dependencies
  */
 
-define('modules/data-export', [], function() {
-
-    /**
-     * Data Export Manager - handles all export formats
-     */
-    class DataExportManager {
+/**
+ * Data Export Manager - handles all export formats
+ */
+class DataExportManager {
         constructor() {
             this.supportedFormats = ['json', 'xml', 'csv', 'pdf'];
             this.init();
@@ -383,13 +382,9 @@ define('modules/data-export', [], function() {
         }
     }
 
-    // Create global instance
-    const dataExporter = new DataExportManager();
+// Create global instance
+const dataExporter = new DataExportManager();
 
-    // Export to global scope for compatibility
-    window.DataExportManager = DataExportManager;
-    window.dataExporter = dataExporter;
-
-    // Return module for AMD
-    return dataExporter;
-});
+// Export to global scope
+window.DataExportManager = DataExportManager;
+window.dataExporter = dataExporter;

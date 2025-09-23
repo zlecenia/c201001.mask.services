@@ -1,11 +1,8 @@
 /**
  * MASKTRONIC C20 - Main Application Module
  * Integrates with modular components: auth.js, menu.js, utils.js, keyboard.js, data-export.js
- * Full AMD dependency chain: config → router → auth → keyboard → menu → modules/data-export
+ * Simple global class system - no AMD dependencies
  */
-
-// AMD/RequireJS module definition
-define('app', ['config', 'router', 'auth', 'keyboard', 'menu', 'modules/data-export'], function(ConfigManager, C20Router, AuthManager, VirtualKeyboard, MenuManager, DataExporter) {
 
 class MasktronicApp {
     constructor() {
@@ -445,9 +442,7 @@ window.showUserMenu = showUserMenu;
 window.togglePasswordVisibility = togglePasswordVisibility;
 window.startMockDataUpdates = startMockDataUpdates;
 
-console.log('✅ App.js - Modular integration complete with AMD pattern');
+console.log('✅ App.js - Simple global class system loaded');
 
-// Return main class for AMD/RequireJS
-return MasktronicApp;
-
-}); // End of AMD define block
+// Export to global scope
+window.MasktronicApp = MasktronicApp;

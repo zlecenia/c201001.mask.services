@@ -1,10 +1,8 @@
 /**
  * Virtual Keyboard for MASKTRONIC C20
  * Handles all keyboard input and interactions
+ * Simple global class system - no AMD dependencies
  */
-
-// AMD/RequireJS module definition
-define('keyboard', [], function() {
 
 class VirtualKeyboard {
     constructor() {
@@ -362,12 +360,6 @@ const virtualKeyboard = new VirtualKeyboard();
 window.addToPassword = addToPassword;
 window.togglePasswordVisibility = togglePasswordVisibility;
 
-// Return the module
-return {
-    VirtualKeyboard: VirtualKeyboard,
-    addToPassword: addToPassword,
-    togglePasswordVisibility: togglePasswordVisibility,
-    instance: virtualKeyboard
-};
-
-}); // Close AMD define block
+// Export to global scope
+window.VirtualKeyboard = VirtualKeyboard;
+window.virtualKeyboard = virtualKeyboard;
