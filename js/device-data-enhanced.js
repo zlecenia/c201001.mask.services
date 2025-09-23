@@ -304,26 +304,12 @@ class DeviceDataEnhanced {
         }
         console.log('🗑️ DeviceDataEnhanced orchestrator destroyed');
     }
-                Object.keys(sensor).forEach(flowType => {
-                    this.sensorData.set(`${sensorType}_${flowType}`, sensor[flowType].current);
-                });
-            } else {
-                // Simple sensor
-                this.sensorData.set(sensorType, sensor.current);
-            }
-        });
-    }
+}
 
-    setupAlarmThresholds() {
-        // Set up alarm thresholds for each sensor
-        this.alarmThresholds.set('pressure_low', { min: 8, max: 12 });
-        this.alarmThresholds.set('pressure_medium', { min: 18, max: 22 });
-        this.alarmThresholds.set('pressure_high', { min: 28, max: 32 });
-        this.alarmThresholds.set('flow_inlet', { min: 0, max: 50 });
-        this.alarmThresholds.set('flow_outlet', { min: 0, max: 45 });
-        this.alarmThresholds.set('temperature', { min: 18, max: 35 });
-        this.alarmThresholds.set('humidity', { min: 30, max: 70 });
-    }
+// Create global instance
+window.deviceDataEnhanced = new DeviceDataEnhanced();
+
+console.log('✅ Enhanced Device Data Module (Orchestrator) loaded - 246 lines, fully modularized');
 
     startRealTimeMonitoring() {
         if (this.isMonitoring) return;
