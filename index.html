@@ -11,398 +11,477 @@
     </script>
 </head>
 <body>
-    <div id="app" class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-left">
+<div id="app" class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="/">
                 <span class="logo">MASKSERVICE</span>
                 <span class="hardware">C20</span>
                 <span class="product">1001</span>
                 <span class="software">v2.0 MOCK</span>
-            </div>
-            <div class="header-right">
+            </a>
+
+        </div>
+        <div class="header-right">
                 <span id="language-selector" class="language-selector">
-                    <button id="lang-pl" class="lang-btn active" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                    <button id="lang-pl" class="lang-btn active" onclick="changeLanguage('pl')"
+                            title="Polski">🇵🇱</button>
                     <button id="lang-en" class="lang-btn" onclick="changeLanguage('en')" title="English">🇺🇸</button>
                     <button id="lang-de" class="lang-btn" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
                 </span>
-            </div>
-        </header>
+        </div>
+    </header>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Login Screen -->
-            <div id="login-screen" class="screen active">
-                <div class="menu-container">
-<!--                    <div class="menu-header" data-i18n="login.menu_header">LOGIN MENU</div>-->
-                    <div class="menu-layout">
-                        <div class="menu-sidebar">
-                            <button id="login-scanner-btn" class="menu-item" onclick="selectLoginMethod('scanner')" data-i18n="login.scanner">Scanner</button>
-                            <button id="login-keyword-btn" class="menu-item active" onclick="selectLoginMethod('keyword')" data-i18n="login.keyword">Keyword</button>
-                        </div>
-                        <div class="menu-content">
-                            <div id="login-keyword" class="login-method active">
-                                <h2 data-i18n="login.user_login_by_keyword">User Login By Keyword</h2>
-                                <div class="login-form">
-                                    <div class="password-container">
-                                        <input type="password" id="password-input" placeholder="Password" data-i18n-placeholder="login.password_placeholder">
-                                        <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="menu-container">
+                <!--                    <div class="menu-header" data-i18n="login.menu_header">LOGIN MENU</div>-->
+                <div class="menu-layout">
+                    <div class="menu-sidebar">
+                        <button id="login-scanner-btn" class="menu-item"
+                                onclick="navigateAction('login-scanner-btn'); selectLoginMethod('scanner')"
+                                data-i18n="login.scanner">Scanner
+                        </button>
+                        <button id="login-keyword-btn" class="menu-item active"
+                                onclick="navigateAction('login-keyword-btn'); selectLoginMethod('keyword')"
+                                data-i18n="login.keyword">Keyword
+                        </button>
+                    </div>
+                    <div class="menu-content">
+                        <div id="login-keyword" class="login-method active">
+                            <h2 data-i18n="login.user_login_by_keyword">User Login By Keyword</h2>
+                            <div class="login-form">
+                                <div class="password-container">
+                                    <input type="password" id="password-input" placeholder="Password"
+                                           data-i18n-placeholder="login.password_placeholder">
+                                    <span class="toggle-password" onclick="togglePasswordVisibility()">👁️</span>
+                                </div>
+                                <div class="keyboard-container">
+                                    <div class="virtual-keyboard" id="virtual-keyboard">
+                                        <!-- Row 1 -->
+                                        <div class="keyboard-row">
+                                            <div id="key-1" class="keyboard-key" data-char="1" data-shift-char="!">
+                                                1<span class="sub-char">!</span></div>
+                                            <div id="key-2" class="keyboard-key" data-char="2" data-shift-char="@">
+                                                2<span class="sub-char">@</span></div>
+                                            <div id="key-3" class="keyboard-key" data-char="3" data-shift-char="#">
+                                                3<span class="sub-char">#</span></div>
+                                            <div id="key-4" class="keyboard-key" data-char="4" data-shift-char="$">
+                                                4<span class="sub-char">$</span></div>
+                                            <div id="key-5" class="keyboard-key" data-char="5" data-shift-char="%">
+                                                5<span class="sub-char">%</span></div>
+                                            <div id="key-6" class="keyboard-key" data-char="6" data-shift-char="^">
+                                                6<span class="sub-char">^</span></div>
+                                            <div id="key-7" class="keyboard-key" data-char="7" data-shift-char="&">
+                                                7<span class="sub-char">&</span></div>
+                                            <div id="key-8" class="keyboard-key" data-char="8" data-shift-char="*">
+                                                8<span class="sub-char">*</span></div>
+                                            <div id="key-9" class="keyboard-key" data-char="9" data-shift-char="(">
+                                                9<span class="sub-char">(</span></div>
+                                            <div id="key-0" class="keyboard-key" data-char="0" data-shift-char=")">
+                                                0<span class="sub-char">)</span></div>
+                                            <div id="key-backspace" class="keyboard-key special backspace"
+                                                 data-action="backspace">⌫
+                                            </div>
+                                        </div>
+                                        <!-- Row 2 -->
+                                        <div class="keyboard-row">
+                                            <div id="key-q" class="keyboard-key" data-char="q" data-shift-char="Q">q
+                                            </div>
+                                            <div id="key-w" class="keyboard-key" data-char="w" data-shift-char="W">w
+                                            </div>
+                                            <div id="key-e" class="keyboard-key" data-char="e" data-shift-char="E">e
+                                            </div>
+                                            <div id="key-r" class="keyboard-key" data-char="r" data-shift-char="R">r
+                                            </div>
+                                            <div id="key-t" class="keyboard-key" data-char="t" data-shift-char="T">t
+                                            </div>
+                                            <div id="key-y" class="keyboard-key" data-char="y" data-shift-char="Y">y
+                                            </div>
+                                            <div id="key-u" class="keyboard-key" data-char="u" data-shift-char="U">u
+                                            </div>
+                                            <div id="key-i" class="keyboard-key" data-char="i" data-shift-char="I">i
+                                            </div>
+                                            <div id="key-o" class="keyboard-key" data-char="o" data-shift-char="O">o
+                                            </div>
+                                            <div id="key-p" class="keyboard-key" data-char="p" data-shift-char="P">p
+                                            </div>
+                                        </div>
+                                        <!-- Row 3 -->
+                                        <div class="keyboard-row">
+                                            <div id="key-caps" class="keyboard-key special caps" data-action="caps"
+                                                 data-i18n="keyboard.caps">Caps
+                                            </div>
+                                            <div id="key-a" class="keyboard-key" data-char="a" data-shift-char="A">a
+                                            </div>
+                                            <div id="key-s" class="keyboard-key" data-char="s" data-shift-char="S">s
+                                            </div>
+                                            <div id="key-d" class="keyboard-key" data-char="d" data-shift-char="D">d
+                                            </div>
+                                            <div id="key-f" class="keyboard-key" data-char="f" data-shift-char="F">f
+                                            </div>
+                                            <div id="key-g" class="keyboard-key" data-char="g" data-shift-char="G">g
+                                            </div>
+                                            <div id="key-h" class="keyboard-key" data-char="h" data-shift-char="H">h
+                                            </div>
+                                            <div id="key-j" class="keyboard-key" data-char="j" data-shift-char="J">j
+                                            </div>
+                                            <div id="key-k" class="keyboard-key" data-char="k" data-shift-char="K">k
+                                            </div>
+                                            <div id="key-l" class="keyboard-key" data-char="l" data-shift-char="L">l
+                                            </div>
+                                            <div id="key-enter" class="keyboard-key special enter" data-action="enter"
+                                                 title="Enter">⏎
+                                            </div>
+                                        </div>
+                                        <!-- Row 4 -->
+                                        <div class="keyboard-row">
+                                            <div id="key-shift" class="keyboard-key special shift" data-action="shift">
+                                                ⇧
+                                            </div>
+                                            <div id="key-z" class="keyboard-key" data-char="z" data-shift-char="Z">z
+                                            </div>
+                                            <div id="key-x" class="keyboard-key" data-char="x" data-shift-char="X">x
+                                            </div>
+                                            <div id="key-c" class="keyboard-key" data-char="c" data-shift-char="C">c
+                                            </div>
+                                            <div id="key-v" class="keyboard-key" data-char="v" data-shift-char="V">v
+                                            </div>
+                                            <div id="key-b" class="keyboard-key" data-char="b" data-shift-char="B">b
+                                            </div>
+                                            <div id="key-n" class="keyboard-key" data-char="n" data-shift-char="N">n
+                                            </div>
+                                            <div id="key-m" class="keyboard-key" data-char="m" data-shift-char="M">m
+                                            </div>
+                                            <div id="key-comma" class="keyboard-key" data-char="," data-shift-char="<">,<span
+                                                    class="sub-char"><</span></div>
+                                            <div id="key-period" class="keyboard-key" data-char="." data-shift-char=">">
+                                                .<span class="sub-char">></span></div>
+                                            <div id="key-slash" class="keyboard-key" data-char="/" data-shift-char="?">/<span
+                                                    class="sub-char">?</span></div>
+                                        </div>
+                                        <!-- Row 5 -->
+                                        <div class="keyboard-row">
+                                            <div id="key-tab" class="keyboard-key special tab" data-action="tab">Tab
+                                            </div>
+                                            <div id="key-space" class="keyboard-key space" data-char=" "
+                                                 data-shift-char=" "></div>
+                                            <div id="key-clear" class="keyboard-key special clear" data-action="clear">
+                                                Clear
+                                            </div>
+                                            <div id="key-toggle" class="keyboard-key special toggle"
+                                                 data-action="toggle">123
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="keyboard-container">
-                                        <div class="virtual-keyboard" id="virtual-keyboard">
-                                            <!-- Row 1 -->
-                                            <div class="keyboard-row">
-                                                <div id="key-1" class="keyboard-key" data-char="1" data-shift-char="!">1<span class="sub-char">!</span></div>
-                                                <div id="key-2" class="keyboard-key" data-char="2" data-shift-char="@">2<span class="sub-char">@</span></div>
-                                                <div id="key-3" class="keyboard-key" data-char="3" data-shift-char="#">3<span class="sub-char">#</span></div>
-                                                <div id="key-4" class="keyboard-key" data-char="4" data-shift-char="$">4<span class="sub-char">$</span></div>
-                                                <div id="key-5" class="keyboard-key" data-char="5" data-shift-char="%">5<span class="sub-char">%</span></div>
-                                                <div id="key-6" class="keyboard-key" data-char="6" data-shift-char="^">6<span class="sub-char">^</span></div>
-                                                <div id="key-7" class="keyboard-key" data-char="7" data-shift-char="&">7<span class="sub-char">&</span></div>
-                                                <div id="key-8" class="keyboard-key" data-char="8" data-shift-char="*">8<span class="sub-char">*</span></div>
-                                                <div id="key-9" class="keyboard-key" data-char="9" data-shift-char="(">9<span class="sub-char">(</span></div>
-                                                <div id="key-0" class="keyboard-key" data-char="0" data-shift-char=")">0<span class="sub-char">)</span></div>
-                                                <div id="key-backspace" class="keyboard-key special backspace" data-action="backspace">⌫</div>
-                                            </div>
-                                            <!-- Row 2 -->
-                                            <div class="keyboard-row">
-                                                <div id="key-q" class="keyboard-key" data-char="q" data-shift-char="Q">q</div>
-                                                <div id="key-w" class="keyboard-key" data-char="w" data-shift-char="W">w</div>
-                                                <div id="key-e" class="keyboard-key" data-char="e" data-shift-char="E">e</div>
-                                                <div id="key-r" class="keyboard-key" data-char="r" data-shift-char="R">r</div>
-                                                <div id="key-t" class="keyboard-key" data-char="t" data-shift-char="T">t</div>
-                                                <div id="key-y" class="keyboard-key" data-char="y" data-shift-char="Y">y</div>
-                                                <div id="key-u" class="keyboard-key" data-char="u" data-shift-char="U">u</div>
-                                                <div id="key-i" class="keyboard-key" data-char="i" data-shift-char="I">i</div>
-                                                <div id="key-o" class="keyboard-key" data-char="o" data-shift-char="O">o</div>
-                                                <div id="key-p" class="keyboard-key" data-char="p" data-shift-char="P">p</div>
-                                            </div>
-                                            <!-- Row 3 -->
-                                            <div class="keyboard-row">
-                                                <div id="key-caps" class="keyboard-key special caps" data-action="caps" data-i18n="keyboard.caps">Caps</div>
-                                                <div id="key-a" class="keyboard-key" data-char="a" data-shift-char="A">a</div>
-                                                <div id="key-s" class="keyboard-key" data-char="s" data-shift-char="S">s</div>
-                                                <div id="key-d" class="keyboard-key" data-char="d" data-shift-char="D">d</div>
-                                                <div id="key-f" class="keyboard-key" data-char="f" data-shift-char="F">f</div>
-                                                <div id="key-g" class="keyboard-key" data-char="g" data-shift-char="G">g</div>
-                                                <div id="key-h" class="keyboard-key" data-char="h" data-shift-char="H">h</div>
-                                                <div id="key-j" class="keyboard-key" data-char="j" data-shift-char="J">j</div>
-                                                <div id="key-k" class="keyboard-key" data-char="k" data-shift-char="K">k</div>
-                                                <div id="key-l" class="keyboard-key" data-char="l" data-shift-char="L">l</div>
-                                                <div id="key-enter" class="keyboard-key special enter" data-action="enter" title="Enter">⏎</div>
-                                            </div>
-                                            <!-- Row 4 -->
-                                            <div class="keyboard-row">
-                                                <div id="key-shift" class="keyboard-key special shift" data-action="shift">⇧</div>
-                                                <div id="key-z" class="keyboard-key" data-char="z" data-shift-char="Z">z</div>
-                                                <div id="key-x" class="keyboard-key" data-char="x" data-shift-char="X">x</div>
-                                                <div id="key-c" class="keyboard-key" data-char="c" data-shift-char="C">c</div>
-                                                <div id="key-v" class="keyboard-key" data-char="v" data-shift-char="V">v</div>
-                                                <div id="key-b" class="keyboard-key" data-char="b" data-shift-char="B">b</div>
-                                                <div id="key-n" class="keyboard-key" data-char="n" data-shift-char="N">n</div>
-                                                <div id="key-m" class="keyboard-key" data-char="m" data-shift-char="M">m</div>
-                                                <div id="key-comma" class="keyboard-key" data-char="," data-shift-char="<">,<span class="sub-char"><</span></div>
-                                                <div id="key-period" class="keyboard-key" data-char="." data-shift-char=">">.<span class="sub-char">></span></div>
-                                                <div id="key-slash" class="keyboard-key" data-char="/" data-shift-char="?">/<span class="sub-char">?</span></div>
-                                            </div>
-                                            <!-- Row 5 -->
-                                            <div class="keyboard-row">
-                                                <div id="key-tab" class="keyboard-key special tab" data-action="tab">Tab</div>
-                                                <div id="key-space" class="keyboard-key space" data-char=" " data-shift-char=" "> </div>
-                                                <div id="key-clear" class="keyboard-key special clear" data-action="clear">Clear</div>
-                                                <div id="key-toggle" class="keyboard-key special toggle" data-action="toggle">123</div>
-                                            </div>
-                                        </div>
-                                        <div class="login-buttons">
-                                            <button id="login-operator-btn" class="btn btn-green" onclick="mockLogin('OPERATOR')">Login as OPERATOR</button>
-                                            <button id="login-admin-btn" class="btn btn-yellow" onclick="mockLogin('ADMIN')">Login as ADMIN</button>
-                                            <button id="login-superuser-btn" class="btn btn-red" onclick="mockLogin('SUPERUSER')">Login as SUPERUSER</button>
-                                            <button id="login-serwisant-btn" class="btn btn-blue" onclick="mockLogin('SERWISANT')">Login as SERWISANT</button>
-                                        </div>
+                                    <div class="login-buttons">
+                                        <button id="login-operator-btn" class="btn btn-green"
+                                                onclick="navigateAction('login-operator-btn'); mockLogin('OPERATOR')">
+                                            Login as OPERATOR
+                                        </button>
+                                        <button id="login-admin-btn" class="btn btn-yellow"
+                                                onclick="navigateAction('login-admin-btn'); mockLogin('ADMIN')">Login as
+                                            ADMIN
+                                        </button>
+                                        <button id="login-superuser-btn" class="btn btn-red"
+                                                onclick="navigateAction('login-superuser-btn'); mockLogin('SUPERUSER')">
+                                            Login as SUPERUSER
+                                        </button>
+                                        <button id="login-serwisant-btn" class="btn btn-blue"
+                                                onclick="navigateAction('login-serwisant-btn'); mockLogin('SERWISANT')">
+                                            Login as SERWISANT
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div id="login-scanner" class="login-method">
-                                <h2>User Login by QR-CODE / BARCODE</h2>
-                                <div class="scanner-mock">
-                                    <div class="scanner-animation">
-                                        <div class="scanner-line"></div>
-                                    </div>
-                                    <p class="error-msg">+ Skaner nie został wykryty</p>
-                                    <p>kod nie został poprawnie sczytany</p>
-                                    <button id="use-keyboard-btn" class="btn" onclick="selectLoginMethod('keyword')">Użyj klawiatury</button>
+                        </div>
+                        <div id="login-scanner" class="login-method">
+                            <h2>User Login by QR-CODE / BARCODE</h2>
+                            <div class="scanner-mock">
+                                <div class="scanner-animation">
+                                    <div class="scanner-line"></div>
                                 </div>
+                                <p class="error-msg">+ Skaner nie został wykryty</p>
+                                <p>kod nie został poprawnie sczytany</p>
+                                <button id="use-keyboard-btn" class="btn"
+                                        onclick="navigateAction('use-keyboard-btn'); selectLoginMethod('keyword')">Użyj
+                                    klawiatury
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- System Start Screen -->
-            <div id="system-screen" class="screen">
-                <div class="menu-container">
-                    <div class="menu-header">SYSTEM</div>
-                    <div class="system-content">
-                        <h1>Welcome</h1>
-                        <div class="system-logo">MASKTRONIC</div>
-                        <div class="loading-bar">
-                            <div class="loading-progress" id="loading-progress"></div>
+        <!-- System Start Screen -->
+        <div id="system-screen" class="screen">
+            <div class="menu-container">
+                <div class="menu-header">SYSTEM</div>
+                <div class="system-content">
+                    <h1>Welcome</h1>
+                    <div class="system-logo">MASKTRONIC</div>
+                    <div class="loading-bar">
+                        <div class="loading-progress" id="loading-progress"></div>
+                    </div>
+                    <p id="loading-text">System starting in Progress...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Menu Screen -->
+        <div id="user-menu-screen" class="screen">
+            <div class="menu-container">
+                <div class="menu-header">
+                    USER MENU
+                    <span id="menu-role-badge" class="role-badge"></span>
+                    <div class="session-info">
+                        <span>Inactive: <span id="inactive-time">0s</span></span>
+                        <button onclick="navigateAction('logout-btn'); logout()" class="btn-logout">Logout</button>
+                    </div>
+                </div>
+                <div class="menu-layout">
+                    <div class="menu-sidebar" id="user-menu-items">
+                        <!-- Dynamic menu items based on role -->
+                    </div>
+                    <div class="menu-content" id="menu-content">
+                        <div class="welcome-message">
+                            <h2>Wybierz opcję z menu</h2>
+                            <p>System gotowy do pracy</p>
                         </div>
-                        <p id="loading-text">System starting in Progress...</p>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- User Menu Screen -->
-            <div id="user-menu-screen" class="screen">
-                <div class="menu-container">
-                    <div class="menu-header">
-                        USER MENU
-                        <span id="menu-role-badge" class="role-badge"></span>
-                        <div class="session-info">
-                            <span>Inactive: <span id="inactive-time">0s</span></span>
-                            <button onclick="logout()" class="btn-logout">Logout</button>
-                        </div>
-                    </div>
-                    <div class="menu-layout">
-                        <div class="menu-sidebar" id="user-menu-items">
-                            <!-- Dynamic menu items based on role -->
-                        </div>
-                        <div class="menu-content" id="menu-content">
-                            <div class="welcome-message">
-                                <h2>Wybierz opcję z menu</h2>
-                                <p>System gotowy do pracy</p>
-                            </div>
-                        </div>
-                    </div>
+        <!-- Pressure Display Panel -->
+        <aside id="pressure-panel" class="pressure-panel" style="display:none;">
+            <h3>DATA SENSORS</h3>
+            <div class="pressure-box">
+                <h4>PRESSURE</h4>
+                <div class="pressure-item">
+                    <span>Low</span>
+                    <span id="pressure-low">10 mbar</span>
+                </div>
+                <div class="pressure-item">
+                    <span>Medium</span>
+                    <span id="pressure-medium">20 bar</span>
+                </div>
+                <div class="pressure-item">
+                    <span>High</span>
+                    <span id="pressure-high">30 bar</span>
                 </div>
             </div>
+        </aside>
+    </main>
 
-            <!-- Pressure Display Panel -->
-            <aside id="pressure-panel" class="pressure-panel" style="display:none;">
-                <h3>DATA SENSORS</h3>
-                <div class="pressure-box">
-                    <h4>PRESSURE</h4>
-                    <div class="pressure-item">
-                        <span>Low</span>
-                        <span id="pressure-low">10 mbar</span>
-                    </div>
-                    <div class="pressure-item">
-                        <span>Medium</span>
-                        <span id="pressure-medium">20 bar</span>
-                    </div>
-                    <div class="pressure-item">
-                        <span>High</span>
-                        <span id="pressure-high">30 bar</span>
-                    </div>
-                </div>
-            </aside>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <div class="footer-left">
-                <span id="footer-user" style="display:none;">USER: ---</span>
-                <span id="footer-date">--/--/----</span>
-                <span id="footer-time">--:--:--</span>
-                <span id="status" class="status-indicator">
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <span id="footer-user" style="display:none;">USER: ---</span>
+            <span id="footer-date">--/--/----</span>
+            <span id="footer-time">--:--:--</span>
+            <span id="status" class="status-indicator">
                     <span class="status-dot"></span>
                     <span id="status-text" data-i18n="global.offline">OFFLINE</span>
                 </span>
-                <span id="user-info" style="display:none;">
+            <span id="user-info" style="display:none;">
                     <span id="username">---</span>
                     <span id="user-role" class="role-badge">---</span>
                 </span>
-            </div>
-            <div class="footer-right">
-                <span class="footer-label">CONNECT 500</span>
-                <span class="footer-host">c201001.mask.services</span>
-            </div>
-        </footer>
-    </div>
-
-    <!-- Menu Templates -->
-    <div id="templates" style="display:none;">
-        <!-- Test Menu Template -->
-        <div id="test-menu-template">
-            <h2>Test Menu</h2>
-            <div class="menu-grid">
-                <button class="menu-card" onclick="selectTestOption('device')">
-                    <h3>Kind of Device</h3>
-                    <p>Wybierz rodzaj urządzenia</p>
-                </button>
-                <button class="menu-card" onclick="selectTestOption('type')">
-                    <h3>Device Type</h3>
-                    <p>Wybierz typ urządzenia</p>
-                </button>
-                <button class="menu-card" onclick="selectTestOption('test')">
-                    <h3>Kind of Test</h3>
-                    <p>Wybierz rodzaj testu</p>
-                </button>
-                <button class="menu-card" onclick="selectTestOption('flow')">
-                    <h3>Test Flow</h3>
-                    <p>Scenariusz testowy</p>
-                </button>
-            </div>
         </div>
-
-        <!-- Device Selection Template -->
-        <div id="device-select-template">
-            <h2>Kind of Device</h2>
-            <div class="device-list">
-                <button class="device-item" onclick="selectDevice('PP_MASK')">PP Mask</button>
-                <button class="device-item" onclick="selectDevice('NP_MASK')">NP Mask</button>
-                <button class="device-item" onclick="selectDevice('SCBA')">SCBA</button>
-                <button class="device-item" onclick="selectDevice('CPS')">CPS Protection Suit</button>
-            </div>
-            <button class="btn btn-back" onclick="backToMenu()">← Powrót</button>
+        <div class="footer-right">
+            <span class="footer-label">CONNECT 500</span>
+            <span class="footer-host">c201001.mask.services</span>
         </div>
+    </footer>
+</div>
 
-        <!-- Workshop Template -->
-        <div id="workshop-template">
-            <h2>Workshop</h2>
-            <div class="menu-grid">
-                <button class="menu-card">
-                    <h3>Equipment List</h3>
-                    <p>Lista sprzętu</p>
-                </button>
-                <button class="menu-card">
-                    <h3>Spare Parts</h3>
-                    <p>Części zamienne</p>
-                </button>
-                <button class="menu-card">
-                    <h3>Maintenance</h3>
-                    <p>Harmonogram przeglądów</p>
-                </button>
-            </div>
-        </div>
-
-        <!-- User Data Template -->
-        <div id="user-data-template">
-            <h2>User Data</h2>
-            <div class="user-info-grid">
-                <div class="info-card">
-                    <h3>Current User</h3>
-                    <p id="current-user-name">---</p>
-                    <p id="current-user-role">---</p>
-                </div>
-                <div class="info-card">
-                    <h3>Session Info</h3>
-                    <p>Login time: <span id="login-time">---</span></p>
-                    <p>Last activity: <span id="last-activity">---</span></p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Device Data Template -->
-        <div id="device-data-template">
-            <h2>Device Data</h2>
-            <div class="device-info">
-                <div class="device-card">
-                    <h3>Device Status</h3>
-                    <p>Device ID: <span id="device-id">RPI_MOCK_001</span></p>
-                    <p>Status: <span id="device-status" class="status-online">ONLINE</span></p>
-                    <p>Uptime: <span id="device-uptime">---</span></p>
-                </div>
-                <div class="sensor-grid">
-                    <div class="sensor-card">
-                        <h4>Temperature</h4>
-                        <span id="temp-value">22.5°C</span>
-                    </div>
-                    <div class="sensor-card">
-                        <h4>Humidity</h4>
-                        <span id="humidity-value">45%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Test Reports Template -->
-        <div id="test-reports-template">
-            <h2>Test Reports</h2>
-            <div class="reports-list">
-                <div class="report-item">
-                    <span>Report #001</span>
-                    <span>2024-01-15</span>
-                    <button class="btn-small">PDF</button>
-                </div>
-                <div class="report-item">
-                    <span>Report #002</span>
-                    <span>2024-01-16</span>
-                    <button class="btn-small">PDF</button>
-                </div>
-            </div>
-            <button class="btn btn-primary">Generate New Report</button>
-        </div>
-
-        <!-- Users Template (ADMIN) -->
-        <div id="users-template">
-            <h2>Users Management</h2>
-            <div class="users-list">
-                <div class="user-item">
-                    <span>operator1</span>
-                    <span class="role-badge role-operator">OPERATOR</span>
-                    <button class="btn-small">Edit</button>
-                </div>
-                <div class="user-item">
-                    <span>admin1</span>
-                    <span class="role-badge role-admin">ADMIN</span>
-                    <button class="btn-small">Edit</button>
-                </div>
-            </div>
-            <button class="btn btn-primary">Add User</button>
-        </div>
-
-        <!-- Service Menu Template (ADMIN) -->
-        <div id="service-menu-template">
-            <h2>Service Menu</h2>
-            <div class="service-grid">
-                <button class="service-card">
-                    <h3>System Diagnostics</h3>
-                    <p>Sprawdź stan systemu</p>
-                </button>
-                <button class="service-card">
-                    <h3>Calibration</h3>
-                    <p>Kalibracja czujników</p>
-                </button>
-                <button class="service-card">
-                    <h3>Backup</h3>
-                    <p>Kopia zapasowa danych</p>
-                </button>
-            </div>
-        </div>
-
-        <!-- System Settings Template (SUPERUSER) -->
-        <div id="system-settings-template">
-            <h2>System Settings</h2>
-            <div class="settings-grid">
-                <div class="setting-group">
-                    <h3>Network Settings</h3>
-                    <label>IP Address: <input type="text" value="192.168.1.10"></label>
-                    <label>Port: <input type="text" value="8080"></label>
-                </div>
-                <div class="setting-group">
-                    <h3>System Configuration</h3>
-                    <label>Update Interval: <input type="number" value="5"> seconds</label>
-                    <label>Debug Mode: <input type="checkbox"></label>
-                </div>
-            </div>
-            <button class="btn btn-primary">Save Settings</button>
+<!-- Menu Templates -->
+<div id="templates" style="display:none;">
+    <!-- Test Menu Template -->
+    <div id="test-menu-template">
+        <h2>Test Menu</h2>
+        <div class="menu-grid">
+            <button class="menu-card" onclick="selectTestOption('device')">
+                <h3>Kind of Device</h3>
+                <p>Wybierz rodzaj urządzenia</p>
+            </button>
+            <button class="menu-card" onclick="selectTestOption('type')">
+                <h3>Device Type</h3>
+                <p>Wybierz typ urządzenia</p>
+            </button>
+            <button class="menu-card" onclick="selectTestOption('test')">
+                <h3>Kind of Test</h3>
+                <p>Wybierz rodzaj testu</p>
+            </button>
+            <button class="menu-card" onclick="selectTestOption('flow')">
+                <h3>Test Flow</h3>
+                <p>Scenariusz testowy</p>
+            </button>
         </div>
     </div>
 
-    <!-- Modular JavaScript Files - Load order matters (cache-busted) -->
-    <script>
-        const cacheBuster = Date.now();
-        document.write('<script src="js/utils.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script src="js/auth.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script src="js/menu.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script src="js/i18n.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script src="js/router.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script type="module" src="js/app.js?v=' + cacheBuster + '"><\/script>');
-        document.write('<script type="module" src="js/ui-tester.js?v=' + cacheBuster + '"><\/script>');
-    </script>
-    <!-- Modular architecture: utils → auth → menu → i18n → router → keyboard → app → ui-tester -->
+    <!-- Device Selection Template -->
+    <div id="device-select-template">
+        <h2>Kind of Device</h2>
+        <div class="device-list">
+            <button class="device-item" onclick="selectDevice('PP_MASK')">PP Mask</button>
+            <button class="device-item" onclick="selectDevice('NP_MASK')">NP Mask</button>
+            <button class="device-item" onclick="selectDevice('SCBA')">SCBA</button>
+            <button class="device-item" onclick="selectDevice('CPS')">CPS Protection Suit</button>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()">← Powrót</button>
+    </div>
+
+    <!-- Workshop Template -->
+    <div id="workshop-template">
+        <h2>Workshop</h2>
+        <div class="menu-grid">
+            <button class="menu-card">
+                <h3>Equipment List</h3>
+                <p>Lista sprzętu</p>
+            </button>
+            <button class="menu-card">
+                <h3>Spare Parts</h3>
+                <p>Części zamienne</p>
+            </button>
+            <button class="menu-card">
+                <h3>Maintenance</h3>
+                <p>Harmonogram przeglądów</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- User Data Template -->
+    <div id="user-data-template">
+        <h2>User Data</h2>
+        <div class="user-info-grid">
+            <div class="info-card">
+                <h3>Current User</h3>
+                <p id="current-user-name">---</p>
+                <p id="current-user-role">---</p>
+            </div>
+            <div class="info-card">
+                <h3>Session Info</h3>
+                <p>Login time: <span id="login-time">---</span></p>
+                <p>Last activity: <span id="last-activity">---</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Device Data Template -->
+    <div id="device-data-template">
+        <h2>Device Data</h2>
+        <div class="device-info">
+            <div class="device-card">
+                <h3>Device Status</h3>
+                <p>Device ID: <span id="device-id">RPI_MOCK_001</span></p>
+                <p>Status: <span id="device-status" class="status-online">ONLINE</span></p>
+                <p>Uptime: <span id="device-uptime">---</span></p>
+            </div>
+            <div class="sensor-grid">
+                <div class="sensor-card">
+                    <h4>Temperature</h4>
+                    <span id="temp-value">22.5°C</span>
+                </div>
+                <div class="sensor-card">
+                    <h4>Humidity</h4>
+                    <span id="humidity-value">45%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Reports Template -->
+    <div id="test-reports-template">
+        <h2>Test Reports</h2>
+        <div class="reports-list">
+            <div class="report-item">
+                <span>Report #001</span>
+                <span>2024-01-15</span>
+                <button class="btn-small">PDF</button>
+            </div>
+            <div class="report-item">
+                <span>Report #002</span>
+                <span>2024-01-16</span>
+                <button class="btn-small">PDF</button>
+            </div>
+        </div>
+        <button class="btn btn-primary">Generate New Report</button>
+    </div>
+
+    <!-- Users Template (ADMIN) -->
+    <div id="users-template">
+        <h2>Users Management</h2>
+        <div class="users-list">
+            <div class="user-item">
+                <span>operator1</span>
+                <span class="role-badge role-operator">OPERATOR</span>
+                <button class="btn-small">Edit</button>
+            </div>
+            <div class="user-item">
+                <span>admin1</span>
+                <span class="role-badge role-admin">ADMIN</span>
+                <button class="btn-small">Edit</button>
+            </div>
+        </div>
+        <button class="btn btn-primary">Add User</button>
+    </div>
+
+    <!-- Service Menu Template (ADMIN) -->
+    <div id="service-menu-template">
+        <h2>Service Menu</h2>
+        <div class="service-grid">
+            <button class="service-card">
+                <h3>System Diagnostics</h3>
+                <p>Sprawdź stan systemu</p>
+            </button>
+            <button class="service-card">
+                <h3>Calibration</h3>
+                <p>Kalibracja czujników</p>
+            </button>
+            <button class="service-card">
+                <h3>Backup</h3>
+                <p>Kopia zapasowa danych</p>
+            </button>
+        </div>
+    </div>
+
+    <!-- System Settings Template (SUPERUSER) -->
+    <div id="system-settings-template">
+        <h2>System Settings</h2>
+        <div class="settings-grid">
+            <div class="setting-group">
+                <h3>Network Settings</h3>
+                <label>IP Address: <input type="text" value="192.168.1.10"></label>
+                <label>Port: <input type="text" value="8080"></label>
+            </div>
+            <div class="setting-group">
+                <h3>System Configuration</h3>
+                <label>Update Interval: <input type="number" value="5"> seconds</label>
+                <label>Debug Mode: <input type="checkbox"></label>
+            </div>
+        </div>
+        <button class="btn btn-primary">Save Settings</button>
+    </div>
+</div>
+
+<!-- Modular JavaScript Files - Load order matters (cache-busted) -->
+<script>
+    const cacheBuster = Date.now();
+    document.write('<script src="js/utils.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/auth.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/menu.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/i18n.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/router.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script type="module" src="js/keyboard.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script type="module" src="js/app.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script type="module" src="js/ui-tester.js?v=' + cacheBuster + '"><\/script>');
+</script>
+<!-- Modular architecture: utils → auth → menu → i18n → router → keyboard → app → ui-tester -->
 </body>
 </html>

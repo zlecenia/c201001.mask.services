@@ -550,7 +550,11 @@ window.C20Router = new C20Router();
 
 // Export functions for global access
 window.navigateTo = (view, language, action) => window.C20Router.navigate(view, language, action);
+window.navigateAction = (actionId) => window.C20Router.navigateAction(actionId);
+window.buildFullURL = (view, language, action) => window.C20Router.buildFullURL(view, language, action);
 window.getCurrentRoute = () => window.C20Router.getCurrentRoute();
 window.getRouteBreadcrumb = () => window.C20Router.getBreadcrumb();
+window.saveRouterSettings = () => window.C20Router.saveToStorage();
+window.loadRouterSettings = () => window.C20Router.loadFromStorage();
 
 console.log('✅ Router Module initialized');
