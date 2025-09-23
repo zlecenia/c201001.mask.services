@@ -58,6 +58,10 @@ body {
 .header-left a:hover {
     color: #d1d5db;
 }
+.header-right {
+    font-weight: bold;
+    font-size: 1.2rem;
+}
 .logo {
     font-weight: bold;
     font-size: 1.2rem;
@@ -935,7 +939,8 @@ button:active {
 }
 
 /* Footer User Info (moved from header) */
-.footer #user-info {
+#user-info,
+#device-info {
     display: flex;
     align-items: center;
     gap: 0.5rem;
