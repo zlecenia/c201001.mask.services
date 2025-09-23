@@ -1,53 +1,42 @@
 /**
- * MASKSERVICE C20 - Enhanced Test Menu Module
- * Multi-step wizard for testing process automation
+ * MASKSERVICE C20 - Enhanced Test Menu Module (Orchestrator)
+ * Coordinates modular test components
  * Compliance with PN-EN 136/137 standards
  */
 
 class TestMenuEnhanced {
     constructor() {
-        this.currentStep = 0;
-        this.testData = {};
-        this.deviceDatabase = new Map();
-        this.testScenarios = new Map();
         this.init();
     }
 
     init() {
-        this.loadDeviceDatabase();
-        this.loadTestScenarios();
-        this.setupEventListeners();
+        // Initialize modular components
+        this.testWizard = new TestWizard();
+        this.testQuick = new TestQuick();
+        this.testScenarios = new TestScenarios();
+        
+        // Make components globally accessible
+        window.testWizard = this.testWizard;
+        window.testQuick = this.testQuick;
+        window.testScenarios = this.testScenarios;
+        
+        console.log('✅ Test Menu Enhanced: All modular components loaded');
     }
 
-    // Multi-step wizard configuration
-    testWizard = {
-        steps: [
-            'device_selection',    // Wybór urządzenia
-            'serial_input',        // Wprowadzenie numeru seryjnego
-            'visual_inspection',   // Kontrola wzrokowa z checklistą
-            'test_selection',      // Wybór scenariusza testowego
-            'test_execution',      // Wykonanie testu
-            'results_review',      // Przegląd wyników
-            'report_generation'    // Generowanie raportu
-        ],
-        
-        stepTitles: {
-            'device_selection': 'Wybór typu urządzenia',
-            'serial_input': 'Wprowadzenie danych urządzenia',
-            'visual_inspection': 'Kontrola wzrokowa',
-            'test_selection': 'Wybór scenariusza testowego',
-            'test_execution': 'Wykonanie testu',
-            'results_review': 'Przegląd wyników',
-            'report_generation': 'Generowanie raportu'
-        }
-    };
+    // Delegation methods for Test Wizard
+    showTestWizard() {
+        return this.testWizard.showTestWizard();
+    }
 
-    // Device database integration
-    deviceDatabase = {
-        searchBySerial: true,
-        searchByCustomer: true,
-        searchByLastTestDate: true,
-        quickAccess: 'recent_devices'
+    // Delegation methods for Quick Test
+    showQuickTest() {
+        return this.testQuick.showQuickTest();
+    }
+
+    // Delegation methods for Test Scenarios
+    showTestScenarios() {
+        return this.testScenarios.showTestScenarios();
+    }
     };
 
     loadDeviceDatabase() {

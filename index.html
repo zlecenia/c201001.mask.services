@@ -16,28 +16,31 @@
     <header class="header">
         <div class="header-left">
             <a href="/">
-                <span class="logo">MASKSERVICE</span>
-                <span class="hardware">C20</span>
-                <span class="product">1001</span>
-                <span class="software">v2.0 MOCK</span>
+                <span class="logo" data-i18n="global.logo">MASKSERVICE</span>
+                <span class="hardware" data-i18n="global.hardware">C20</span>
+                <span class="product" data-i18n="global.product">1001</span>
+                <span class="software" data-i18n="global.software">v2.0 MOCK</span>
             </a>
 
         </div>
         <div class="header-center">
-          <span id="device_connection_status" class="status-indicator">
+            <span  id="device-url" id="device_connection_status" class="status-indicator">
                 <span id="device_url" class="footer-host">
-                    <a href="https://c201001.mask.services">c201001.mask.services</a>
+                    <a href="https://c201001.mask.services" data-i18n="global.device_url_label">c201001.mask.services</a>
                 </span>
                 <span class="status-dot"></span>
-                <span id="status-text" data-i18n="global.offline">OFFLINE</span>
+                <span id="status-text"  class="role-badge" data-i18n="global.offline">OFFLINE</span>
             </span>
+
         </div>
 
         <div class="header-right">
+
             <span id="device-info">
-                    <span id="device_name">CONNECT</span>
-                    <span id="device_type">500</span>
+                    <span id="device_name" data-i18n="global.device_name">CONNECT</span>
+                    <span id="device_type" data-i18n="global.device_type">500</span>
             </span>
+
         </div>
     </header>
 
@@ -235,7 +238,7 @@
         <!-- System Start Screen -->
         <div id="system-screen" class="screen">
             <div class="menu-container">
-<!--                <div class="menu-header">SYSTEM</div>-->
+                <!--                <div class="menu-header">SYSTEM</div>-->
                 <div class="system-content">
                     <h1>Welcome</h1>
                     <div class="system-logo">MASKTRONIC</div>
@@ -302,14 +305,11 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-left">
-
-
-
             <span id="user-info" style="display:none;">
 <!--                    <span id="username">-&#45;&#45;</span>-->
-                    <span id="user-name">USERNAME</span>
-                    <span id="user-role" class="role-badge">---</span>
-                </span>
+                <span id="user-name">USERNAME</span>
+                <span id="user-role" class="role-badge">---</span>
+            </span>
 
             <!--            <div id="session-info" class="session-info">-->
             <!--                <span>Inactive: <span id="inactive-time">0s</span></span>-->
@@ -330,10 +330,11 @@
         </div>
 
         <div class="footer-right">
-            <p>
+
+            <span id="time-info" >
                 <span id="footer-date">--/--/----</span>
-                <span id="footer-time">--:--</span>
-            </p>
+                <span id="footer-time" class="role-badge">--:--</span>
+            </span>
 
         </div>
     </footer>
@@ -543,6 +544,13 @@
     document.write('<script src="js/modules/workshop-maintenance.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/modules/workshop-tools.js?v=' + cacheBuster + '"><\/script>');
     document.write('<script src="js/modules/workshop-inventory.js?v=' + cacheBuster + '"><\/script>');
+    
+    // Modular reports components (load before enhanced modules)
+    document.write('<script src="js/modules/reports-core.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/reports-generation.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/reports-batch.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/reports-schedule.js?v=' + cacheBuster + '"><\/script>');
+    document.write('<script src="js/modules/reports-display.js?v=' + cacheBuster + '"><\/script>');
     
     // Enhanced modules for MASKSERVICE C20 functionality
     document.write('<script src="js/test-menu-enhanced.js?v=' + cacheBuster + '"><\/script>');

@@ -360,6 +360,166 @@ class ReportsSchedule {
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 3000);
     }
+
+    // Main UI method for reports schedule
+    showReportsSchedule() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getReportsScheduleHTML();
+        }
+    }
+
+    // HTML template for reports schedule
+    getReportsScheduleHTML() {
+        return `
+            <div class="test-reports-schedule">
+                <div class="reports-header">
+                    <h2>Harmonogram raportów</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="reportsSchedule.createSchedule()">
+                            ➕ Nowy harmonogram
+                        </button>
+                        <button class="btn btn-secondary" onclick="reportsSchedule.importSchedule()">
+                            📥 Importuj harmonogram
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Active Schedules -->
+                <div class="schedules-section">
+                    <h3>Aktywne harmonogramy</h3>
+                    <div class="schedules-list">
+                        ${this.getActiveSchedulesHTML()}
+                    </div>
+                </div>
+
+                <!-- Schedule Templates -->
+                <div class="schedule-templates">
+                    <h3>Szablony harmonogramów</h3>
+                    <div class="templates-grid">
+                        <div class="template-card" onclick="reportsSchedule.useTemplate('daily')">
+                            <div class="template-icon">📅</div>
+                            <div class="template-name">Dzienny</div>
+                            <div class="template-desc">Raporty generowane codziennie</div>
+                        </div>
+                        <div class="template-card" onclick="reportsSchedule.useTemplate('weekly')">
+                            <div class="template-icon">📊</div>
+                            <div class="template-name">Tygodniowy</div>
+                            <div class="template-desc">Raporty zbiorcze co tydzień</div>
+                        </div>
+                        <div class="template-card" onclick="reportsSchedule.useTemplate('monthly')">
+                            <div class="template-icon">📈</div>
+                            <div class="template-name">Miesięczny</div>
+                            <div class="template-desc">Raporty miesięczne z analizą</div>
+                        </div>
+                        <div class="template-card" onclick="reportsSchedule.useTemplate('custom')">
+                            <div class="template-icon">⚙️</div>
+                            <div class="template-name">Niestandardowy</div>
+                            <div class="template-desc">Własne ustawienia</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scheduled Reports Queue -->
+                <div class="scheduled-queue">
+                    <h3>Kolejka zaplanowanych raportów</h3>
+                    <div class="queue-list">
+                        ${this.getScheduledQueueHTML()}
+                    </div>
+                </div>
+
+                <!-- Schedule Settings -->
+                <div class="schedule-settings">
+                    <h3>Ustawienia harmonogramów</h3>
+                    <div class="settings-grid">
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" checked> Powiadomienia email
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox" checked> Automatyczne archiwizowanie
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>
+                                <input type="checkbox"> Backup w chmurze
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // HTML template for active schedules
+    getActiveSchedulesHTML() {
+        return `
+            <div class="schedule-item">
+                <div class="schedule-info">
+                    <strong>Raport miesięczny</strong>
+                    <span class="schedule-frequency">Co miesiąc, 1 dzień</span>
+                </div>
+                <div class="schedule-status active">Aktywny</div>
+                <div class="schedule-actions">
+                    <button class="btn-small btn-edit" onclick="reportsSchedule.editSchedule('monthly-1')">
+                        ✏️ Edytuj
+                    </button>
+                    <button class="btn-small btn-delete" onclick="reportsSchedule.deleteSchedule('monthly-1')">
+                        🗑️ Usuń
+                    </button>
+                </div>
+            </div>
+            <div class="schedule-item">
+                <div class="schedule-info">
+                    <strong>Raport tygodniowy</strong>
+                    <span class="schedule-frequency">Co tydzień, poniedziałek</span>
+                </div>
+                <div class="schedule-status active">Aktywny</div>
+                <div class="schedule-actions">
+                    <button class="btn-small btn-edit" onclick="reportsSchedule.editSchedule('weekly-1')">
+                        ✏️ Edytuj
+                    </button>
+                    <button class="btn-small btn-delete" onclick="reportsSchedule.deleteSchedule('weekly-1')">
+                        🗑️ Usuń
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    // HTML template for scheduled queue
+    getScheduledQueueHTML() {
+        return `
+            <div class="queue-item">
+                <div class="queue-info">
+                    <strong>Raport miesięczny - Styczeń 2024</strong>
+                    <span class="queue-time">Zaplanowany na: 01.02.2024 08:00</span>
+                </div>
+                <div class="queue-status pending">Oczekujący</div>
+            </div>
+            <div class="queue-item">
+                <div class="queue-info">
+                    <strong>Raport tygodniowy - Tydzień 5</strong>
+                    <span class="queue-time">Zaplanowany na: 29.01.2024 08:00</span>
+                </div>
+                <div class="queue-status processing">W trakcie</div>
+            </div>
+        `;
+    }
+
+    useTemplate(templateType) {
+        console.log('Using template:', templateType);
+        this.createSchedule(templateType);
+    }
+
+    deleteSchedule(scheduleId) {
+        if (confirm('Czy na pewno chcesz usunąć ten harmonogram?')) {
+            console.log('Deleting schedule:', scheduleId);
+            this.showSuccess('Harmonogram został usunięty');
+        }
+    }
 }
 
 if (typeof module !== 'undefined' && module.exports) {

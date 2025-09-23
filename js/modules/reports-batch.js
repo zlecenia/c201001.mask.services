@@ -832,6 +832,88 @@ class ReportsBatch {
         console.log('Viewing batch report:', batchId);
         // In production, this would show the batch report details
     }
+
+    // Main UI method for batch generator
+    showBatchGenerator() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getBatchGeneratorHTML();
+        }
+    }
+
+    // HTML template for batch generator
+    getBatchGeneratorHTML() {
+        return `
+            <div class="batch-generator">
+                <div class="reports-header">
+                    <h2>Generator raportów zbiorczych</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-secondary" onclick="testReportsEnhanced.backToReports()">
+                            ← Powrót
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="generator-options">
+                    <div class="option-group">
+                        <h3>Typ raportu zbiorczego</h3>
+                        <label><input type="radio" name="batch-type" value="customer" checked> Według klienta</label>
+                        <label><input type="radio" name="batch-type" value="period"> Według okresu</label>
+                        <label><input type="radio" name="batch-type" value="device-type"> Według typu urządzenia</label>
+                        <label><input type="radio" name="batch-type" value="statistical"> Analiza statystyczna</label>
+                    </div>
+
+                    <div class="option-group">
+                        <h3>Parametry</h3>
+                        <div id="batch-parameters">
+                            <div class="parameter-group">
+                                <label>Klient:</label>
+                                <select id="batch-customer">
+                                    <option value="">Wybierz klienta</option>
+                                    <option value="Firma ABC">Firma ABC</option>
+                                    <option value="Firma XYZ">Firma XYZ</option>
+                                    <option value="Straż Pożarna">Straż Pożarna</option>
+                                </select>
+                            </div>
+                            <div class="parameter-group">
+                                <label>Zakres dat:</label>
+                                <input type="date" id="batch-start-date">
+                                <input type="date" id="batch-end-date">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="option-group">
+                        <h3>Format eksportu</h3>
+                        <label><input type="radio" name="export-format" value="pdf" checked> PDF</label>
+                        <label><input type="radio" name="export-format" value="xml"> XML</label>
+                        <label><input type="radio" name="export-format" value="csv"> CSV</label>
+                    </div>
+
+                    <div class="option-group">
+                        <h3>Opcje dodatkowe</h3>
+                        <label><input type="checkbox" id="include-graphs" checked> Dołącz wykresy</label>
+                        <label><input type="checkbox" id="digital-signature"> Podpis cyfrowy</label>
+                        <label><input type="checkbox" id="email-delivery"> Wyślij mailem</label>
+                        <label><input type="checkbox" id="compress-output"> Kompresja ZIP</label>
+                    </div>
+                </div>
+
+                <div class="generator-actions">
+                    <button class="btn btn-primary" onclick="reportsBatch.generateBatch('batch-${Date.now()}')">
+                        🚀 Generuj raport zbiorczy
+                    </button>
+                    <button class="btn btn-secondary" onclick="reportsBatch.previewBatchReport()">
+                        👁️ Podgląd
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    previewBatchReport() {
+        alert('Podgląd raportu zbiorczego - funkcja wkrótce dostępna!');
+    }
 }
 
 // Export for modular architecture

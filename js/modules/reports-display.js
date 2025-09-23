@@ -272,6 +272,122 @@ class ReportsDisplay {
     saveDisplaySettings() {
         localStorage.setItem('reportsDisplay_settings', JSON.stringify(this.displaySettings));
     }
+
+    // Main UI method for reports view
+    showReportsView() {
+        const content = document.getElementById('menu-content');
+        if (content) {
+            content.innerHTML = this.getReportsViewHTML();
+        }
+    }
+
+    // HTML template for reports view
+    getReportsViewHTML() {
+        return `
+            <div class="test-reports-view">
+                <div class="reports-header">
+                    <h2>Przeglądanie raportów</h2>
+                    <div class="header-actions">
+                        <button class="btn btn-primary" onclick="testReportsEnhanced.refreshReports()">
+                            🔄 Odśwież
+                        </button>
+                        <button class="btn btn-secondary" onclick="testReportsEnhanced.exportCurrentView()">
+                            📤 Eksportuj widok
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Report Filters -->
+                <div class="report-filters">
+                    <h3>Filtry raportów</h3>
+                    <div class="filter-grid">
+                        <div class="filter-group">
+                            <label>Klient:</label>
+                            <select onchange="testReportsEnhanced.filterByCustomer(this.value)">
+                                <option value="">Wszyscy klienci</option>
+                                <option value="Firma ABC">Firma ABC</option>
+                                <option value="Firma XYZ">Firma XYZ</option>
+                                <option value="Straż Pożarna">Straż Pożarna</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Status:</label>
+                            <select onchange="testReportsEnhanced.filterByStatus(this.value)">
+                                <option value="">Wszystkie</option>
+                                <option value="PASSED">Pozytywne</option>
+                                <option value="FAILED">Negatywne</option>
+                                <option value="PENDING">Oczekujące</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Okres od:</label>
+                            <input type="date" onchange="testReportsEnhanced.filterByDateFrom(this.value)">
+                        </div>
+                        <div class="filter-group">
+                            <label>Okres do:</label>
+                            <input type="date" onchange="testReportsEnhanced.filterByDateTo(this.value)">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reports List -->
+                <div class="reports-list-enhanced">
+                    <h3>Lista raportów</h3>
+                    <div class="reports-table">
+                        <div class="table-header">
+                            <div class="col-id">ID</div>
+                            <div class="col-date">Data</div>
+                            <div class="col-customer">Klient</div>
+                            <div class="col-device">Urządzenie</div>
+                            <div class="col-result">Wynik</div>
+                            <div class="col-actions">Akcje</div>
+                        </div>
+                        ${this.getReportsListHTML()}
+                    </div>
+                </div>
+
+                <!-- Statistics Panel -->
+                <div class="statistics-panel">
+                    <h3>Statystyki</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getMockReportCount()}</div>
+                            <div class="stat-label">Łączna liczba raportów</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getMockPassedCount()}</div>
+                            <div class="stat-label">Pozytywne</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getMockFailedCount()}</div>
+                            <div class="stat-label">Negatywne</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${this.getMockCustomersCount()}</div>
+                            <div class="stat-label">Klienci</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // Mock data methods
+    getMockReportCount() {
+        return 127;
+    }
+
+    getMockPassedCount() {
+        return 98;
+    }
+
+    getMockFailedCount() {
+        return 29;
+    }
+
+    getMockCustomersCount() {
+        return 15;
+    }
 }
 
 if (typeof module !== 'undefined' && module.exports) {
