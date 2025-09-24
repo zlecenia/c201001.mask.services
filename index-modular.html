@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="global.page_title">MASKSERVICE C20 1001 - System Mock v2.0</title>
+    <script>
+        // Cache-busting for CSS
+        const cssVersion = Date.now();
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
+    </script>
+</head>
+<body>
+<div id="app" class="container">
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="/">
+                <span class="logo" data-i18n="global.logo">MASKSERVICE</span>
+                <span class="hardware" data-i18n="global.hardware">C20</span>
+                <span class="product" data-i18n="global.product">1001</span>
+                <span class="software" data-i18n="global.software">v2.0 MOCK</span>
+            </a>
+        </div>
+        <div class="header-center">
+            <span id="device-url" class="status-indicator">
+                <span id="device_url" class="footer-host">
+                    <a href="https://201001.mask.services" data-i18n="global.device_url_label">201001.mask.services</a>
+                </span>
+                <span class="status-dot"></span>
+                <span id="status-text" class="role-badge" data-i18n="global.offline">OFFLINE</span>
+            </span>
+        </div>
+        <div class="header-right">
+            <span id="device-info">
+                <span id="device_name" data-i18n="global.device_name">CONNECT</span>
+                <span id="device_type" data-i18n="global.device_type">500</span>
+            </span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Screens will be dynamically loaded here -->
+        <div id="login-screen" class="screen active">
+            <!-- Content loaded dynamically from views/screens/login-screen.html -->
+        </div>
+
+        <div id="system-screen" class="screen">
+            <!-- Content loaded dynamically from views/screens/system-screen.html -->
+        </div>
+
+        <div id="user-menu-screen" class="screen">
+            <!-- Content loaded dynamically from views/screens/user-menu-screen.html -->
+        </div>
+
+        <!-- Pressure Display Panel - Always Visible -->
+        <aside id="pressure-panel" class="pressure-panel">
+            <h3 id="pressure-panel-title" data-i18n="device.pressure_title">PRESSURE</h3>
+            <div class="pressure-box">
+                <div class="pressure-item">
+                    <div id="pressure-low-label" class="pressure-label" data-i18n="device.pressure_low">Low</div>
+                    <div id="pressure-low" class="pressure-value">10</div>
+                    <div id="pressure-low-unit" class="pressure-unit">mbar</div>
+                    <div id="pressure-low-dia" class="pressure-dia"></div>
+                </div>
+            </div>
+            <div class="pressure-box">
+                <div class="pressure-item">
+                    <div id="pressure-medium-label" class="pressure-label" data-i18n="device.pressure_medium">Medium</div>
+                    <div id="pressure-medium" class="pressure-value">20</div>
+                    <div id="pressure-medium-unit" class="pressure-unit">bar</div>
+                    <div id="pressure-medium-dia" class="pressure-dia"></div>
+                </div>
+            </div>
+            <div class="pressure-box">
+                <div class="pressure-item">
+                    <div id="pressure-high-label" class="pressure-label" data-i18n="device.pressure_high">High</div>
+                    <div id="pressure-high" class="pressure-value">30</div>
+                    <div id="pressure-high-unit" class="pressure-unit">bar</div>
+                    <div id="pressure-high-dia" class="pressure-dia"></div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-left">
+            <span id="user-info" style="display:none;">
+                <span id="user-name" data-i18n="user.username_placeholder">USERNAME</span>
+                <span id="user-role" class="role-badge">---</span>
+            </span>
+        </div>
+
+        <div class="footer-center">
+            <span id="language-selector" class="language-selector">
+                <button id="lang-pl" class="lang-btn active" onclick="changeLanguage('pl')" title="Polski">🇵🇱</button>
+                <button id="lang-en" class="lang-btn" onclick="changeLanguage('en')" title="English">🇺🇸</button>
+                <button id="lang-de" class="lang-btn" onclick="changeLanguage('de')" title="Deutsch">🇩🇪</button>
+            </span>
+        </div>
+
+        <div class="footer-right">
+            <span id="time-info">
+                <span id="footer-date">--/--/----</span>
+                <span id="footer-time" class="role-badge">--:--</span>
+            </span>
+        </div>
+    </footer>
+</div>
+
+<!-- Dynamic Templates Container -->
+<div id="templates" style="display:none;">
+    <!-- Templates will be dynamically loaded here from views/templates/ -->
+    <!-- Placeholder divs will be created on-demand by ViewLoader -->
+</div>
+
+<!-- Global Loading Overlay -->
+<div id="loading-overlay" class="loading-overlay" style="display:none;">
+    <div class="loading-container">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">
+            <h3 data-i18n="loading.title">Logowanie...</h3>
+            <p data-i18n="loading.message">Proszę czekać</p>
+        </div>
+    </div>
+</div>
+
+<!-- MASKSERVICE C20 - Modular Script Loading -->
+<script>
+    // Global configuration for MASKSERVICE C20
+    const cacheBuster = Date.now();
+    window.MASKSERVICE_CONFIG = {
+        version: '2.0.1001',
+        cacheBuster: cacheBuster,
+        debug: window.location.search.includes('debug=true'),
+        modular: true // Enable modular view loading
+    };
+    
+    console.log('🔧 MASKSERVICE C20 v' + window.MASKSERVICE_CONFIG.version + ' - Modular Script Loading');
+    console.log('⚡ Cache buster: ' + cacheBuster);
+    console.log('📦 Modular views: ENABLED');
+</script>
+
+<!-- Core modules loaded in dependency order with cache buster -->
+<script>
+    // Dynamic script loading with cache buster
+    const scripts = [
+        'js/utils.js',
+        'js/config.js',
+        'js/i18n.js',
+        'js/auth.js',
+        'js/keyboard.js',
+        'js/menu.js',
+        'js/modules/data-export.js',
+        'js/modules/settings-ui-generator.js',
+        'js/modules/view-loader.js',  // Dynamic view loader
+        'js/modules/view-tester.js',
+        'js/router.js',
+        'js/app.js'
+    ];
+    
+    scripts.forEach(function(src) {
+        document.write('<script src="' + src + '?v=' + cacheBuster + '"><\/script>');
+    });
+    
+    // Add automated test suite (only on localhost)
+    if (window.location.hostname === 'localhost') {
+        document.write('<script src="test.js?v=' + cacheBuster + '"><\/script>');
+    }
+</script>
+
+<script>
+    // Initialize modular application after all scripts are loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 MASKSERVICE C20 modular application starting...');
+        
+        // Wait for ViewLoader to be available
+        if (typeof window.viewLoader !== 'undefined') {
+            console.log('✅ ViewLoader available - preloading critical views...');
+            
+            // Preload critical screens immediately
+            const criticalScreens = ['login-screen', 'system-screen', 'user-menu-screen'];
+            
+            criticalScreens.forEach(async (screenId) => {
+                try {
+                    await window.viewLoader.loadAndInjectView(screenId);
+                    console.log(`✅ Critical screen loaded: ${screenId}`);
+                } catch (error) {
+                    console.error(`❌ Failed to load critical screen ${screenId}:`, error);
+                }
+            });
+            
+        } else {
+            console.error('❌ ViewLoader not available - falling back to static content');
+        }
+        
+        // Initialize the application
+        if (typeof window.MasktronicApp !== 'undefined') {
+            window.app = new MasktronicApp();
+            console.log('✅ MASKSERVICE C20 modular application loaded successfully');
+        } else {
+            console.error('❌ MasktronicApp not available');
+        }
+    });
+    
+    // Listen for view load events
+    document.addEventListener('viewLoaded', function(event) {
+        console.log('📄 View loaded:', event.detail.viewId);
+        
+        // Apply any post-load processing
+        if (window.applyI18nToElement && event.detail.element) {
+            window.applyI18nToElement(event.detail.element);
+        }
+    });
+</script>
+
+<!-- jsPDF Library for PDF Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Modular architecture: Dynamic view loading enabled -->
+</body>
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MASKSERVICE C20 - Comprehensive View Test</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1a1a1a;
+            color: #00ff00;
+            padding: 20px;
+            margin: 0;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #333;
+        }
+        .pass { background: #004400; }
+        .fail { background: #440000; }
+        .warning { background: #444400; }
+        pre {
+            background: #222;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 MASKSERVICE C20 - Comprehensive View Test</h1>
+        <div id="status" class="status">Initializing test runner...</div>
+        <div id="results"></div>
+        
+        <script>
+            async function runComprehensiveTest() {
+                const statusDiv = document.getElementById('status');
+                const resultsDiv = document.getElementById('results');
+                
+                statusDiv.innerHTML = '🚀 Opening MASKSERVICE C20 application...';
+                
+                // Open the main application in iframe
+                const iframe = document.createElement('iframe');
+                iframe.src = 'http://localhost:8084';
+                iframe.style.width = '100%';
+                iframe.style.height = '600px';
+                iframe.style.border = '2px solid #333';
+                iframe.style.borderRadius = '5px';
+                
+                resultsDiv.appendChild(iframe);
+                
+                // Wait for iframe to load
+                iframe.onload = async function() {
+                    statusDiv.innerHTML = '⏳ Application loaded, waiting for initialization...';
+                    
+                    // Wait for app to initialize
+                    await new Promise(resolve => setTimeout(resolve, 3000));
+                    
+                    statusDiv.innerHTML = '🧪 Running comprehensive tests...';
+                    
+                    try {
+                        // Access the iframe's window
+                        const appWindow = iframe.contentWindow;
+                        
+                        if (!appWindow.viewTester) {
+                            throw new Error('ViewTester not available in application');
+                        }
+                        
+                        statusDiv.innerHTML = '✅ ViewTester found - running all tests...';
+                        
+                        // Create results display
+                        const testResults = document.createElement('div');
+                        testResults.innerHTML = '<h2>📊 Test Results</h2>';
+                        resultsDiv.appendChild(testResults);
+                        
+                        // Run template availability test
+                        const templateResults = await testTemplateAvailability(appWindow);
+                        displayTestResults(testResults, 'Template Availability', templateResults);
+                        
+                        // Run navigation test
+                        const navResults = await testMenuNavigation(appWindow);
+                        displayTestResults(testResults, 'Menu Navigation', navResults);
+                        
+                        // Run interactive elements test
+                        const interactiveResults = await testInteractiveElements(appWindow);
+                        displayTestResults(testResults, 'Interactive Elements', interactiveResults);
+                        
+                        // Run system integration test
+                        const integrationResults = await testSystemIntegration(appWindow);
+                        displayTestResults(testResults, 'System Integration', integrationResults);
+                        
+                        // Display final summary
+                        displayFinalSummary(testResults, {
+                            templates: templateResults,
+                            navigation: navResults,
+                            interactive: interactiveResults,
+                            integration: integrationResults
+                        });
+                        
+                        statusDiv.innerHTML = '🎉 All tests completed successfully!';
+                        statusDiv.className = 'status pass';
+                        
+                    } catch (error) {
+                        statusDiv.innerHTML = '❌ Error running tests: ' + error.message;
+                        statusDiv.className = 'status fail';
+                        console.error('Test error:', error);
+                    }
+                };
+            }
+            
+            async function testTemplateAvailability(appWindow) {
+                const templates = [
+                    'login-screen', 'system-screen', 'user-menu-screen',
+                    'test-menu-template', 'device-select-template', 'workshop-template',
+                    'user-data-template', 'device-data-template', 'test-reports-template',
+                    'users-template', 'service-menu-template', 'system-settings-template',
+                    'device-history-template', 'reports-view-template', 'reports-batch-template',
+                    'realtime-sensors-template', 'reports-schedule-template', 'workshop-parts-template',
+                    'workshop-maintenance-template', 'workshop-tools-template', 'workshop-inventory-template'
+                ];
+                
+                const results = [];
+                let passed = 0;
+                
+                for (const templateId of templates) {
+                    const template = appWindow.document.getElementById(templateId);
+                    if (template && template.innerHTML.trim().length > 0) {
+                        results.push({ name: templateId, status: 'PASS', details: `${template.innerHTML.length} chars` });
+                        passed++;
+                    } else if (template) {
+                        results.push({ name: templateId, status: 'PARTIAL', details: 'Empty content' });
+                    } else {
+                        results.push({ name: templateId, status: 'FAIL', details: 'Not found' });
+                    }
+                }
+                
+                return {
+                    total: templates.length,
+                    passed: passed,
+                    failed: templates.length - passed,
+                    successRate: ((passed / templates.length) * 100).toFixed(1) + '%',
+                    details: results
+                };
+            }
+            
+            async function testMenuNavigation(appWindow) {
+                // Login first
+                if (appWindow.mockLogin) {
+                    appWindow.mockLogin('OPERATOR');
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                }
+                
+                const menuOptions = [
+                    'user_data', 'realtime_sensors', 'reports_view', 'reports_batch',
+                    'reports_schedule', 'workshop_parts', 'workshop_maintenance',
+                    'workshop_tools', 'workshop_inventory', 'users', 'service_menu',
+                    'settings_scenarios', 'settings_integration', 'settings_standards',
+                    'settings_system'
+                ];
+                
+                const results = [];
+                let passed = 0;
+                
+                for (const menuOption of menuOptions) {
+                    try {
+                        let errorCaught = null;
+                        const originalError = appWindow.console.error;
+                        appWindow.console.error = (msg) => {
+                            if (msg.includes('Template not found') || msg.includes('not available')) {
+                                errorCaught = msg;
+                            }
+                            originalError(msg);
+                        };
+                        
+                        if (appWindow.MenuManager?.selectMenuOption) {
+                            appWindow.MenuManager.selectMenuOption(menuOption);
+                            await new Promise(resolve => setTimeout(resolve, 200));
+                            
+                            if (errorCaught) {
+                                results.push({ name: menuOption, status: 'FAIL', details: errorCaught });
+                            } else {
+                                results.push({ name: menuOption, status: 'PASS', details: 'Navigation successful' });
+                                passed++;
+                            }
+                        } else {
+                            results.push({ name: menuOption, status: 'FAIL', details: 'MenuManager not available' });
+                        }
+                        
+                        appWindow.console.error = originalError;
+                    } catch (error) {
+                        results.push({ name: menuOption, status: 'FAIL', details: error.message });
+                    }
+                }
+                
+                return {
+                    total: menuOptions.length,
+                    passed: passed,
+                    failed: menuOptions.length - passed,
+                    successRate: ((passed / menuOptions.length) * 100).toFixed(1) + '%',
+                    details: results
+                };
+            }
+            
+            async function testInteractiveElements(appWindow) {
+                const buttons = appWindow.document.querySelectorAll('button, .btn');
+                const menuItems = appWindow.document.querySelectorAll('.menu-item');
+                const inputs = appWindow.document.querySelectorAll('input, select, textarea');
+                
+                let workingButtons = 0;
+                let workingMenuItems = 0;
+                let workingInputs = 0;
+                
+                buttons.forEach(btn => {
+                    if (btn.onclick || btn.getAttribute('onclick')) {
+                        workingButtons++;
+                    }
+                });
+                
+                menuItems.forEach(item => {
+                    if (item.onclick || item.getAttribute('onclick')) {
+                        workingMenuItems++;
+                    }
+                });
+                
+                inputs.forEach(input => {
+                    if (!input.disabled && !input.readonly) {
+                        workingInputs++;
+                    }
+                });
+                
+                return {
+                    buttons: { total: buttons.length, working: workingButtons },
+                    menuItems: { total: menuItems.length, working: workingMenuItems },
+                    inputs: { total: inputs.length, working: workingInputs }
+                };
+            }
+            
+            async function testSystemIntegration(appWindow) {
+                const systems = [
+                    { name: 'Router System', check: () => appWindow.C20Router },
+                    { name: 'Menu Manager', check: () => appWindow.MenuManager },
+                    { name: 'Auth System', check: () => appWindow.mockLogin },
+                    { name: 'Config Manager', check: () => appWindow.ConfigManager },
+                    { name: 'i18n System', check: () => appWindow.changeLanguage },
+                    { name: 'ViewTester', check: () => appWindow.viewTester },
+                    { name: 'Virtual Keyboard', check: () => appWindow.VirtualKeyboard },
+                    { name: 'Data Export', check: () => appWindow.exportTestData }
+                ];
+                
+                const results = [];
+                let passed = 0;
+                
+                systems.forEach(system => {
+                    const available = system.check();
+                    if (available) {
+                        results.push({ name: system.name, status: 'PASS', details: 'Available' });
+                        passed++;
+                    } else {
+                        results.push({ name: system.name, status: 'FAIL', details: 'Not available' });
+                    }
+                });
+                
+                return {
+                    total: systems.length,
+                    passed: passed,
+                    failed: systems.length - passed,
+                    successRate: ((passed / systems.length) * 100).toFixed(1) + '%',
+                    details: results
+                };
+            }
+            
+            function displayTestResults(container, testName, results) {
+                const section = document.createElement('div');
+                section.innerHTML = `
+                    <h3>🧪 ${testName}</h3>
+                    <div class="test-summary">
+                        <strong>Summary:</strong> ${results.passed || 0}/${results.total || 0} passed 
+                        (${results.successRate || 'N/A'})
+                    </div>
+                `;
+                
+                if (results.details) {
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.innerHTML = '<h4>Details:</h4>';
+                    
+                    results.details.forEach(item => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = item.status === 'PASS' ? 'pass' : 
+                                          item.status === 'FAIL' ? 'fail' : 'warning';
+                        itemDiv.innerHTML = `
+                            ${item.status === 'PASS' ? '✅' : item.status === 'FAIL' ? '❌' : '⚠️'} 
+                            <strong>${item.name}</strong>: ${item.details || ''}
+                        `;
+                        detailsDiv.appendChild(itemDiv);
+                    });
+                    
+                    section.appendChild(detailsDiv);
+                }
+                
+                // Special handling for interactive elements
+                if (results.buttons) {
+                    const interactiveDiv = document.createElement('div');
+                    interactiveDiv.innerHTML = `
+                        <h4>Interactive Elements Summary:</h4>
+                        <div>✅ Buttons: ${results.buttons.working}/${results.buttons.total} have handlers</div>
+                        <div>✅ Menu Items: ${results.menuItems.working}/${results.menuItems.total} interactive</div>
+                        <div>✅ Input Fields: ${results.inputs.working}/${results.inputs.total} functional</div>
+                    `;
+                    section.appendChild(interactiveDiv);
+                }
+                
+                container.appendChild(section);
+            }
+            
+            function displayFinalSummary(container, allResults) {
+                const summary = document.createElement('div');
+                summary.innerHTML = '<h2>📊 FINAL SUMMARY</h2>';
+                
+                let totalTests = 0;
+                let totalPassed = 0;
+                
+                Object.values(allResults).forEach(result => {
+                    if (result.total && result.passed !== undefined) {
+                        totalTests += result.total;
+                        totalPassed += result.passed;
+                    }
+                });
+                
+                const overallRate = totalTests > 0 ? ((totalPassed / totalTests) * 100).toFixed(1) : '0';
+                
+                const summaryDiv = document.createElement('div');
+                summaryDiv.className = overallRate === '100.0' ? 'pass' : 
+                                     overallRate >= '90.0' ? 'warning' : 'fail';
+                summaryDiv.innerHTML = `
+                    <h3>🎯 Overall Results</h3>
+                    <div><strong>Total Tests:</strong> ${totalTests}</div>
+                    <div><strong>Passed:</strong> ${totalPassed}</div>
+                    <div><strong>Failed:</strong> ${totalTests - totalPassed}</div>
+                    <div><strong>Success Rate:</strong> ${overallRate}%</div>
+                    <br>
+                    <div><strong>Status:</strong> ${
+                        overallRate === '100.0' ? '🎉 ALL TESTS PASSED!' :
+                        overallRate >= '90.0' ? '✅ EXCELLENT - Minor issues only' :
+                        overallRate >= '75.0' ? '⚠️ GOOD - Some fixes needed' :
+                        '❌ NEEDS ATTENTION - Several issues found'
+                    }</div>
+                `;
+                
+                summary.appendChild(summaryDiv);
+                container.appendChild(summary);
+            }
+            
+            // Start the test when page loads
+            window.addEventListener('load', runComprehensiveTest);
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<h2 data-i18n="test.menu_title">Test Menu</h2>
+<div class="menu-grid">
+    <button class="menu-card" onclick="selectTestOption('device')">
+        <h3 data-i18n="test.kind_of_device">Kind of Device</h3>
+        <p data-i18n="test.select_device_type">Wybierz rodzaj urządzenia</p>
+    </button>
+    <button class="menu-card" onclick="selectTestOption('type')">
+        <h3 data-i18n="test.device_type">Device Type</h3>
+        <p data-i18n="test.select_device_model">Wybierz typ urządzenia</p>
+    </button>
+    <button class="menu-card" onclick="selectTestOption('test')">
+        <h3 data-i18n="test.kind_of_test">Kind of Test</h3>
+        <p data-i18n="test.select_test_type">Wybierz rodzaj testu</p>
+    </button>
+    <button class="menu-card" onclick="selectTestOption('flow')">
+        <h3 data-i18n="test.test_flow">Test Flow</h3>
+        <p data-i18n="test.test_scenario">Scenariusz testowy</p>
+    </button>
+</div>
+
+<!-- Export Section -->
+<div class="export-section">
+    <h3 data-i18n="export.title">Export Test Data</h3>
+    <div class="export-buttons">
+        <button class="btn-export btn-json" onclick="exportTestData('json')" data-i18n="export.json">JSON</button>
+        <button class="btn-export btn-xml" onclick="exportTestData('xml')" data-i18n="export.xml">XML</button>
+        <button class="btn-export btn-csv" onclick="exportTestData('csv')" data-i18n="export.csv">CSV</button>
+        <button class="btn-export btn-pdf" onclick="exportTestData('pdf')" data-i18n="export.pdf">PDF</button>
+    </div>
+</div>
