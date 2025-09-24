@@ -48,3 +48,13 @@ ustaw w pliku  config/menu.json  role tak, by komplementarnie kazda rola miala w
 wiekszosc elmentow menu  byly zarezerowane dla jednej roli
 
 
+
+przy naciksaniu kolejnych buttonow z menu pojawiaja sie bledy
+
+Template Not Found
+
+Template "device-history-template" is not available.
+
+http://localhost:8084/#/user-menu-screen/pl/default
+
+http://localhost:8084/#/user-menu-screen/pl/default

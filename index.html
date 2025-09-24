@@ -570,6 +570,321 @@
             </div>
         </div>
     </div>
+
+    <!-- Device History Template -->
+    <div id="device-history-template">
+        <h2 data-i18n="device.history_title">Device History</h2>
+        <div class="history-container">
+            <div class="filter-section">
+                <input type="text" placeholder="Search devices..." data-i18n-placeholder="device.search_placeholder" class="search-input">
+                <select class="filter-select">
+                    <option value="all" data-i18n="device.filter_all">All Devices</option>
+                    <option value="PP_MASK" data-i18n="devices.pp_mask">PP Mask</option>
+                    <option value="NP_MASK" data-i18n="devices.np_mask">NP Mask</option>
+                    <option value="SCBA" data-i18n="devices.scba">SCBA</option>
+                    <option value="CPS" data-i18n="devices.cps">CPS Protection Suit</option>
+                </select>
+            </div>
+            <div class="history-list">
+                <div class="history-item">
+                    <div class="device-info">
+                        <span class="device-name">PP-MASK-001</span>
+                        <span class="device-status status-active">Active</span>
+                    </div>
+                    <div class="last-test">Last test: 2025-09-20 14:30</div>
+                    <div class="test-result status-passed">PASSED</div>
+                </div>
+                <div class="history-item">
+                    <div class="device-info">
+                        <span class="device-name">NP-MASK-003</span>
+                        <span class="device-status status-maintenance">Maintenance</span>
+                    </div>
+                    <div class="last-test">Last test: 2025-09-18 09:15</div>
+                    <div class="test-result status-failed">FAILED</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Reports View Template -->
+    <div id="reports-view-template">
+        <h2 data-i18n="reports.view_title">Reports View</h2>
+        <div class="reports-container">
+            <div class="report-filters">
+                <div class="filter-group">
+                    <label data-i18n="reports.date_from">Date From:</label>
+                    <input type="date" class="date-input" id="date-from">
+                </div>
+                <div class="filter-group">
+                    <label data-i18n="reports.date_to">Date To:</label>
+                    <input type="date" class="date-input" id="date-to">
+                </div>
+                <div class="filter-group">
+                    <label data-i18n="reports.device_type">Device Type:</label>
+                    <select class="filter-select">
+                        <option value="all" data-i18n="device.filter_all">All Types</option>
+                        <option value="PP_MASK" data-i18n="devices.pp_mask">PP Mask</option>
+                        <option value="NP_MASK" data-i18n="devices.np_mask">NP Mask</option>
+                        <option value="SCBA" data-i18n="devices.scba">SCBA</option>
+                        <option value="CPS" data-i18n="devices.cps">CPS Protection Suit</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" onclick="generateReport()" data-i18n="reports.generate">Generate Report</button>
+            </div>
+            <div class="report-results">
+                <div class="report-summary">
+                    <div class="summary-card">
+                        <h3 data-i18n="reports.total_tests">Total Tests</h3>
+                        <span class="summary-number">247</span>
+                    </div>
+                    <div class="summary-card">
+                        <h3 data-i18n="reports.passed_tests">Passed</h3>
+                        <span class="summary-number passed">231</span>
+                    </div>
+                    <div class="summary-card">
+                        <h3 data-i18n="reports.failed_tests">Failed</h3>
+                        <span class="summary-number failed">16</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Reports Batch Template -->
+    <div id="reports-batch-template">
+        <h2 data-i18n="reports.batch_title">Batch Reports Generator</h2>
+        <div class="batch-container">
+            <div class="batch-settings">
+                <div class="setting-group">
+                    <label data-i18n="reports.batch_period">Report Period:</label>
+                    <select class="batch-select">
+                        <option value="daily" data-i18n="reports.daily">Daily</option>
+                        <option value="weekly" data-i18n="reports.weekly">Weekly</option>
+                        <option value="monthly" data-i18n="reports.monthly">Monthly</option>
+                        <option value="quarterly" data-i18n="reports.quarterly">Quarterly</option>
+                    </select>
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="reports.output_format">Output Format:</label>
+                    <div class="format-options">
+                        <label><input type="checkbox" value="pdf" checked> PDF</label>
+                        <label><input type="checkbox" value="excel"> Excel</label>
+                        <label><input type="checkbox" value="csv"> CSV</label>
+                        <label><input type="checkbox" value="json"> JSON</label>
+                    </div>
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="reports.email_recipients">Email Recipients:</label>
+                    <textarea placeholder="Enter email addresses (one per line)" data-i18n-placeholder="reports.email_placeholder" class="email-input"></textarea>
+                </div>
+                <div class="setting-group">
+                    <label data-i18n="reports.schedule">Schedule:</label>
+                    <select class="batch-select">
+                        <option value="manual" data-i18n="reports.manual">Manual Only</option>
+                        <option value="auto-daily" data-i18n="reports.auto_daily">Auto Daily</option>
+                        <option value="auto-weekly" data-i18n="reports.auto_weekly">Auto Weekly</option>
+                        <option value="auto-monthly" data-i18n="reports.auto_monthly">Auto Monthly</option>
+                    </select>
+                </div>
+            </div>
+            <div class="batch-actions">
+                <button class="btn btn-primary" onclick="generateBatchReport()" data-i18n="reports.generate_now">Generate Now</button>
+                <button class="btn btn-secondary" onclick="scheduleBatchReport()" data-i18n="reports.schedule_report">Schedule Report</button>
+                <button class="btn btn-info" onclick="previewBatchReport()" data-i18n="reports.preview">Preview</button>
+            </div>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Real-time Sensors Template -->
+    <div id="realtime-sensors-template">
+        <h2 data-i18n="sensors.title">Real-time Sensors</h2>
+        <div class="sensors-container">
+            <div class="sensor-grid">
+                <div class="sensor-card">
+                    <h3 data-i18n="sensors.pressure">Pressure</h3>
+                    <div class="sensor-value">15.2 <span class="unit">kPa</span></div>
+                    <div class="sensor-status status-normal">Normal</div>
+                </div>
+                <div class="sensor-card">
+                    <h3 data-i18n="sensors.temperature">Temperature</h3>
+                    <div class="sensor-value">22.5 <span class="unit">°C</span></div>
+                    <div class="sensor-status status-normal">Normal</div>
+                </div>
+                <div class="sensor-card">
+                    <h3 data-i18n="sensors.humidity">Humidity</h3>
+                    <div class="sensor-value">45 <span class="unit">%</span></div>
+                    <div class="sensor-status status-warning">Warning</div>
+                </div>
+                <div class="sensor-card">
+                    <h3 data-i18n="sensors.flow_rate">Flow Rate</h3>
+                    <div class="sensor-value">8.7 <span class="unit">L/min</span></div>
+                    <div class="sensor-status status-normal">Normal</div>
+                </div>
+            </div>
+            <div class="sensor-controls">
+                <button class="btn btn-primary" onclick="refreshSensors()" data-i18n="sensors.refresh">Refresh Data</button>
+                <button class="btn btn-secondary" onclick="exportSensorData()" data-i18n="sensors.export">Export Data</button>
+            </div>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Reports Schedule Template -->
+    <div id="reports-schedule-template">
+        <h2 data-i18n="reports.schedule_title">Report Schedule</h2>
+        <div class="schedule-container">
+            <div class="schedule-list">
+                <div class="schedule-item">
+                    <div class="schedule-info">
+                        <h3>Daily Test Summary</h3>
+                        <p>Every day at 18:00</p>
+                    </div>
+                    <div class="schedule-status status-active">Active</div>
+                    <div class="schedule-actions">
+                        <button class="btn btn-sm btn-primary">Edit</button>
+                        <button class="btn btn-sm btn-danger">Disable</button>
+                    </div>
+                </div>
+                <div class="schedule-item">
+                    <div class="schedule-info">
+                        <h3>Weekly Equipment Report</h3>
+                        <p>Every Monday at 09:00</p>
+                    </div>
+                    <div class="schedule-status status-active">Active</div>
+                    <div class="schedule-actions">
+                        <button class="btn btn-sm btn-primary">Edit</button>
+                        <button class="btn btn-sm btn-danger">Disable</button>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="addScheduledReport()" data-i18n="reports.add_schedule">Add New Schedule</button>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Workshop Parts Template -->
+    <div id="workshop-parts-template">
+        <h2 data-i18n="workshop.parts_title">Workshop Parts</h2>
+        <div class="parts-container">
+            <div class="search-filter">
+                <input type="text" placeholder="Search parts..." data-i18n-placeholder="workshop.search_parts" class="search-input">
+                <select class="filter-select">
+                    <option value="all" data-i18n="workshop.all_categories">All Categories</option>
+                    <option value="masks" data-i18n="workshop.masks">Masks</option>
+                    <option value="filters" data-i18n="workshop.filters">Filters</option>
+                    <option value="valves" data-i18n="workshop.valves">Valves</option>
+                    <option value="seals" data-i18n="workshop.seals">Seals</option>
+                </select>
+            </div>
+            <div class="parts-list">
+                <div class="part-item">
+                    <div class="part-info">
+                        <span class="part-name">HEPA Filter H13</span>
+                        <span class="part-code">HF-H13-001</span>
+                    </div>
+                    <div class="part-stock">Stock: 25</div>
+                    <div class="part-status status-available">Available</div>
+                </div>
+                <div class="part-item">
+                    <div class="part-info">
+                        <span class="part-name">Rubber Seal Set</span>
+                        <span class="part-code">RS-SET-002</span>
+                    </div>
+                    <div class="part-stock">Stock: 8</div>
+                    <div class="part-status status-low">Low Stock</div>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Workshop Maintenance Template -->
+    <div id="workshop-maintenance-template">
+        <h2 data-i18n="workshop.maintenance_title">Maintenance Schedule</h2>
+        <div class="maintenance-container">
+            <div class="maintenance-calendar">
+                <div class="calendar-header">
+                    <button class="btn btn-sm" onclick="previousMonth()" data-i18n="calendar.previous">‹</button>
+                    <h3 id="calendar-title">September 2025</h3>
+                    <button class="btn btn-sm" onclick="nextMonth()" data-i18n="calendar.next">›</button>
+                </div>
+                <div class="maintenance-list">
+                    <div class="maintenance-item">
+                        <div class="maintenance-date">Sep 25, 2025</div>
+                        <div class="maintenance-task">PP-MASK-001 - Quarterly Check</div>
+                        <div class="maintenance-status status-pending">Pending</div>
+                    </div>
+                    <div class="maintenance-item">
+                        <div class="maintenance-date">Sep 28, 2025</div>
+                        <div class="maintenance-task">SCBA-003 - Annual Service</div>
+                        <div class="maintenance-status status-scheduled">Scheduled</div>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="addMaintenanceTask()" data-i18n="workshop.add_maintenance">Add Maintenance Task</button>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Workshop Tools Template -->
+    <div id="workshop-tools-template">
+        <h2 data-i18n="workshop.tools_title">Calibration Tools</h2>
+        <div class="tools-container">
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <h3 data-i18n="tools.pressure_tester">Pressure Tester</h3>
+                    <div class="tool-info">
+                        <p>Model: PT-2000</p>
+                        <p>Last Calibration: 2025-08-15</p>
+                        <p>Next Due: 2025-11-15</p>
+                    </div>
+                    <div class="tool-status status-calibrated">Calibrated</div>
+                </div>
+                <div class="tool-card">
+                    <h3 data-i18n="tools.flow_meter">Flow Meter</h3>
+                    <div class="tool-info">
+                        <p>Model: FM-500</p>
+                        <p>Last Calibration: 2025-07-20</p>
+                        <p>Next Due: 2025-10-20</p>
+                    </div>
+                    <div class="tool-status status-due">Due Soon</div>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="scheduleCalibration()" data-i18n="tools.schedule_calibration">Schedule Calibration</button>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
+    <!-- Workshop Inventory Template -->
+    <div id="workshop-inventory-template">
+        <h2 data-i18n="workshop.inventory_title">Inventory</h2>
+        <div class="inventory-container">
+            <div class="inventory-summary">
+                <div class="summary-card">
+                    <h3 data-i18n="inventory.total_items">Total Items</h3>
+                    <span class="summary-number">342</span>
+                </div>
+                <div class="summary-card">
+                    <h3 data-i18n="inventory.low_stock">Low Stock</h3>
+                    <span class="summary-number warning">12</span>
+                </div>
+                <div class="summary-card">
+                    <h3 data-i18n="inventory.out_of_stock">Out of Stock</h3>
+                    <span class="summary-number critical">3</span>
+                </div>
+            </div>
+            <div class="inventory-actions">
+                <button class="btn btn-primary" onclick="generateInventoryReport()" data-i18n="inventory.generate_report">Generate Report</button>
+                <button class="btn btn-secondary" onclick="orderParts()" data-i18n="inventory.order_parts">Order Parts</button>
+                <button class="btn btn-info" onclick="viewLowStock()" data-i18n="inventory.view_low_stock">View Low Stock</button>
+            </div>
+        </div>
+        <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
+    </div>
+
 </div>
 
 <!-- Global Loading Overlay -->
@@ -602,7 +917,8 @@
     // Dynamic script loading with cache buster
     const scripts = [
         'js/utils.js',
-        'js/config.js', 
+        'js/config.js',
+        'js/i18n.js',
         'js/auth.js',
         'js/keyboard.js',
         'js/menu.js',
