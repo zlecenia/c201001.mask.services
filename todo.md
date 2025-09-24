@@ -22,7 +22,7 @@ Kolejne kroki to implementacja podziału pozostałych dużych modułów
 
 
 
-kontynuuj refaktoryzacje podziel modularnie i komplementarnie aktualny kod,, aby nie byklo plikow .js wikszych od 450linii kodu
+kontynuuj refaktoryzacje podziel modularnie i komplementarnie aktualny kod,, aby nie bylo plikow .js wikszych od 450linii kodu
 i dokumentuj w docs
 
 
@@ -48,3 +48,51 @@ ustaw w pliku  config/menu.json  role tak, by komplementarnie kazda rola miala w
 wiekszosc elmentow menu  byly zarezerowane dla jednej roli
 
 
+w momencie wpisywania hasla nie pozwalaj na pokazywanie systemowej klawiatury w urzadzeniach mobilnych
+ gdyz wpisywanie znakow obsluguje nasza wlasna klawiatura
+
+operator ma za zadanie przeprowadzi testy, dlatego jego menu musi by ograniczone do tetsw i raportw
+
+scenariusze testowe moga by uzupenione przez inne role, ale oni nie musi testowa tylko zarzadzac rolami, 
+najwiecej opcji ma serwisant, ale on nie testuje i nie raportuje
+
+przeanalizuj translacje i popraw gdzi jeszcze sa dodane atrybuty data-i18n
+
+dodaj do kazdego  .pressure-item  wizualizacje wykres zmian jako kolejny element pressure-*-dia
+gdzie w czasie rzeczywistym bdzie pokazywanych ostatnich 60  pomiarow (przez 60 sekund)
+<div class="pressure-item">
+    <div id="pressure-high-label" class="pressure-label">Wysokie</div>
+    <div id="pressure-high" class="pressure-value">30.5</div>
+    <div id="pressure-high-unit" class="pressure-unit">bar</div>
+    <div id="pressure-high-dia" class="pressure-dia"></div>
+</div>
+
+
+przeanalizuj translacje i popraw gdzi jeszcze sa dodane atrybuty data-i18n
+wykorzystaaj jakis framework do ladowania zaleznosci , aby nie trzeba bylo analizowac, tylko automatycznie kaskadoiwo ladowal o sie to co trzeba
+lub zwyczajnie linkuj przed zaladowaniem modulu inne, w razie gdyby nie byly zaladowane w dopowiedniej kolejnosci
+rob zaleznosci jak w node js, ale dla frontendu
+
+kontynuuj refaktoryzacje podziel modularnie i komplementarnie aktualny kod,, aby nie bylo plikow .js wikszych od 450linii kodu
+i dokumentuj w docs
+
+
+zamiast wyskakujacych okienek przegladarki uzyj zwyklego formularza, 
+ale w poziomie a nie pionie, jedna pod druga tylko jedno pole obok drugiego i na koniec akcja: zatwierdz/wyslij
+
+wszelkie dane z plikow .js przenies do plikow config/*.json i laduj i uzywaj
+czy aktualnie s jakies duplikaty kodu lub plikow? sprawdz i usun
+
+przycisk .btn-logout nie dziala, powinien wylogowac i wrocic do ekranu startowego z loogowaniem
+
+edycja, dodawanie userow nie dziala
+
+ustandaryzuj import/export danych w 3 formatach: json, xml, csv oraz export do wydruku w pdf bezposrerednio z JS w miejscach, gdzie sa dane
+
+
+--
+
+biorc pod uwage pliki z config/*.json uzyj tego rozwizania edytora do edycji i nadpisywania poprzez usluge API python wraz z serwowaniem calego projektu ze wszystkimi plikami
+uwzglednij schema, ktore sprawdza poprawnosc danych
+Ustandaryzuj import/export danych (JSON, XML, CSV)
+Dodaj eksport do PDF bezpośrednio z JavaScript
