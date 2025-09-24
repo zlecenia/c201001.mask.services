@@ -12,16 +12,16 @@
       "OPERATOR",
       "ADMIN",
       "SUPERUSER", 
-      "SERWISANT"
+      "SERVICEUSER"
     ],
     "deletable": [
       "OPERATOR/*",
       "ADMIN/*",
       "SUPERUSER/*",
-      "SERWISANT/*"
+      "SERVICEUSER/*"
     ],
     "readonly": [],
-    "protected": ["OPERATOR", "ADMIN", "SUPERUSER", "SERWISANT"]
+    "protected": ["OPERATOR", "ADMIN", "SUPERUSER", "SERVICEUSER"]
   },
   "field_types": {
     "key": "string",
@@ -63,7 +63,7 @@
     "OPERATOR": "Podstawowe funkcje operatorskie",
     "ADMIN": "Funkcje administracyjne systemu", 
     "SUPERUSER": "Pełny dostęp do wszystkich funkcji",
-    "SERWISANT": "Funkcje serwisowe i diagnostyczne"
+    "SERVICEUSER": "Funkcje serwisowe i diagnostyczne"
   },
   "default_new_item": {
     "key": "new_item",

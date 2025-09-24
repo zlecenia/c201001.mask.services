@@ -6,12 +6,12 @@
 const MASKSERVICE_TEST_CONFIG = {
     baseUrl: 'http://localhost:8084',
     testTimeout: 10000,
-    roles: ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'],
+    roles: ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERVICEUSER'],
     expectedMenuCounts: {
         'OPERATOR': 7,
         'ADMIN': 9,
         'SUPERUSER': 15,
-        'SERWISANT': 18
+        'SERVICEUSER': 18
     }
 };
 

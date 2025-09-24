@@ -36,7 +36,7 @@
     { "key": "settings_standards", "label": "Standards", "icon": "📋" },
     { "key": "settings_system", "label": "System Config", "icon": "⚙️" }
   ],
-  "SERWISANT": [
+  "SERVICEUSER": [
     { "key": "test_scenarios", "label": "Test Scenarios", "icon": "📋" },
     { "key": "user_data", "label": "User Data", "icon": "👤" },
     { "key": "realtime_sensors", "label": "Real-time Sensors", "icon": "📊" },

@@ -12,20 +12,20 @@
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["OPERATOR", "ADMIN", "SUPERUSER", "SERWISANT"]
+            "enum": ["OPERATOR", "ADMIN", "SUPERUSER", "SERVICEUSER"]
           },
           "description": "Lista dostępnych ról w systemie"
         },
         "default_role": {
           "type": "string", 
-          "enum": ["OPERATOR", "ADMIN", "SUPERUSER", "SERWISANT"],
+          "enum": ["OPERATOR", "ADMIN", "SUPERUSER", "SERVICEUSER"],
           "description": "Domyślna rola dla nowych użytkowników"
         },
         "role_hierarchy": {
           "type": "object",
           "description": "Hierarchia uprawnień (wyższa liczba = więcej uprawnień)",
           "patternProperties": {
-            "^(OPERATOR|ADMIN|SUPERUSER|SERWISANT)$": {
+            "^(OPERATOR|ADMIN|SUPERUSER|SERVICEUSER)$": {
               "type": "integer",
               "minimum": 1,
               "maximum": 10

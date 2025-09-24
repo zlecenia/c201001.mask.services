@@ -1,12 +1,12 @@
 {
   "roles": {
-    "valid_roles": ["OPERATOR", "ADMIN", "SUPERUSER", "SERWISANT"],
+    "valid_roles": ["OPERATOR", "ADMIN", "SUPERUSER", "SERVICEUSER"],
     "default_role": "OPERATOR",
     "role_hierarchy": {
       "OPERATOR": 1,
       "ADMIN": 2, 
       "SUPERUSER": 3,
-      "SERWISANT": 4
+      "SERVICEUSER": 4
     }
   },
   "authentication": {

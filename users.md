@@ -2,7 +2,7 @@ Podziel widok strony na 5 stron:
 strona logowania index.html
 strona usera: user-menu-screen.html
 strona admina: admin-menu-screen.html
-strona serwisanta: service-menu-screen.html
+strona serviceusera: service-menu-screen.html
 strona operatora: operator-menu-screen.html
 
 Jak działa system ról, interface, uprawnień?
@@ -13,7 +13,7 @@ Każdy utworzony użytkownik otrzymuje przy utworzeniu konta dostep do wybranych
 operator
 superuser
 admin
-serwisant
+serviceuser
 
 w zależności od wybranego użytkownika, wyświetlane są różne menu i funkcje.
 każda z tych rół ma określony komplementarny (niewspółdzielony z innymi rolami) zakres funkcji
