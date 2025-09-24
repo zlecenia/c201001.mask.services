@@ -224,22 +224,22 @@ class MenuManager {
 
     showUserData() {
         console.log('Opening User Data...');
-        this.navigateToTemplate('user-data-template', 'user-data');
+        this.loadTemplate('user-data-template');
     }
 
     showRealtimeSensors() {
-        console.log('Opening Real-time Sensors...');
-        this.navigateToTemplate('realtime-sensors-template', 'realtime-sensors');
+        console.log('Opening Realtime Sensors...');
+        this.loadTemplate('realtime-sensors-template');
     }
 
     showDeviceHistory() {
         console.log('Opening Device History...');
-        this.navigateToTemplate('device-history-template', 'device-history');
+        this.loadTemplate('device-history-template');
     }
 
     showReportsView() {
         console.log('Opening Reports View...');
-        this.navigateToTemplate('reports-view-template', 'reports-view');
+        this.loadTemplate('reports-view-template');
     }
 
     showReportsBatch() {
@@ -268,7 +268,7 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopParts();
         } else {
-            this.navigateToTemplate('workshop-parts-template', 'workshop-parts');
+            this.loadTemplate('workshop-parts-template');
         }
     }
 
@@ -278,7 +278,7 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopMaintenance();
         } else {
-            this.navigateToTemplate('workshop-maintenance-template', 'workshop-maintenance');
+            this.loadTemplate('workshop-maintenance-template');
         }
     }
 
@@ -608,31 +608,31 @@ class MenuManager {
 
     showServiceMenu() {
         console.log('Opening Service Menu...');
-        this.navigateToTemplate('service-menu-template', 'service-menu');
+        this.loadTemplate('service-menu-template');
     }
 
     showSettingsScenarios() {
-        console.log('Opening Settings Scenarios...');
-        this.navigateToTemplate('system-settings-template', 'settings-scenarios');
+        console.log('Opening Settings - Scenarios...');
+        this.loadTemplate('system-settings-template');
     }
 
     showSettingsIntegration() {
-        console.log('Opening Settings Integration...');
-        this.navigateToTemplate('system-settings-template', 'settings-integration');
+        console.log('Opening Settings - Integration...');
+        this.loadTemplate('system-settings-template');
     }
 
     showSettingsStandards() {
-        console.log('Opening Settings Standards...');
-        this.navigateToTemplate('system-settings-template', 'settings-standards');
+        console.log('Opening Settings - Standards...');
+        this.loadTemplate('system-settings-template');
     }
 
     showSettingsSystem() {
-        console.log('Opening Settings System...');
-        this.navigateToTemplate('system-settings-template', 'settings-system');
+        console.log('Opening Settings - System...');
+        this.loadTemplate('system-settings-template');
     }
 
-    showAdvancedDiagnostics() {
-        console.log('Opening Advanced Diagnostics...');
+    showServiceScreen() {
+        console.log('Opening Service Screen...');
         this.loadTemplate('service-menu-template');
     }
 

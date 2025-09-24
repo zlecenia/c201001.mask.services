@@ -249,7 +249,7 @@ body {
 }
 
 .menu-item:hover {
-    background: #d1d5db;
+
 }
 
 .menu-item.active {
@@ -550,26 +550,36 @@ button:active {
 .btn-green {
     background: var(--success-color);
     color: white;
+    border: 1px solid white;
+}
+
+.btn-orange {
+    background: var(--warning-color);
+    color: white;
 }
 
 .btn-yellow {
-    background: var(--warning-color);
-    color: white;
+    background: #ffcb00;
+    color: black;
+    border: 1px solid white;
 }
 
 .btn-red {
     background: var(--danger-color);
     color: white;
+    border: 1px solid white;
 }
 
 .btn-blue {
     background: #3b82f6;
     color: white;
+    border: 1px solid white;
 }
 
 .btn-purple {
     background: #8b5cf6;
     color: white;
+    border: 1px solid white;
 }
 
 .btn-primary {
@@ -580,26 +590,38 @@ button:active {
 .btn-small {
     padding: 0.25rem 0.5rem;
     font-size: 0.8rem;
+    border: 1px solid white;
 }
 
 .btn-back {
     background: #6b7280;
     color: white;
     margin-top: 1rem;
+    border: 1px solid white;
 }
+.btn-gray {
+    background: #6b7280;
+    color: white;
+    border: 1px solid white;
+}
+
 
 .login-buttons {
     margin-top: 1rem;
-
     display: flex;    flex-direction: column;
-
     align-self: flex-start;
 }
 .login-buttons button {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+    font-weight: bold;
 }
+
+.login-buttons button:hover {
+    border: 1px solid black;
+}
+
 /* System Screen */
 .system-content {
     display: flex;
