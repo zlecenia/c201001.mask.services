@@ -1027,6 +1027,16 @@
 <script src="js/components/UsersTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/WorkshopTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/TestReportsTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/DeviceHistoryTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/ReportsBatchTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/ReportsScheduleTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/WorkshopInventoryTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/WorkshopMaintenanceTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/WorkshopPartsTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/WorkshopToolsTemplate.js?v=" type="text/javascript"></script>
+<script src="js/modules/view-loader.js?v=" type="text/javascript"></script>
+<script src="js/modules/vue-view-loader.js?v=" type="text/javascript"></script>
+<script src="js/vue-i18n.js?v=" type="text/javascript"></script>
 <script src="js/vue-app.js?v=" type="text/javascript"></script>
 
 <!-- Vue.js Application Initialization -->
@@ -1107,6 +1117,41 @@
                 if (window.MaskServiceVue && window.TestReportsTemplate) {
                     window.MaskServiceVue.registerComponent('TestReportsTemplate', window.TestReportsTemplate);
                     console.log('✅ TestReportsTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.DeviceHistoryTemplate) {
+                    window.MaskServiceVue.registerComponent('DeviceHistoryTemplate', window.DeviceHistoryTemplate);
+                    console.log('✅ DeviceHistoryTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.ReportsBatchTemplate) {
+                    window.MaskServiceVue.registerComponent('ReportsBatchTemplate', window.ReportsBatchTemplate);
+                    console.log('✅ ReportsBatchTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.ReportsScheduleTemplate) {
+                    window.MaskServiceVue.registerComponent('ReportsScheduleTemplate', window.ReportsScheduleTemplate);
+                    console.log('✅ ReportsScheduleTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.WorkshopInventoryTemplate) {
+                    window.MaskServiceVue.registerComponent('WorkshopInventoryTemplate', window.WorkshopInventoryTemplate);
+                    console.log('✅ WorkshopInventoryTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.WorkshopMaintenanceTemplate) {
+                    window.MaskServiceVue.registerComponent('WorkshopMaintenanceTemplate', window.WorkshopMaintenanceTemplate);
+                    console.log('✅ WorkshopMaintenanceTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.WorkshopPartsTemplate) {
+                    window.MaskServiceVue.registerComponent('WorkshopPartsTemplate', window.WorkshopPartsTemplate);
+                    console.log('✅ WorkshopPartsTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.WorkshopToolsTemplate) {
+                    window.MaskServiceVue.registerComponent('WorkshopToolsTemplate', window.WorkshopToolsTemplate);
+                    console.log('✅ WorkshopToolsTemplate component registered with Vue app');
                 }
                 
                 // Mount Vue app
