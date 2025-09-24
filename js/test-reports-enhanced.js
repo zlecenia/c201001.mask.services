@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Enhanced Test Reports Module (Modular)
+ * MASKTRONIC C20 - Enhanced Test Reports Module (Modular)
  * Main orchestrator for modular test reports functionality
  * Optimized for 400x1280 display (7.9" LCD IPS touchscreen)
  */

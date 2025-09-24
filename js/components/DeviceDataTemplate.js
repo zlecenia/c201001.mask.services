@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Device Data Template Component
+ * MASKTRONIC C20 - Vue.js Device Data Template Component
  * Replaces vanilla device-data-template.html
  * Real-time device status and sensor monitoring
  */

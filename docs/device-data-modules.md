@@ -2,7 +2,7 @@
 
 ## Overview
 
-The MASKSERVICE C20 device data system has been modularized into four specialized components coordinated by an orchestrator pattern. This architecture improves maintainability, scalability, and code organization.
+The MASKTRONIC C20 device data system has been modularized into four specialized components coordinated by an orchestrator pattern. This architecture improves maintainability, scalability, and code organization.
 
 ## Architecture
 
@@ -322,4 +322,4 @@ console.log(deviceData.exportAlarmData());
 
 **Last Updated**: 2024-01-20  
 **Version**: 1.0.4  
-**Maintainer**: MASKSERVICE Development Team
+**Maintainer**: MASKTRONIC Development Team

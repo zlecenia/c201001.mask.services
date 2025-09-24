@@ -1,5 +1,5 @@
 /**
- * HTML Structure Analyzer for MASKSERVICE C20
+ * HTML Structure Analyzer for MASKTRONIC C20
  * Analyzes current HTML for duplicates, missing content, and modularization opportunities
  */
 
@@ -10,7 +10,7 @@ const path = require('path');
 const htmlPath = path.join(__dirname, 'index.html');
 const htmlContent = fs.readFileSync(htmlPath, 'utf8');
 
-console.log('🔍 MASKSERVICE C20 HTML Structure Analysis');
+console.log('🔍 MASKTRONIC C20 HTML Structure Analysis');
 console.log('='.repeat(60));
 
 // Extract templates from HTML

@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Utilities Module
+ * MASKTRONIC C20 - Utilities Module
  * Common utilities, helpers, and shared functions
  * Simple global class system - no AMD dependencies
  */

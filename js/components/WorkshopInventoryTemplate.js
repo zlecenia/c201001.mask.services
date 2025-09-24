@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Workshop Inventory Template Component
+ * MASKTRONIC C20 - Vue.js Workshop Inventory Template Component
  * Replaces vanilla workshop-inventory-template.html
  * Advanced inventory management with stock tracking and alerts
  */

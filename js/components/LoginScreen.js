@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Login Screen Component
+ * MASKTRONIC C20 - Vue.js Login Screen Component
  * First Vue component replacing vanilla login-screen template
  */
 
@@ -172,7 +172,7 @@ const LoginScreen = {
             <div class="login-container">
                 <!-- Header -->
                 <div class="login-header">
-                    <h1>MASKSERVICE C20 <span class="vue-badge">Vue</span></h1>
+                    <h1>MASKTRONIC C20 <span class="vue-badge">Vue</span></h1>
                     <p>System testowania urządzeń ochrony osobistej</p>
                 </div>
 

@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Comprehensive View Test Runner
+ * MASKTRONIC C20 - Comprehensive View Test Runner
  * Automated testing script for all application views and functionality
  */
 
@@ -10,7 +10,7 @@ window.addEventListener('load', async function() {
     // Give the application time to initialize
     await new Promise(resolve => setTimeout(resolve, 2000));
     
-    console.log('📊 MASKSERVICE C20 - COMPREHENSIVE VIEW TEST REPORT');
+    console.log('📊 MASKTRONIC C20 - COMPREHENSIVE VIEW TEST REPORT');
     console.log('='.repeat(80));
     
     // Check if ViewTester is available

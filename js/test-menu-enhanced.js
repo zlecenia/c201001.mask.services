@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Enhanced Test Menu Module (Orchestrator)
+ * MASKTRONIC C20 - Enhanced Test Menu Module (Orchestrator)
  * Coordinates modular test components
  * Compliance with PN-EN 136/137 standards
  */

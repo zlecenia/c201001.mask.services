@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Reports Schedule Template Component
+ * MASKTRONIC C20 - Vue.js Reports Schedule Template Component
  * Replaces vanilla reports-schedule-template.html
  * Advanced report scheduling with CRON expressions and automation
  */

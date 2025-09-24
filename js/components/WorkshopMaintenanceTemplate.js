@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Workshop Maintenance Template Component
+ * MASKTRONIC C20 - Vue.js Workshop Maintenance Template Component
  * Replaces vanilla workshop-maintenance-template.html
  * Advanced maintenance scheduling with calendar and task management
  */

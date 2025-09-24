@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Template Extractor
+ * MASKTRONIC C20 - Template Extractor
  * Automatically extracts all templates and screens from index.html into separate files
  */
 

@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Reports View Template Component
+ * MASKTRONIC C20 - Vue.js Reports View Template Component
  * Replaces vanilla reports-view-template.html
  * Advanced reporting with filters and data visualization
  */

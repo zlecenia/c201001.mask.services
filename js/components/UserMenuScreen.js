@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js User Menu Screen Component
+ * MASKTRONIC C20 - Vue.js User Menu Screen Component
  * Replaces vanilla user-menu-screen.html template
  * Dynamic menu based on user role
  */

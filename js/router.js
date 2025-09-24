@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Advanced URL Router Module (Orchestrator)
+ * MASKTRONIC C20 - Advanced URL Router Module (Orchestrator)
  * Format: PROTOCOL://DOMAIN:PORT/VIEW-ID/LANGUAGE/ACTION-ID
  * 
  * This orchestrator delegates functionality to modular components:

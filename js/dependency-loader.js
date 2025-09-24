@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Dependency Loading Framework
+ * MASKTRONIC C20 - Dependency Loading Framework
  * Node.js-like dependency management for frontend modules
  * Automatic cascade loading with circular dependency detection
  */

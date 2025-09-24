@@ -1,4 +1,4 @@
-# MASKSERVICE C20 - Automated Testing Makefile
+# MASKTRONIC C20 - Automated Testing Makefile
 # Professional test automation for template loading verification
 
 .PHONY: test test-server test-templates test-modules clean help
@@ -21,7 +21,7 @@ all: help
 
 # Help target
 help:
-	@echo "$(BLUE)MASKSERVICE C20 - Automated Test Suite$(NC)"
+	@echo "$(BLUE)MASKTRONIC C20 - Automated Test Suite$(NC)"
 	@echo "======================================"
 	@echo ""
 	@echo "Available commands:"
@@ -52,7 +52,7 @@ check-server:
 
 # Start development server
 run:
-	@echo "$(BLUE)🚀 Starting MASKSERVICE C20 development server...$(NC)"
+	@echo "$(BLUE)🚀 Starting MASKTRONIC C20 development server...$(NC)"
 	@python3 -m http.server $(PORT) &
 	@echo $$! > .server.pid
 	@sleep 3
@@ -69,7 +69,7 @@ stop:
 
 # Run automated tests
 run-tests:
-	@echo "$(BLUE)🧪 Running MASKSERVICE C20 Automated Tests...$(NC)"
+	@echo "$(BLUE)🧪 Running MASKTRONIC C20 Automated Tests...$(NC)"
 	@echo "=========================================="
 	@echo ""
 	@echo "$(YELLOW)Test URL: $(TEST_URL)$(NC)"
@@ -93,7 +93,7 @@ run-tests:
 	@echo '' >> run_test.sh
 	@echo 'echo "$(GREEN)✅ Test execution completed$(NC)"' >> run_test.sh
 	@echo 'echo "$(BLUE)📋 Check browser console for detailed test results$(NC)"' >> run_test.sh
-	@echo 'echo "$(BLUE)🔍 Look for: MASKSERVICE C20 TEMPLATE LOADING TEST REPORT$(NC)"' >> run_test.sh
+	@echo 'echo "$(BLUE)🔍 Look for: MASKTRONIC C20 TEMPLATE LOADING TEST REPORT$(NC)"' >> run_test.sh
 	@echo '' >> run_test.sh
 	@echo 'kill $$BROWSER_PID 2>/dev/null || true' >> run_test.sh
 	
@@ -152,7 +152,7 @@ test-watch:
 
 # Generate test report
 test-report:
-	@echo "$(BLUE)📊 MASKSERVICE C20 Test Environment Report$(NC)"
+	@echo "$(BLUE)📊 MASKTRONIC C20 Test Environment Report$(NC)"
 	@echo "=========================================="
 	@echo "$(YELLOW)System Information:$(NC)"
 	@echo "  OS: $$(uname -s)"

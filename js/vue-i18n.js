@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Compatible I18n System
+ * MASKTRONIC C20 - Vue.js Compatible I18n System
  * Replaces legacy CSS selector-based i18n with Vue reactive translations
  * Post-migration integration layer for Vue components
  */

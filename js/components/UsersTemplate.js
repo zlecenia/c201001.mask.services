@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Users Template Component
+ * MASKTRONIC C20 - Vue.js Users Template Component
  * Replaces vanilla users-template.html
  * Advanced user management with roles and permissions
  */

@@ -1,9 +1,9 @@
 /**
- * MASKSERVICE C20 - Enhanced System Settings Module (Orchestrator)
+ * MASKTRONIC C20 - Enhanced System Settings Module (Orchestrator)
  * Advanced system configuration for SUPERUSER role
  * Coordinates modular components for settings management
  * @version 3.0.0 - Fully Modularized Architecture
- * @author MASKSERVICE Team
+ * @author MASKTRONIC Team
  */
 
 define('system-settings-enhanced', [

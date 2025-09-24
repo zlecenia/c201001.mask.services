@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Debug Menu Navigation Issues
+ * MASKTRONIC C20 - Debug Menu Navigation Issues
  * Diagnose and fix the core problems with menu navigation
  */
 

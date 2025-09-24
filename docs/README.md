@@ -1,4 +1,4 @@
-# MASKSERVICE C20 - Dokumentacja modularnej architektury
+# MASKTRONIC C20 - Dokumentacja modularnej architektury
 
 ## 📋 Spis treści
 - [Przegląd architektury](#przegląd-architektury)
@@ -11,7 +11,7 @@
 
 ## 🏗️ Przegląd architektury
 
-MASKSERVICE C20 został zrefaktoryzowany w wersji 2.0.0 na modularną architekturę dla lepszej organizacji kodu i łatwiejszej konserwacji. Każdy plik JavaScript ma maksymalnie 450 linii kodu.
+MASKTRONIC C20 został zrefaktoryzowany w wersji 2.0.0 na modularną architekturę dla lepszej organizacji kodu i łatwiejszej konserwacji. Każdy plik JavaScript ma maksymalnie 450 linii kodu.
 
 ### Główne cele refaktoryzacji:
 - ✅ **Modularność** - Podział dużych plików na mniejsze, wyspecjalizowane moduły
@@ -213,10 +213,10 @@ settingsSystem.importSystemConfig();
 
 ```javascript
 /**
- * MASKSERVICE C20 - [Nazwa modułu]
+ * MASKTRONIC C20 - [Nazwa modułu]
  * [Opis funkcjonalności]
  * @version X.Y.Z
- * @author MASKSERVICE Team
+ * @author MASKTRONIC Team
  */
 
 class ModuleName {
@@ -272,4 +272,4 @@ console.log('✅ [Module Name] loaded');
 
 **Wersja dokumentacji:** 2.0.0  
 **Data ostatniej aktualizacji:** 2024-01-23  
-**Autorzy:** MASKSERVICE Development Team
+**Autorzy:** MASKTRONIC Development Team

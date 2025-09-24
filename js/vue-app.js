@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Application Entry Point
+ * MASKTRONIC C20 - Vue.js Application Entry Point
  * Vue.js Migration: Main app instance and component management
  */
 
@@ -7,7 +7,7 @@
 const { createApp, ref, reactive, computed, onMounted, nextTick } = Vue;
 
 /**
- * Main Vue App Instance for MASKSERVICE C20
+ * Main Vue App Instance for MASKTRONIC C20
  * Gradually replacing vanilla JS modules with Vue components
  */
 class MaskServiceVueApp {
@@ -21,7 +21,7 @@ class MaskServiceVueApp {
             isAuthenticated: false
         });
         
-        console.log('🔶 Vue.js App initializing for MASKSERVICE C20...');
+        console.log('🔶 Vue.js App initializing for MASKTRONIC C20...');
         this.initializeVueApp();
     }
 
@@ -264,4 +264,4 @@ window.MaskServiceVue = new MaskServiceVueApp();
 // Backward compatibility - expose Vue app globally
 window.vueApp = window.MaskServiceVue;
 
-console.log('🔶 Vue.js integration loaded for MASKSERVICE C20');
+console.log('🔶 Vue.js integration loaded for MASKTRONIC C20');

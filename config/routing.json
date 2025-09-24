@@ -75,7 +75,7 @@
   "languages": ["pl", "en", "de"],
   "metadata": {
     "version": "2.0.1001",
-    "description": "MASKSERVICE C20 - Routing Configuration",
+    "description": "MASKTRONIC C20 - Routing Configuration",
     "lastModified": "2025-09-24T13:10:00Z",
     "extractedFrom": "router.js"
   }

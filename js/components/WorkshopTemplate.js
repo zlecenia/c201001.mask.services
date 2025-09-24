@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Workshop Template Component
+ * MASKTRONIC C20 - Vue.js Workshop Template Component
  * Replaces vanilla workshop-template.html
  * Advanced workshop management with equipment, parts, and maintenance
  */

@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Configuration Management Module
+ * MASKTRONIC C20 - Configuration Management Module
  * Handles loading and management of application configuration
  * Simple global class system - no AMD dependencies
  */

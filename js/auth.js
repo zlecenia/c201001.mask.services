@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Authentication Module
+ * MASKTRONIC C20 - Authentication Module
  * Modular authentication system - login, logout, user management
  * Simple global class system - no AMD dependencies
  */

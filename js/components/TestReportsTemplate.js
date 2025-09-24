@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Test Reports Template Component
+ * MASKTRONIC C20 - Vue.js Test Reports Template Component
  * Replaces vanilla test-reports-template.html
  * Advanced test reports management with PDF generation and filtering
  */
@@ -225,7 +225,7 @@ startxref
 150
 %%EOF
 
-MASKSERVICE C20 - Test Report
+MASKTRONIC C20 - Test Report
 Report: ${report.number}
 Title: ${report.title}
 Date: ${report.date}

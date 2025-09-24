@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Final Workflow Test
+ * MASKTRONIC C20 - Final Workflow Test
  * Comprehensive end-to-end test of the complete system:
  * - Role-based screens (5 screens)
  * - Dynamic template loading
@@ -8,7 +8,7 @@
  * - Router state changes
  */
 
-console.log('🎯 MASKSERVICE C20 - Final Workflow Test Starting...');
+console.log('🎯 MASKTRONIC C20 - Final Workflow Test Starting...');
 
 // Wait for all systems to initialize
 setTimeout(async () => {

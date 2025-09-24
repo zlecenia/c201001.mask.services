@@ -1,10 +1,10 @@
 /**
- * MASKSERVICE C20 - Vue.js Architecture Test Suite
+ * MASKTRONIC C20 - Vue.js Architecture Test Suite
  * Comprehensive testing for Vue components, reactive systems, and external configs
  * Post-Migration: Tests for Vue.js-based architecture (September 2025)
  */
 
-const MASKSERVICE_VUE_TEST_CONFIG = {
+const MASKTRONIC_VUE_TEST_CONFIG = {
     baseUrl: 'http://localhost:8081',
     testTimeout: 15000,
     roles: ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'],
@@ -118,7 +118,7 @@ class MaskServiceVueTest {
     async testVueComponentLoading() {
         this.log('🔶 Testing Vue Component Loading', 'test');
         
-        const expectedComponents = MASKSERVICE_VUE_TEST_CONFIG.vueComponents;
+        const expectedComponents = MASKTRONIC_VUE_TEST_CONFIG.vueComponents;
         
         for (const componentName of expectedComponents) {
             try {
@@ -149,7 +149,7 @@ class MaskServiceVueTest {
     async testExternalConfigLoading() {
         this.log('🗺 Testing External Config Loading', 'test');
         
-        const configPaths = MASKSERVICE_VUE_TEST_CONFIG.externalConfigs;
+        const configPaths = MASKTRONIC_VUE_TEST_CONFIG.externalConfigs;
         
         for (const configPath of configPaths) {
             try {
@@ -595,7 +595,7 @@ class MaskServiceVueTest {
         const successRate = this.results.total > 0 ? ((this.results.passed / this.results.total) * 100).toFixed(1) : 0;
         
         console.log('\n' + '='.repeat(80));
-        console.log('🔶 MASKSERVICE C20 VUE.JS ARCHITECTURE TEST REPORT');
+        console.log('🔶 MASKTRONIC C20 VUE.JS ARCHITECTURE TEST REPORT');
         console.log('='.repeat(80));
         console.log(`📊 Total Tests: ${this.results.total}`);
         console.log(`✅ Passed: ${this.results.passed}`);
@@ -612,7 +612,7 @@ class MaskServiceVueTest {
         
         // Vue Components Report
         console.log('\n🔶 VUE COMPONENTS REPORT:');
-        console.log(`📊 Total Components Expected: ${MASKSERVICE_VUE_TEST_CONFIG.vueComponents.length}`);
+        console.log(`📊 Total Components Expected: ${MASKTRONIC_VUE_TEST_CONFIG.vueComponents.length}`);
         const loadedComponents = this.results.vueComponents.filter(c => c.status === 'loaded').length;
         const missingComponents = this.results.vueComponents.filter(c => c.status === 'missing').length;
         const errorComponents = this.results.vueComponents.filter(c => c.status === 'error').length;
@@ -622,7 +622,7 @@ class MaskServiceVueTest {
         
         // External Config Report
         console.log('\n🗺 EXTERNAL CONFIG REPORT:');
-        console.log(`📊 Total Configs Expected: ${MASKSERVICE_VUE_TEST_CONFIG.externalConfigs.length}`);
+        console.log(`📊 Total Configs Expected: ${MASKTRONIC_VUE_TEST_CONFIG.externalConfigs.length}`);
         const loadedConfigs = this.results.configTests.filter(c => c.status === 'loaded').length;
         const failedConfigs = this.results.configTests.filter(c => c.status === 'failed').length;
         const errorConfigs = this.results.configTests.filter(c => c.status === 'error').length;
@@ -658,13 +658,13 @@ class MaskServiceVueTest {
             successRate: parseFloat(successRate),
             testDuration: testDuration,
             vueComponents: {
-                total: MASKSERVICE_VUE_TEST_CONFIG.vueComponents.length,
+                total: MASKTRONIC_VUE_TEST_CONFIG.vueComponents.length,
                 loaded: loadedComponents,
                 missing: missingComponents,
                 errors: errorComponents
             },
             externalConfigs: {
-                total: MASKSERVICE_VUE_TEST_CONFIG.externalConfigs.length,
+                total: MASKTRONIC_VUE_TEST_CONFIG.externalConfigs.length,
                 loaded: loadedConfigs,
                 failed: failedConfigs,
                 errors: errorConfigs
@@ -680,7 +680,7 @@ class MaskServiceVueTest {
      * Run comprehensive Vue.js architecture test suite
      */
     async runAllVueTests() {
-        this.log('🚀 Starting MASKSERVICE C20 VUE.JS ARCHITECTURE Tests', 'test');
+        this.log('🚀 Starting MASKTRONIC C20 VUE.JS ARCHITECTURE Tests', 'test');
         this.testStartTime = Date.now();
         
         try {
@@ -710,15 +710,15 @@ if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
     window.addEventListener('load', async () => {
         // Wait for Vue.js app and components to load
         setTimeout(async () => {
-            console.log('🔶 Starting MASKSERVICE C20 Vue.js Architecture Tests...');
+            console.log('🔶 Starting MASKTRONIC C20 Vue.js Architecture Tests...');
             const vueTester = new MaskServiceVueTest();
             const results = await vueTester.runAllVueTests();
             
             // Export results to global scope for Makefile and automation access
-            window.MASKSERVICE_VUE_TEST_RESULTS = results;
-            window.MASKSERVICE_TEST_RESULTS = results; // Legacy compatibility
+            window.MASKTRONIC_VUE_TEST_RESULTS = results;
+            window.MASKTRONIC_TEST_RESULTS = results; // Legacy compatibility
             
-            console.log('🎯 Vue.js test results exported to window.MASKSERVICE_VUE_TEST_RESULTS');
+            console.log('🎯 Vue.js test results exported to window.MASKTRONIC_VUE_TEST_RESULTS');
         }, 5000); // Wait 5 seconds for Vue.js components to initialize
     });
 }

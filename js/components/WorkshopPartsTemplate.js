@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Workshop Parts Template Component
+ * MASKTRONIC C20 - Vue.js Workshop Parts Template Component
  * Replaces vanilla workshop-parts-template.html
  * Advanced parts management with search, filters, and stock tracking
  */

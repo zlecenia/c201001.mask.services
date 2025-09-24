@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Service Menu Template Component
+ * MASKTRONIC C20 - Vue.js Service Menu Template Component
  * Replaces vanilla service-menu-template.html
  * Advanced service menu with diagnostics, calibration, and maintenance
  */

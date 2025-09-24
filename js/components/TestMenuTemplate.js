@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Test Menu Template Component
+ * MASKTRONIC C20 - Vue.js Test Menu Template Component
  * Replaces vanilla test-menu-template.html
  * Interactive test menu with export functionality
  */

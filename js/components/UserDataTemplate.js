@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js User Data Template Component
+ * MASKTRONIC C20 - Vue.js User Data Template Component
  * Replaces vanilla user-data-template.html
  * Display user information and session data
  */
@@ -61,7 +61,8 @@ const UserDataTemplate = {
                 }
             };
             const langRoles = roleMap[props.language] || roleMap.pl;
-            return langRoles[props.user.role] || props.user.role;
+            const userRole = props.user?.role || 'GUEST';
+            return langRoles[userRole] || userRole;
         });
 
         const formatTime = (date) => {

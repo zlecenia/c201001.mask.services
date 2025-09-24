@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js System Settings Template Component
+ * MASKTRONIC C20 - Vue.js System Settings Template Component
  * Replaces vanilla system-settings-template.html
  * Advanced system configuration and settings management
  */
@@ -49,7 +49,7 @@ const SystemSettingsTemplate = {
         });
 
         const deviceSettings = reactive({
-            deviceName: 'MASKSERVICE-001',
+            deviceName: 'MASKTRONIC-001',
             location: 'Production Floor',
             timezone: 'Europe/Warsaw',
             language: 'pl',

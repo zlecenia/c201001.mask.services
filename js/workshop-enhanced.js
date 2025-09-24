@@ -1,8 +1,8 @@
 /**
- * MASKSERVICE C20 - Enhanced Workshop Module (Modular Architecture)
+ * MASKTRONIC C20 - Enhanced Workshop Module (Modular Architecture)
  * Orchestrates workshop modules: core, parts, maintenance, tools, inventory
  * @version 2.0.0
- * @author MASKSERVICE Team
+ * @author MASKTRONIC Team
  */
 
 class WorkshopEnhanced {

@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Realtime Sensors Template Component
+ * MASKTRONIC C20 - Vue.js Realtime Sensors Template Component
  * Replaces vanilla realtime-sensors-template.html
  * Advanced real-time sensor monitoring dashboard
  */
@@ -34,7 +34,7 @@ const RealtimeSensorsTemplate = {
         const sensors = reactive([
             {
                 id: 'pressure',
-                name: props.language === 'pl' ? 'Ciśnienie' : 'Pressure',
+                name: (props.language || 'pl') === 'pl' ? 'Ciśnienie' : 'Pressure',
                 value: 15.2,
                 unit: 'kPa',
                 min: 10,

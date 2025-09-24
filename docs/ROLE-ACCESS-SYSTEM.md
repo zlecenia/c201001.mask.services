@@ -1,8 +1,8 @@
-# MASKSERVICE C20 - System Ról, Interfejsów i Uprawnień
+# MASKTRONIC C20 - System Ról, Interfejsów i Uprawnień
 
 ## 📋 Przegląd Systemu
 
-System MASKSERVICE C20 implementuje zaawansowany system kontroli dostępu oparty na rolach, z dodatkowymi ograniczeniami w zależności od używanego interfejsu (LCD 7.9" vs przeglądarka komputera).
+System MASKTRONIC C20 implementuje zaawansowany system kontroli dostępu oparty na rolach, z dodatkowymi ograniczeniami w zależności od używanego interfejsu (LCD 7.9" vs przeglądarka komputera).
 
 ## 🎭 Role Systemowe
 
@@ -216,4 +216,4 @@ templateValidator.setupMenuMonitoring();
 
 ---
 
-**System MASKSERVICE C20 zapewnia pełną kontrolę dostępu z elastycznymi ograniczeniami interfejsowymi, zoptymalizowany dla urządzeń LCD touchscreen 7.9" oraz pełnofunkcjonalnych przeglądarek komputerowych.**
+**System MASKTRONIC C20 zapewnia pełną kontrolę dostępu z elastycznymi ograniczeniami interfejsowymi, zoptymalizowany dla urządzeń LCD touchscreen 7.9" oraz pełnofunkcjonalnych przeglądarek komputerowych.**

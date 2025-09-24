@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Modular Integration Test
+ * MASKTRONIC C20 - Modular Integration Test
  * Test script to verify MenuManager integration with ViewLoader
  */
 

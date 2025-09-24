@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Compatible Sensor Monitoring System
+ * MASKTRONIC C20 - Vue.js Compatible Sensor Monitoring System
  * Replaces legacy DOM manipulation with Vue reactive sensor data
  * Post-migration integration layer for Vue components
  */

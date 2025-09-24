@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Reports Batch Template Component
+ * MASKTRONIC C20 - Vue.js Reports Batch Template Component
  * Replaces vanilla reports-batch-template.html
  * Advanced batch report generation with multiple formats and scheduling
  */
@@ -113,7 +113,7 @@ const ReportsBatchTemplate = {
         };
 
         const downloadMockFile = (reportData) => {
-            const content = `MASKSERVICE C20 - ${reportData.format.toUpperCase()} Report
+            const content = `MASKTRONIC C20 - ${reportData.format.toUpperCase()} Report
 Period: ${reportData.period}
 Generated: ${reportData.generatedAt}
 User: ${props.user.username}

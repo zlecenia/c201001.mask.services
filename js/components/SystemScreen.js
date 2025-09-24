@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js System Screen Component
+ * MASKTRONIC C20 - Vue.js System Screen Component
  * Replaces vanilla system-screen.html template
  * Uses global Vue APIs from vue-app.js (no duplicate destructuring)
  */

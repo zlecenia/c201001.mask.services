@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Workshop Tools Template Component
+ * MASKTRONIC C20 - Vue.js Workshop Tools Template Component
  * Replaces vanilla workshop-tools-template.html
  * Advanced calibration tools management with scheduling and tracking
  */

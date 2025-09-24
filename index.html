@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="global.page_title">MASKSERVICE C20 1001 - System Mock v2.0</title>
+    <title data-i18n="global.page_title">MASKTRONIC C20 1001 - System Mock v2.0</title>
     <!-- Vue.js CDN for development -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     
@@ -64,7 +64,7 @@
     <header class="header">
         <div class="header-left">
             <a href="/">
-                <span class="logo" data-i18n="global.logo">MASKSERVICE</span>
+                <span class="logo" data-i18n="global.logo">MASKTRONIC</span>
                 <span class="hardware" data-i18n="global.hardware">C20</span>
                 <span class="product" data-i18n="global.product">1001</span>
                 <span class="software" data-i18n="global.software">v2.0 MOCK</span>
@@ -946,17 +946,17 @@
     </div>
 </div>
 
-<!-- MASKSERVICE C20 - Simple Script Loading -->
+<!-- MASKTRONIC C20 - Simple Script Loading -->
 <script>
-    // Global configuration for MASKSERVICE C20
+    // Global configuration for MASKTRONIC C20
     const cacheBuster = Date.now();
-    window.MASKSERVICE_CONFIG = {
+    window.MASKTRONIC_CONFIG = {
         version: '2.0.1001',
         cacheBuster: cacheBuster,
         debug: window.location.search.includes('debug=true')
     };
     
-    console.log('🔧 MASKSERVICE C20 v' + window.MASKSERVICE_CONFIG.version + ' - Simple Script Loading');
+    console.log('🔧 MASKTRONIC C20 v' + window.MASKTRONIC_CONFIG.version + ' - Simple Script Loading');
     console.log('⚡ Cache buster: ' + cacheBuster);
 </script>
 
@@ -990,12 +990,12 @@
 <script>
     // Initialize application after all scripts are loaded
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 MASKSERVICE C20 application starting...');
+        console.log('🚀 MASKTRONIC C20 application starting...');
         
         // Initialize the application
         if (typeof window.MasktronicApp !== 'undefined') {
             window.app = new MasktronicApp();
-            console.log('✅ MASKSERVICE C20 application loaded successfully');
+            console.log('✅ MASKTRONIC C20 application loaded successfully');
         } else {
             console.error('❌ MasktronicApp not available');
         }
@@ -1042,7 +1042,7 @@
 <script>
     // Vue.js Application Startup
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🔶 Starting Vue.js integration for MASKSERVICE C20...');
+        console.log('🔶 Starting Vue.js integration for MASKTRONIC C20...');
         
         // Initialize Vue app when DOM is ready
         setTimeout(() => {

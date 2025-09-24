@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Device History Template Component  
+ * MASKTRONIC C20 - Vue.js Device History Template Component
  * Replaces vanilla device-history-template.html
  * Advanced device history tracking with search, filters, and analytics
  */

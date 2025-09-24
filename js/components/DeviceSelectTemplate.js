@@ -1,5 +1,5 @@
 /**
- * MASKSERVICE C20 - Vue.js Device Select Template Component
+ * MASKTRONIC C20 - Vue.js Device Select Template Component
  * Replaces vanilla device-select-template.html
  * Interactive device selection for testing
  */
