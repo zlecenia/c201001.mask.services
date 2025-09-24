@@ -1,0 +1,78 @@
+<div class="menu-container service-interface">
+    <div class="role-header">
+        <h1 data-i18n="roles.service_menu">Service Menu</h1>
+        <span class="role-badge role-serwisant" data-i18n="roles.serwisant">SERWISANT</span>
+    </div>
+    
+    <div class="menu-layout service-layout">
+        <div class="menu-sidebar" id="service-menu-items">
+            <!-- Service technician functions -->
+            <button class="menu-item menu-primary" onclick="MenuManager.selectMenuOption('workshop_maintenance')" data-i18n="menu.workshop_maintenance">
+                <span class="menu-icon">🔧</span>
+                <span class="menu-text">Maintenance Schedule</span>
+            </button>
+            
+            <button class="menu-item menu-primary" onclick="MenuManager.selectMenuOption('workshop_tools')" data-i18n="menu.workshop_tools">
+                <span class="menu-icon">🛠️</span>
+                <span class="menu-text">Calibration Tools</span>
+            </button>
+            
+            <button class="menu-item menu-primary" onclick="MenuManager.selectMenuOption('workshop_parts')" data-i18n="menu.workshop_parts">
+                <span class="menu-icon">⚙️</span>
+                <span class="menu-text">Workshop Parts</span>
+            </button>
+            
+            <button class="menu-item menu-primary" onclick="MenuManager.selectMenuOption('workshop_inventory')" data-i18n="menu.workshop_inventory">
+                <span class="menu-icon">📦</span>
+                <span class="menu-text">Inventory</span>
+            </button>
+            
+            <button class="menu-item menu-secondary" onclick="MenuManager.selectMenuOption('device_history')" data-i18n="menu.device_history">
+                <span class="menu-icon">📋</span>
+                <span class="menu-text">Device History</span>
+            </button>
+            
+            <button class="menu-item menu-secondary" onclick="MenuManager.selectMenuOption('realtime_sensors')" data-i18n="menu.realtime_sensors">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text">Real-time Sensors</span>
+            </button>
+            
+            <!-- Service system access -->
+            <div class="menu-section">
+                <h3 data-i18n="menu.service_section">Service Tools</h3>
+                <button class="menu-item menu-system" onclick="MenuManager.selectMenuOption('service_menu')" data-i18n="menu.service_menu">
+                    <span class="menu-icon">🔧</span>
+                    <span class="menu-text">Service Menu</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="menu-content" id="menu-content">
+            <div class="welcome-message">
+                <h2 data-i18n="menu.select_option">Wybierz opcję z menu</h2>
+                <p data-i18n="roles.service_description">Service Technician: Maintenance and calibration tools</p>
+                <div class="service-status">
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="service.pending_maintenance">Pending Maintenance:</span>
+                        <span class="status-value warning">3</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="service.calibration_due">Calibration Due:</span>
+                        <span class="status-value critical">1</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="service.parts_low">Parts Low Stock:</span>
+                        <span class="status-value warning">5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Service-specific quick actions -->
+    <div class="quick-actions service-actions">
+        <button class="btn btn-quick btn-maintenance" onclick="scheduleMaintenanceCheck()" data-i18n="actions.schedule_maintenance">Schedule Maintenance</button>
+        <button class="btn btn-quick btn-calibrate" onclick="startCalibration()" data-i18n="actions.start_calibration">Start Calibration</button>
+        <button class="btn btn-quick btn-diagnostic" onclick="runDiagnostic()" data-i18n="actions.run_diagnostic">Run Diagnostic</button>
+    </div>
+</div>
