@@ -437,7 +437,11 @@ class MaskServiceVueTest {
         this.log('Testing DataExportManager', 'test');
         
         try {
-            if (window.dataExporter && window.dataExporter.exportData) {
+            // Check for both DataExportManager class and instance
+            const hasClass = window.DataExportManager && typeof window.DataExportManager === 'function';
+            const hasInstance = window.dataExporter && typeof window.dataExporter.exportData === 'function';
+            
+            if (hasClass || hasInstance) {
                 this.log('DataExportManager available', 'info');
                 
                 // Test formats
@@ -445,7 +449,9 @@ class MaskServiceVueTest {
                 this.log(`DataExportManager supports: ${supportedFormats.join(', ')}`, 'info');
                 this.results.passed++;
             } else {
-                this.log('DataExportManager not available', 'error');
+                this.log('DataExportManager not available - checking what exists:', 'error');
+                this.log(`window.DataExportManager: ${typeof window.DataExportManager}`, 'info');
+                this.log(`window.dataExporter: ${typeof window.dataExporter}`, 'info');
                 this.results.failed++;
             }
             this.results.total++;

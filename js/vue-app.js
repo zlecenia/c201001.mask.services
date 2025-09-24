@@ -13,6 +13,7 @@ const { createApp, ref, reactive, computed, onMounted, nextTick } = Vue;
 class MaskServiceVueApp {
     constructor() {
         this.app = null;
+        this.appState = null; // Will store reference to Vue app state
         this.currentScreen = ref('login-screen');
         this.currentLanguage = ref('pl');
         this.currentUser = reactive({
@@ -41,6 +42,9 @@ class MaskServiceVueApp {
                         isAuthenticated: false
                     }
                 });
+
+                // Store reference to appState for external access
+                window.MaskServiceVue.appState = appState;
 
                 // Navigation method compatible with existing router
                 const navigateToScreen = (screen, language = 'pl', action = 'default') => {
@@ -221,32 +225,168 @@ class MaskServiceVueApp {
         }
     }
 
-    /**
-     * Navigate to screen - Vue-compatible navigation method
-     */
-    navigateToScreen(screen, language = 'pl', action = 'default') {
-        console.log(`🔶 Vue Navigation: ${screen}/${language}/${action}`);
-        
+/**
+ * Navigate to screen - Vue-compatible navigation method
+ * FIXED: Now actually renders Vue components instead of just changing hash
+ */
+navigateToScreen(screen, language = 'pl', action = 'default') {
+    console.log(`🔶 Vue Navigation: ${screen}/${language}/${action}`);
+    
+    try {
         // Update app state
-        this.appState.currentScreen = screen;
-        this.appState.currentLanguage = language;
+        if (this.appState) {
+            this.appState.currentScreen = screen;
+            this.appState.currentLanguage = language;
+        }
         
-        // Integrate with existing router system
+        // CRITICAL FIX: Actually load and render the Vue component
+        this.loadComponentToDom(screen);
+        
+        // Update router hash for consistency
         if (window.C20Router) {
             const hash = `#/${screen}/${language}/${action}`;
             window.location.hash = hash;
         }
         
         console.log('✅ Vue Navigation completed:', { screen, language, action });
+        return true;
+        
+    } catch (error) {
+        console.error(`❌ Vue Navigation failed for ${screen}:`, error);
+        return false;
     }
+}
 
-    /**
-     * Register Vue component
-     */
-    registerComponent(name, component) {
-        if (this.app) {
-            this.app.component(name, component);
-            console.log(`✅ Vue component registered: ${name}`);
+/**
+ * Load and render Vue component to DOM - CRITICAL FIX for navigation
+ * This replaces the legacy loadTemplate DOM manipulation with proper Vue rendering
+ */
+loadComponentToDom(screenName) {
+    console.log(`🔶 Vue: Loading component for screen: ${screenName}`);
+    
+    try {
+        // Find the menu content container (same as legacy loadTemplate)
+        const menuContent = document.getElementById('menu-content');
+        if (!menuContent) {
+            console.error('❌ Menu content container not found');
+            return false;
+        }
+        
+        // Map screen names to Vue component names
+        const componentMap = {
+            'test-menu': 'TestMenuTemplate',
+            'test-menu-template': 'TestMenuTemplate',
+            'user-data': 'UserDataTemplate', 
+            'user-data-template': 'UserDataTemplate',
+            'device-select': 'DeviceSelectTemplate',
+            'device-select-template': 'DeviceSelectTemplate',
+            'device-data': 'DeviceDataTemplate',
+            'device-data-template': 'DeviceDataTemplate',
+            'realtime-sensors': 'RealtimeSensorsTemplate',
+            'realtime-sensors-template': 'RealtimeSensorsTemplate',
+            'reports-view': 'ReportsViewTemplate',
+            'reports-view-template': 'ReportsViewTemplate',
+            'reports-batch': 'ReportsBatchTemplate',
+            'reports-batch-template': 'ReportsBatchTemplate',
+            'reports-schedule': 'ReportsScheduleTemplate',
+            'reports-schedule-template': 'ReportsScheduleTemplate',
+            'system-settings': 'SystemSettingsTemplate',
+            'system-settings-template': 'SystemSettingsTemplate',
+            'service-menu': 'ServiceMenuTemplate',
+            'service-menu-template': 'ServiceMenuTemplate',
+            'users': 'UsersTemplate',
+            'users-template': 'UsersTemplate',
+            'workshop': 'WorkshopTemplate',
+            'workshop-template': 'WorkshopTemplate',
+            'workshop-inventory': 'WorkshopInventoryTemplate',
+            'workshop-inventory-template': 'WorkshopInventoryTemplate',
+            'workshop-maintenance': 'WorkshopMaintenanceTemplate',
+            'workshop-maintenance-template': 'WorkshopMaintenanceTemplate',
+            'workshop-parts': 'WorkshopPartsTemplate',
+            'workshop-parts-template': 'WorkshopPartsTemplate',
+            'workshop-tools': 'WorkshopToolsTemplate',
+            'workshop-tools-template': 'WorkshopToolsTemplate',
+            'test-reports': 'TestReportsTemplate',
+            'test-reports-template': 'TestReportsTemplate',
+            'device-history': 'DeviceHistoryTemplate',
+            'device-history-template': 'DeviceHistoryTemplate'
+        };
+        
+        const componentName = componentMap[screenName];
+        if (!componentName) {
+            console.error(`❌ Vue: No component mapped for screen: ${screenName}`);
+            menuContent.innerHTML = `<div class="error-message">
+                <h2>Component Not Found</h2>
+                <p>No Vue component available for screen: ${screenName}</p>
+                <p>Available screens: ${Object.keys(componentMap).join(', ')}</p>
+            </div>`;
+            return false;
+        }
+        
+        // Check if component is registered
+        if (!this.app || !this.app._context.components[componentName]) {
+            console.error(`❌ Vue: Component '${componentName}' not registered`);
+            menuContent.innerHTML = `<div class="error-message">
+                <h2>Component Not Registered</h2>
+                <p>Vue component '${componentName}' is not registered</p>
+            </div>`;
+            return false;
+        }
+        
+        // Clear existing content and render Vue component
+        menuContent.innerHTML = `<div id="vue-component-${screenName}" class="vue-component-container"></div>`;
+        
+        // Create a new Vue app instance for this component
+        const { createApp } = Vue;
+        const componentApp = createApp({
+            components: {
+                [componentName]: this.app._context.components[componentName]
+            },
+            template: `<${componentName}></${componentName}>`
+        });
+        
+        // Mount the component to the container
+        const componentContainer = document.getElementById(`vue-component-${screenName}`);
+        if (componentContainer) {
+            componentApp.mount(componentContainer);
+            console.log(`✅ Vue: Component '${componentName}' rendered successfully for screen '${screenName}'`);
+            
+            // Apply i18n if available (legacy compatibility)
+            if (window.changeLanguage && window.currentLanguage) {
+                // Vue components should handle i18n internally, but legacy fallback
+                setTimeout(() => {
+                    if (window.changeLanguage) {
+                        window.changeLanguage(window.currentLanguage);
+                    }
+                }, 100);
+            }
+            
+            return true;
+        } else {
+            console.error(`❌ Vue: Could not find component container for ${screenName}`);
+            return false;
+        }
+        
+    } catch (error) {
+        console.error(`❌ Vue: Failed to load component for ${screenName}:`, error);
+        const menuContent = document.getElementById('menu-content');
+        if (menuContent) {
+            menuContent.innerHTML = `<div class="error-message">
+                <h2>Component Load Error</h2>
+                <p>Failed to load Vue component for "${screenName}": ${error.message}</p>
+            </div>`;
+        }
+        return false;
+    }
+}
+
+/**
+ * Register Vue component
+ */
+registerComponent(name, component) {
+    if (this.app) {
+        this.app.component(name, component);
+        console.log(`✅ Vue component registered: ${name}`);
         }
     }
 
