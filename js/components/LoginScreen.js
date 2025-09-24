@@ -260,7 +260,7 @@ const LoginScreen = {
                 <!-- Footer -->
                 <div class="login-footer">
                     <p>🔶 Vue.js Component Active</p>
-                    <p>Version 2.0.1001 | {{ new Date().getFullYear() }}</p>
+                    <p>Version 22.25.1001 | {{ new Date().getFullYear() }}</p>
                 </div>
             </div>
         </div>

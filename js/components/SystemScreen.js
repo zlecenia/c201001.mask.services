@@ -77,7 +77,7 @@ const SystemScreen = {
             systemState.loadingProgress = 0;
 
             const progressInterval = setInterval(() => {
-                systemState.loadingProgress += Math.random() * 15;
+                systemState.loadingProgress += Math.random() * 100;
                 
                 if (systemState.loadingProgress >= 100) {
                     systemState.loadingProgress = 100;
@@ -91,9 +91,9 @@ const SystemScreen = {
                         // Navigate to user menu after system screen
                         setTimeout(() => {
                             emit('navigate', 'user-menu-screen', props.language, 'default');
-                        }, 2000);
+                        }, 200);
                         
-                    }, 500);
+                    }, 200);
                 }
             }, 100);
         };
@@ -111,7 +111,7 @@ const SystemScreen = {
             // Start loading animation after short delay
             setTimeout(() => {
                 startLoadingAnimation();
-            }, 500);
+            }, 200);
         });
 
         return {

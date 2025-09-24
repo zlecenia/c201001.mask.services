@@ -35,6 +35,14 @@ class MenuManager {
     }
 
     /**
+     * Initialize menu for specific role (wrapper method for compatibility)
+     */
+    async initializeMenu(role) {
+        console.log(`🔄 Initializing menu for role: ${role}`);
+        return await this.showUserMenu(role);
+    }
+
+    /**
      * Show user menu based on role
      */
     async showUserMenu(role) {
@@ -726,12 +734,19 @@ class MenuManager {
         console.log(`🛣️ Navigating to template: ${templateId} (route: ${routePath})`);
         
         try {
-            // Update hash/router first
+            // Delegate routing to C20Router to prevent conflicts
             if (window.C20Router && routePath) {
                 const currentLang = window.currentLanguage || 'pl';
                 const newHash = `#/${routePath}/${currentLang}/default`;
-                console.log(`📍 Updating hash: ${window.location.hash} → ${newHash}`);
-                window.location.hash = newHash;
+                console.log(`🛣️ Delegating navigation to C20Router: ${window.location.hash} → ${newHash}`);
+                
+                // Use C20Router navigation instead of direct hash manipulation
+                if (window.C20Router.navigateToView) {
+                    await window.C20Router.navigateToView(routePath, currentLang, 'default');
+                } else {
+                    // Fallback to hash if C20Router.navigateToView not available
+                    window.location.hash = newHash;
+                }
             }
             
             // Load template

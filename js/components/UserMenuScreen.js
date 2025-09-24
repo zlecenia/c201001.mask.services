@@ -188,7 +188,7 @@ const UserMenuScreen = {
                     <div class="header-content">
                         <h1 class="welcome-text">{{ welcomeText }}</h1>
                         <div class="user-badge">
-                            <span class="role-badge" :class="'role-' + user.role.toLowerCase()">
+                            <span class="role-badge" :class="'role-' + (user.role || 'guest').toLowerCase()">
                                 {{ userRoleText }}
                             </span>
                             <span class="vue-indicator">Vue</span>
