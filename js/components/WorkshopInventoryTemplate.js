@@ -4,7 +4,6 @@
  * Advanced inventory management with stock tracking and alerts
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const WorkshopInventoryTemplate = {
     name: 'WorkshopInventoryTemplate',

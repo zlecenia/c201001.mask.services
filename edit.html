@@ -485,10 +485,10 @@
                         items: { $ref: "#/definitions/menuItem" },
                         description: "Pozycje menu dla superusera"
                     },
-                    SERWISANT: {
+                    SERVICEUSER: {
                         type: "array",
                         items: { $ref: "#/definitions/menuItem" },
-                        description: "Pozycje menu dla serwisanta"
+                        description: "Pozycje menu dla serviceusera"
                     }
                 },
                 definitions: {
@@ -762,9 +762,9 @@
             },
             system: {
                 "roles": {
-                    "valid_roles": ["OPERATOR", "ADMIN", "SUPERUSER", "SERWISANT"],
+                    "valid_roles": ["OPERATOR", "ADMIN", "SUPERUSER", "SERVICEUSER"],
                     "default_role": "OPERATOR",
-                    "role_hierarchy": { "OPERATOR": 1, "ADMIN": 2, "SUPERUSER": 3, "SERWISANT": 4 }
+                    "role_hierarchy": { "OPERATOR": 1, "ADMIN": 2, "SUPERUSER": 3, "SERVICEUSER": 4 }
                 },
                 "authentication": {
                     "session_timeout": 1800000,
@@ -888,7 +888,7 @@
             }
 
             // Menu.json - ma role użytkowników
-            if (keys.some(k => ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'].includes(k))) {
+            if (keys.some(k => ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERVICEUSER'].includes(k))) {
                 return 'menu';
             }
 

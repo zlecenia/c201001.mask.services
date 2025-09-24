@@ -329,7 +329,7 @@ class UITester {
             'login-operator-btn',
             'login-admin-btn', 
             'login-superuser-btn',
-            'login-serwisant-btn'
+            'login-serviceuser-btn'
         ];
         
         let testCount = 0;

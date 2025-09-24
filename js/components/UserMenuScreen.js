@@ -4,7 +4,6 @@
  * Dynamic menu based on user role
  */
 
-const { ref, reactive, computed, onMounted, nextTick } = Vue;
 
 const UserMenuScreen = {
     name: 'UserMenuScreen',
@@ -69,9 +68,9 @@ const UserMenuScreen = {
                     { id: 'advanced_diagnostics', icon: '🔍', label: 'Advanced Diagnostics', description: 'Zaawansowana diagnostyka' },
                     { id: 'system_diagnostics', icon: '💻', label: 'System Diagnostics', description: 'Diagnostyka systemowa' }
                 ],
-                SERWISANT: [
+                SERVICEUSER: [
                     { id: 'test_menu', icon: '🧪', label: 'Test Menu', description: 'Menu testów serwisowych' },
-                    { id: 'user_data', icon: '👤', label: 'User Data', description: 'Dane serwisanta' },
+                    { id: 'user_data', icon: '👤', label: 'User Data', description: 'Dane serviceusera' },
                     { id: 'device_data', icon: '📊', label: 'Device Data', description: 'Dane urządzenia' },
                     { id: 'test_reports', icon: '📋', label: 'Test Reports', description: 'Raporty serwisowe' },
                     { id: 'realtime_sensors', icon: '📡', label: 'Real-time Sensors', description: 'Monitoring czujników' },
@@ -103,7 +102,7 @@ const UserMenuScreen = {
                     OPERATOR: 'Operator',
                     ADMIN: 'Administrator',
                     SUPERUSER: 'Superuser',
-                    SERWISANT: 'Serwisant'
+                    SERVICEUSER: 'Serwisant'
                 }
             };
             const langRoles = roleMap[props.language] || roleMap.pl;
@@ -292,7 +291,7 @@ const UserMenuScreen = {
         .role-badge.role-operator { background: #3498db; }
         .role-badge.role-admin { background: #27ae60; }
         .role-badge.role-superuser { background: #9b59b6; }
-        .role-badge.role-serwisant { background: #e67e22; }
+        .role-badge.role-serviceuser { background: #e67e22; }
         
         .vue-indicator {
             background: #42b883;

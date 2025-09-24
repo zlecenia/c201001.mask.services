@@ -4,7 +4,6 @@
  * Advanced calibration tools management with scheduling and tracking
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const WorkshopToolsTemplate = {
     name: 'WorkshopToolsTemplate',

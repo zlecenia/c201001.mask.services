@@ -18,7 +18,7 @@ System MASKSERVICE C20 implementuje zaawansowany system kontroli dostępu oparty
 - **Ekran**: `admin-menu-screen.html`
 - **Ograniczenia**: Brak dostępu do krytycznych ustawień systemowych
 
-### 3. **SERWISANT** (Service Technician)
+### 3. **SERVICEUSER** (Service Technician)
 - **Konserwacja, kalibracja i zarządzanie warsztatem**
 - Dostęp do: Workshop Parts/Maintenance/Tools/Inventory, Service Menu + podstawowe funkcje
 - **Ekran**: `service-menu-screen.html`  
@@ -53,7 +53,7 @@ System MASKSERVICE C20 implementuje zaawansowany system kontroli dostępu oparty
 Każdy użytkownik może mieć przypisane kombinacje ról:
 - `OPERATOR` 
 - `OPERATOR + ADMIN`
-- `SERWISANT + ADMIN`
+- `SERVICEUSER + ADMIN`
 - `SUPERUSER` (wszystkie uprawnienia)
 
 ### **Poziom 2: Ograniczenia w Ramach Ról**
@@ -82,7 +82,7 @@ views/screens/
 ├── login-screen.html           # Logowanie
 ├── operator-menu-screen.html   # Menu OPERATOR
 ├── admin-menu-screen.html      # Menu ADMIN  
-├── service-menu-screen.html    # Menu SERWISANT
+├── service-menu-screen.html    # Menu SERVICEUSER
 ├── superuser-menu-screen.html  # Menu SUPERUSER
 └── user-menu-screen.html       # Menu ogólne (legacy)
 ```
@@ -106,7 +106,7 @@ function checkAccess(user, functionName) {
 
 ## 🎯 Mapowanie Funkcji do Ról
 
-| Funkcja | OPERATOR | ADMIN | SERWISANT | SUPERUSER |
+| Funkcja | OPERATOR | ADMIN | SERVICEUSER | SUPERUSER |
 |---------|----------|-------|-----------|-----------|
 | Test Wizard | ✅ | ✅ | ❌ | ✅ |
 | Device History | ✅ | ✅ | ✅ | ✅ |

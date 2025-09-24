@@ -3,7 +3,6 @@
  * First Vue component replacing vanilla login-screen template
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const LoginScreen = {
     name: 'LoginScreen',
@@ -35,7 +34,7 @@ const LoginScreen = {
             { key: 'OPERATOR', label: 'Operator', color: 'blue' },
             { key: 'ADMIN', label: 'Administrator', color: 'green' },
             { key: 'SUPERUSER', label: 'Superuser', color: 'purple' },
-            { key: 'SERWISANT', label: 'Serwisant', color: 'orange' }
+            { key: 'SERVICEUSER', label: 'Serwisant', color: 'orange' }
         ]);
 
         // Computed properties

@@ -4,7 +4,6 @@
  * Advanced system configuration and settings management
  */
 
-const { ref, reactive, computed, onMounted, watch } = Vue;
 
 const SystemSettingsTemplate = {
     name: 'SystemSettingsTemplate',

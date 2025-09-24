@@ -4,7 +4,6 @@
  * Advanced service menu with diagnostics, calibration, and maintenance
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const ServiceMenuTemplate = {
     name: 'ServiceMenuTemplate',

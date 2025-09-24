@@ -4,7 +4,6 @@
  * Display user information and session data
  */
 
-const { ref, reactive, computed, onMounted, onUnmounted } = Vue;
 
 const UserDataTemplate = {
     name: 'UserDataTemplate',
@@ -52,13 +51,13 @@ const UserDataTemplate = {
                     OPERATOR: 'Operator',
                     ADMIN: 'Administrator',
                     SUPERUSER: 'Superuser',
-                    SERWISANT: 'Serwisant'
+                    SERVICEUSER: 'Serwisant'
                 },
                 en: {
                     OPERATOR: 'Operator',
                     ADMIN: 'Administrator',
                     SUPERUSER: 'Superuser',
-                    SERWISANT: 'Service Technician'
+                    SERVICEUSER: 'Service Technician'
                 }
             };
             const langRoles = roleMap[props.language] || roleMap.pl;
@@ -96,7 +95,7 @@ const UserDataTemplate = {
                 OPERATOR: ['read_devices', 'run_tests', 'view_reports'],
                 ADMIN: ['read_devices', 'run_tests', 'view_reports', 'manage_users', 'system_settings'],
                 SUPERUSER: ['read_devices', 'run_tests', 'view_reports', 'manage_users', 'system_settings', 'advanced_config', 'integrations'],
-                SERWISANT: ['read_devices', 'run_tests', 'view_reports', 'service_mode', 'diagnostics', 'calibration']
+                SERVICEUSER: ['read_devices', 'run_tests', 'view_reports', 'service_mode', 'diagnostics', 'calibration']
             };
             
             return permissionMap[props.user.role] || [];
@@ -513,7 +512,7 @@ const UserDataTemplate = {
         .role-badge.role-operator { background: #3498db; }
         .role-badge.role-admin { background: #27ae60; }
         .role-badge.role-superuser { background: #9b59b6; }
-        .role-badge.role-serwisant { background: #e67e22; }
+        .role-badge.role-serviceuser { background: #e67e22; }
         
         .edit-form {
             margin: 16px 0;

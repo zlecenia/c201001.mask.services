@@ -162,6 +162,25 @@ class MaskServiceVueApp {
     }
 
     /**
+     * Navigate to screen - Vue-compatible navigation method
+     */
+    navigateToScreen(screen, language = 'pl', action = 'default') {
+        console.log(`🔶 Vue Navigation: ${screen}/${language}/${action}`);
+        
+        // Update app state
+        this.appState.currentScreen = screen;
+        this.appState.currentLanguage = language;
+        
+        // Integrate with existing router system
+        if (window.C20Router) {
+            const hash = `#/${screen}/${language}/${action}`;
+            window.location.hash = hash;
+        }
+        
+        console.log('✅ Vue Navigation completed:', { screen, language, action });
+    }
+
+    /**
      * Register Vue component
      */
     registerComponent(name, component) {

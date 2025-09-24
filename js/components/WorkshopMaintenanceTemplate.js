@@ -4,7 +4,6 @@
  * Advanced maintenance scheduling with calendar and task management
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const WorkshopMaintenanceTemplate = {
     name: 'WorkshopMaintenanceTemplate',

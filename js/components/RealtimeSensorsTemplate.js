@@ -4,7 +4,6 @@
  * Advanced real-time sensor monitoring dashboard
  */
 
-const { ref, reactive, computed, onMounted, onUnmounted } = Vue;
 
 const RealtimeSensorsTemplate = {
     name: 'RealtimeSensorsTemplate',

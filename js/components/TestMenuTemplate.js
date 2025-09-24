@@ -4,7 +4,6 @@
  * Interactive test menu with export functionality
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const TestMenuTemplate = {
     name: 'TestMenuTemplate',

@@ -25,7 +25,7 @@ class VueI18nManager {
         }
 
         try {
-            const response = await fetch(`/lang/${language}.json`);
+            const response = await fetch(`/locales/${language}.json`);
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}`);
             }

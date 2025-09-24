@@ -4,7 +4,6 @@
  * Advanced parts management with search, filters, and stock tracking
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const WorkshopPartsTemplate = {
     name: 'WorkshopPartsTemplate',

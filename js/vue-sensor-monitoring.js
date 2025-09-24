@@ -11,41 +11,104 @@ class VueSensorMonitoring {
         this.isMonitoring = false;
         this.vueComponents = new Set();
         
-        // Vue reactive sensor data
+        // Vue reactive sensor data - will be loaded from config/sensors.json
         this.reactiveSensorData = Vue.reactive({
-            pressure: {
-                low: { min: 8, max: 12, unit: 'mbar', alarm: false, current: 10.0, status: 'normal' },
-                medium: { min: 18, max: 22, unit: 'bar', alarm: false, current: 20.0, status: 'normal' },
-                high: { min: 28, max: 32, unit: 'bar', alarm: false, current: 30.0, status: 'normal' }
-            },
-            flow: {
-                inlet: { current: 25.0, unit: 'l/min', max: 50, min: 0, alarm: false, status: 'normal' },
-                outlet: { current: 23.0, unit: 'l/min', max: 45, min: 0, alarm: false, status: 'normal' }
-            },
-            temperature: { current: 22.5, unit: '°C', min: 18, max: 35, alarm: false, status: 'normal' },
-            humidity: { current: 45, unit: '%', min: 30, max: 70, alarm: false, status: 'normal' },
             lastUpdate: new Date().toISOString(),
             isActive: false
         });
+        
+        // Configuration loaded from external JSON
+        this.sensorConfig = null;
 
         this.alarmThresholds = new Map();
         this.init();
     }
 
-    init() {
+    async init() {
+        console.log('🔧 Initializing Vue Sensor Monitoring...');
+        
+        // Load sensor configuration from external JSON
+        await this.loadSensorConfig();
+        
         this.setupAlarmThresholds();
         this.initializeSensorData();
-        console.log('🔧 Vue Sensor Monitoring initialized');
+        console.log('✅ Vue Sensor Monitoring initialized with external config');
+    }
+
+    /**
+     * Load sensor configuration from config/sensors.json
+     */
+    async loadSensorConfig() {
+        try {
+            const response = await fetch('/config/sensors.json');
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: Failed to load sensor config`);
+            }
+            
+            this.sensorConfig = await response.json();
+            
+            // Initialize reactive sensor data with loaded config
+            Object.assign(this.reactiveSensorData, this.sensorConfig.sensorDefaults);
+            
+            console.log('✅ Sensor configuration loaded from config/sensors.json');
+            return true;
+        } catch (error) {
+            console.error('❌ Failed to load sensor config:', error);
+            
+            // Fallback to hardcoded defaults if config loading fails
+            this.loadFallbackConfig();
+            return false;
+        }
+    }
+
+    /**
+     * Fallback sensor configuration if external JSON fails to load
+     */
+    loadFallbackConfig() {
+        console.warn('⚠️ Using fallback sensor configuration');
+        
+        this.sensorConfig = {
+            sensorDefaults: {
+                pressure: {
+                    low: { min: 8, max: 12, unit: 'mbar', alarm: false, current: 10.0, status: 'normal' },
+                    medium: { min: 18, max: 22, unit: 'bar', alarm: false, current: 20.0, status: 'normal' },
+                    high: { min: 28, max: 32, unit: 'bar', alarm: false, current: 30.0, status: 'normal' }
+                },
+                flow: {
+                    inlet: { current: 25.0, unit: 'l/min', max: 50, min: 0, alarm: false, status: 'normal' },
+                    outlet: { current: 23.0, unit: 'l/min', max: 45, min: 0, alarm: false, status: 'normal' }
+                },
+                temperature: { current: 22.5, unit: '°C', min: 18, max: 35, alarm: false, status: 'normal' },
+                humidity: { current: 45, unit: '%', min: 30, max: 70, alarm: false, status: 'normal' }
+            },
+            alarmThresholds: {
+                pressure_low: { min: 8, max: 12 },
+                pressure_medium: { min: 18, max: 22 },
+                pressure_high: { min: 28, max: 32 },
+                flow_inlet: { min: 0, max: 50 },
+                flow_outlet: { min: 0, max: 45 },
+                temperature: { min: 18, max: 35 },
+                humidity: { min: 30, max: 70 }
+            }
+        };
+        
+        // Initialize reactive sensor data with fallback config
+        Object.assign(this.reactiveSensorData, this.sensorConfig.sensorDefaults);
     }
 
     setupAlarmThresholds() {
-        this.alarmThresholds.set('pressure_low', { min: 8, max: 12 });
-        this.alarmThresholds.set('pressure_medium', { min: 18, max: 22 });
-        this.alarmThresholds.set('pressure_high', { min: 28, max: 32 });
-        this.alarmThresholds.set('flow_inlet', { min: 0, max: 50 });
-        this.alarmThresholds.set('flow_outlet', { min: 0, max: 45 });
-        this.alarmThresholds.set('temperature', { min: 18, max: 35 });
-        this.alarmThresholds.set('humidity', { min: 30, max: 70 });
+        // Use alarm thresholds from loaded configuration
+        if (this.sensorConfig && this.sensorConfig.alarmThresholds) {
+            const thresholds = this.sensorConfig.alarmThresholds;
+            
+            Object.entries(thresholds).forEach(([key, value]) => {
+                this.alarmThresholds.set(key, value);
+            });
+            
+            console.log('✅ Alarm thresholds loaded from config:', Object.keys(thresholds).length, 'thresholds');
+        } else {
+            console.warn('⚠️ No alarm thresholds in config, using empty Map');
+        }
     }
 
     initializeSensorData() {

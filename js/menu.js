@@ -355,7 +355,7 @@ class MenuManager {
             { username: 'operator1', role: 'OPERATOR', password: '1234', created: Date.now() },
             { username: 'admin1', role: 'ADMIN', password: 'admin', created: Date.now() },
             { username: 'super1', role: 'SUPERUSER', password: 'super', created: Date.now() },
-            { username: 'service1', role: 'SERWISANT', password: 'service', created: Date.now() }
+            { username: 'service1', role: 'SERVICEUSER', password: 'service', created: Date.now() }
         ];
         
         this.saveUsersToStorage(defaultUsers);
@@ -409,7 +409,7 @@ class MenuManager {
                             { value: 'OPERATOR', label: 'Operator' },
                             { value: 'ADMIN', label: 'Administrator' },
                             { value: 'SUPERUSER', label: 'Superuser' },
-                            { value: 'SERWISANT', label: 'Serwisant' }
+                            { value: 'SERVICEUSER', label: 'Serwisant' }
                         ]
                     }
                 ],
@@ -422,7 +422,7 @@ class MenuManager {
             // Fallback for simple prompt
             const username = prompt('Enter username:');
             const password = prompt('Enter password:');
-            const role = prompt('Enter role (OPERATOR/ADMIN/SUPERUSER/SERWISANT):');
+            const role = prompt('Enter role (OPERATOR/ADMIN/SUPERUSER/SERVICEUSER):');
             
             if (username && password && role) {
                 this.createUser({ username, password, role: role.toUpperCase() });
@@ -475,7 +475,7 @@ class MenuManager {
                             { value: 'OPERATOR', label: 'Operator' },
                             { value: 'ADMIN', label: 'Administrator' },
                             { value: 'SUPERUSER', label: 'Superuser' },
-                            { value: 'SERWISANT', label: 'Serwisant' }
+                            { value: 'SERVICEUSER', label: 'Serwisant' }
                         ]
                     }
                 ],
@@ -531,7 +531,7 @@ class MenuManager {
         }
 
         // Validate role
-        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'];
+        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERVICEUSER'];
         if (!validRoles.includes(userData.role)) {
             alert(`Invalid role "${userData.role}". Valid roles: ${validRoles.join(', ')}`);
             return;
@@ -575,7 +575,7 @@ class MenuManager {
         }
 
         // Validate role
-        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'];
+        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERVICEUSER'];
         if (!validRoles.includes(updateData.role)) {
             alert(`Invalid role "${updateData.role}". Valid roles: ${validRoles.join(', ')}`);
             return;

@@ -4,7 +4,6 @@
  * Real-time device status and sensor monitoring
  */
 
-const { ref, reactive, computed, onMounted, onUnmounted } = Vue;
 
 const DeviceDataTemplate = {
     name: 'DeviceDataTemplate',

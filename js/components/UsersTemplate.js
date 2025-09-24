@@ -4,7 +4,6 @@
  * Advanced user management with roles and permissions
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const UsersTemplate = {
     name: 'UsersTemplate',

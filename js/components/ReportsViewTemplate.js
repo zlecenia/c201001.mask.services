@@ -4,7 +4,6 @@
  * Advanced reporting with filters and data visualization
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const ReportsViewTemplate = {
     name: 'ReportsViewTemplate',

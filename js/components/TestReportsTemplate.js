@@ -4,7 +4,6 @@
  * Advanced test reports management with PDF generation and filtering
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const TestReportsTemplate = {
     name: 'TestReportsTemplate',

@@ -4,7 +4,6 @@
  * Advanced report scheduling with CRON expressions and automation
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const ReportsScheduleTemplate = {
     name: 'ReportsScheduleTemplate',

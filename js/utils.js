@@ -121,7 +121,7 @@ class Utils {
     }
 
     static validateRole(role) {
-        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'];
+        const validRoles = ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERVICEUSER'];
         return validRoles.includes(role);
     }
 

@@ -4,7 +4,6 @@
  * Advanced workshop management with equipment, parts, and maintenance
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const WorkshopTemplate = {
     name: 'WorkshopTemplate',

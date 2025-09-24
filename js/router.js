@@ -273,7 +273,7 @@ class C20Router {
                     'login-operator-btn',
                     'login-admin-btn',
                     'login-superuser-btn',
-                    'login-serwisant-btn',
+                    'login-serviceuser-btn',
                     'key-*', // Virtual keyboard keys
                     'password-input'
                 ]

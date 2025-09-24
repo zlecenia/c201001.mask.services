@@ -4,7 +4,6 @@
  * Advanced device history tracking with search, filters, and analytics
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const DeviceHistoryTemplate = {
     name: 'DeviceHistoryTemplate',

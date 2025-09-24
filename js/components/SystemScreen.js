@@ -1,9 +1,8 @@
 /**
  * MASKSERVICE C20 - Vue.js System Screen Component
  * Replaces vanilla system-screen.html template
+ * Uses global Vue APIs from vue-app.js (no duplicate destructuring)
  */
-
-const { ref, reactive, computed, onMounted } = Vue;
 
 const SystemScreen = {
     name: 'SystemScreen',
@@ -49,19 +48,19 @@ const SystemScreen = {
                         OPERATOR: 'Operator',
                         ADMIN: 'Administrator',
                         SUPERUSER: 'Superuser',
-                        SERWISANT: 'Serwisant'
+                        SERVICEUSER: 'Serwisant'
                     },
                     en: {
                         OPERATOR: 'Operator',
                         ADMIN: 'Administrator', 
                         SUPERUSER: 'Superuser',
-                        SERWISANT: 'Service Technician'
+                        SERVICEUSER: 'Service Technician'
                     },
                     de: {
                         OPERATOR: 'Bediener',
                         ADMIN: 'Administrator',
                         SUPERUSER: 'Superuser',
-                        SERWISANT: 'Servicetechniker'
+                        SERVICEUSER: 'Servicetechniker'
                     }
                 };
                 

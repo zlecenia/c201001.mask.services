@@ -4,7 +4,7 @@
 .PHONY: test test-server test-templates test-modules clean help
 
 # Configuration
-PORT = 8084
+PORT = 8081
 BROWSER = firefox
 TEST_TIMEOUT = 30
 TEST_URL = http://localhost:$(PORT)
@@ -51,7 +51,7 @@ check-server:
 	fi
 
 # Start development server
-start-server:
+run:
 	@echo "$(BLUE)🚀 Starting MASKSERVICE C20 development server...$(NC)"
 	@python3 -m http.server $(PORT) &
 	@echo $$! > .server.pid
@@ -59,7 +59,7 @@ start-server:
 	@echo "$(GREEN)✅ Server started on http://localhost:$(PORT)$(NC)"
 
 # Stop development server
-stop-server:
+stop:
 	@if [ -f .server.pid ]; then \
 		echo "$(BLUE)🛑 Stopping development server...$(NC)"; \
 		kill `cat .server.pid` 2>/dev/null || true; \

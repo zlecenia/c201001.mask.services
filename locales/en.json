@@ -29,7 +29,7 @@
     "login_as_operator": "Login as OPERATOR",
     "login_as_admin": "Login as ADMIN",
     "login_as_superuser": "Login as SUPERUSER",
-    "login_as_serwisant": "Login as SERWISANT",
+    "login_as_serviceuser": "Login as SERVICEUSER",
     "scanner_not_detected": "Scanner not detected",
     "code_not_read": "Code not read correctly",
     "use_keyboard": "Use keyboard",
@@ -123,7 +123,7 @@
     "OPERATOR": "Operator",
     "ADMIN": "Administrator",
     "SUPERUSER": "Super User",
-    "SERWISANT": "Service Technician"
+    "SERVICEUSER": "Service Technician"
   },
   "messages": {
     "please_enter_password": "Please enter a password",

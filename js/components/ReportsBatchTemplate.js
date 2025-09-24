@@ -4,7 +4,6 @@
  * Advanced batch report generation with multiple formats and scheduling
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const ReportsBatchTemplate = {
     name: 'ReportsBatchTemplate',

@@ -4,7 +4,6 @@
  * Interactive device selection for testing
  */
 
-const { ref, reactive, computed, onMounted } = Vue;
 
 const DeviceSelectTemplate = {
     name: 'DeviceSelectTemplate',
