@@ -737,6 +737,13 @@ class C20Router {
     }
 
     /**
+     * Navigate to view (compatibility method for test.js)
+     */
+    navigateToView(view, language = null, action = null) {
+        return this.navigate(view, language, action, true);
+    }
+
+    /**
      * Fallback direct navigation
      */
     navigateDirect(view, language = null, action = null, updateHash = true) {

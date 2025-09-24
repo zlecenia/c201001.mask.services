@@ -4,7 +4,8 @@
  * Extracted from system-settings-enhanced.js for modularity
  */
 
-define('settings-ui-generator', [], function() {
+(function(global) {
+    'use strict';
     
     class SettingsUIGenerator {
         constructor() {
@@ -321,10 +322,12 @@ define('settings-ui-generator', [], function() {
         }
     }
 
-    return SettingsUIGenerator;
-});
-
-// Legacy global export
-if (typeof window !== 'undefined') {
-    window.SettingsUIGenerator = SettingsUIGenerator;
-}
+    // Export the module to global namespace
+    global.SettingsUIGenerator = SettingsUIGenerator;
+    
+    // Initialize global instance if needed
+    if (!global.settingsUIGenerator) {
+        global.settingsUIGenerator = new SettingsUIGenerator();
+    }
+    
+})(window || global || this);

@@ -202,11 +202,116 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Filter configuration
+      DEFAULT_STATUS_FILTER: 'ALL',
+      DEFAULT_DATE_RANGE: 'ALL',
+      SEARCH_DEBOUNCE_DELAY: 300, // ms
+      
+      // Reports management configuration
+      MAX_REPORTS_DISPLAY: 200,
+      REPORTS_PER_PAGE: 25,
+      AUTO_REFRESH_INTERVAL: 60000, // 60 seconds
+      
+      // Modal configuration
+      MODAL_ANIMATION_DURATION: 300, // ms
+      MODAL_MAX_WIDTH: 700, // px
+      
+      // Date/time configuration
+      DATE_FORMAT_OPTIONS: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      },
+      
+      // Duration formatting
+      DURATION_UNITS: {
+        SECONDS: 's',
+        MINUTES: 'min',
+        HOURS: 'h'
+      },
+      
+      // Touch configuration (for 400x1280 display)
+      TOUCH_TARGET_MIN_SIZE: 44, // px
+      TABLE_MIN_WIDTH: 800, // px for mobile scroll
+      
+      // Report status types
+      REPORT_STATUS_TYPES: {
+        COMPLETED: { label: 'Ukończone', color: '#28a745' },
+        PENDING: { label: 'Oczekujące', color: '#ffc107' },
+        FAILED: { label: 'Nieudane', color: '#dc3545' },
+        CANCELLED: { label: 'Anulowane', color: '#6c757d' }
+      },
+      
+      // Test result types
+      TEST_RESULT_TYPES: {
+        PASSED: { label: 'Zaliczony', color: '#28a745' },
+        FAILED: { label: 'Niezaliczony', color: '#dc3545' },
+        PENDING: { label: 'Oczekujący', color: '#ffc107' }
+      },
+      
+      // Component state variables
       selectedStatus: 'ALL',
       selectedDateRange: 'ALL',
       searchQuery: '',
       showReportModal: false,
       modalReport: null,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Reports section translations
+        testReports: 'reports.test_reports',
+        newReport: 'reports.new_report',
+        export: 'reports.export',
+        totalReports: 'reports.total_reports',
+        today: 'reports.today',
+        passedTests: 'reports.passed_tests',
+        pending: 'reports.pending',
+        thisMonth: 'reports.this_month',
+        generated: 'reports.generated',
+        successRate: 'reports.success_rate',
+        inQueue: 'reports.in_queue',
+        reports: 'reports.reports',
+        
+        // Filter translations
+        status: 'reports.status',
+        dateRange: 'reports.date_range',
+        searchReports: 'reports.search_reports',
+        allStatuses: 'reports.all_statuses',
+        completed: 'reports.completed',
+        failed: 'reports.failed',
+        thisWeek: 'reports.this_week',
+        allDates: 'reports.all_dates',
+        
+        // Table headers
+        id: 'reports.id',
+        testName: 'reports.test_name',
+        device: 'reports.device',
+        date: 'reports.date',
+        duration: 'reports.duration',
+        result: 'reports.result',
+        actions: 'reports.actions',
+        
+        // Modal translations
+        basicInfo: 'reports.basic_info',
+        testResults: 'reports.test_results',
+        operator: 'reports.operator',
+        testType: 'reports.test_type',
+        createdAt: 'reports.created_at',
+        download: 'reports.download',
+        
+        // Common translations
+        close: 'common.close',
+        view: 'common.view',
+        edit: 'common.edit',
+        delete: 'common.delete',
+        share: 'common.share'
+      },
+      
+      // Test reports data
       testReports: [
         {
           id: 'RPT001',

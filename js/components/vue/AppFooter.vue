@@ -33,15 +33,32 @@ export default {
     currentUser: {
       type: Object,
       default: null
-    },
-    currentTime: {
-      type: String,
-      default: ''
     }
   },
   data() {
     return {
-      buildNumber: '20250124.1900'
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Time update configuration
+      TIME_UPDATE_INTERVAL: 1000, // 1 second
+      
+      // System info
+      buildNumber: '20250124.1900',
+      
+      // Current time state
+      currentTime: '',
+      timeInterval: null,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        software: 'global.software',
+        version: 'global.version', 
+        build: 'global.build',
+        user: 'global.user',
+        logout: 'menu.logout',
+        system: 'global.system',
+        status: 'global.status'
+      }
     }
   },
   computed: {
@@ -54,9 +71,40 @@ export default {
     }
   },
   methods: {
+    updateTime() {
+      this.currentTime = new Date().toLocaleTimeString('pl-PL', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+      });
+    },
+    
+    startTimeUpdates() {
+      this.updateTime(); // Initial update
+      this.timeInterval = setInterval(() => {
+        this.updateTime();
+      }, this.TIME_UPDATE_INTERVAL);
+    },
+    
+    stopTimeUpdates() {
+      if (this.timeInterval) {
+        clearInterval(this.timeInterval);
+        this.timeInterval = null;
+      }
+    },
+    
     handleLogout() {
       this.$emit('logout');
     }
+  },
+  
+  mounted() {
+    this.startTimeUpdates();
+  },
+  
+  beforeUnmount() {
+    this.stopTimeUpdates();
   }
 }
 </script>

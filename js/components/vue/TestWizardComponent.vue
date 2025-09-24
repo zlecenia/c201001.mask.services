@@ -219,7 +219,70 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Wizard configuration
+      TOTAL_STEPS: 4,
+      INITIAL_STEP: 0,
+      PROGRESS_STEP_WIDTH: 25, // 100% / 4 steps = 25%
+      
+      // Test configuration
+      MIN_TEST_DURATION: 60000, // 1 minute in ms
+      MAX_TEST_DURATION: 3600000, // 1 hour in ms
+      DEFAULT_PARAMETER_VALUES: {
+        pressure: 50,
+        flow: 30,
+        duration: 180
+      },
+      
+      // Animation and UI timing
+      STEP_TRANSITION_DURATION: 300,
+      BUTTON_HOVER_TRANSFORM: 1, // px
+      
+      // Mobile breakpoints (for 400x1280 display)
+      MOBILE_BREAKPOINT: 450, // px
+      TOUCH_TARGET_MIN_SIZE: 44, // px
+      
+      // Component state variables
       currentStep: 0,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Wizard section translations
+        testWizard: 'wizard.test_wizard',
+        selectTestType: 'wizard.select_test_type',
+        selectDevice: 'wizard.select_device',
+        configureParameters: 'wizard.configure_parameters',
+        reviewConfiguration: 'wizard.review_configuration',
+        testDetails: 'wizard.test_details',
+        testType: 'wizard.test_type',
+        device: 'wizard.device',
+        parameters: 'wizard.parameters',
+        review: 'wizard.review',
+        lastCalibration: 'wizard.last_calibration',
+        testsToday: 'wizard.tests_today',
+        confirmStart: 'wizard.confirm_start',
+        startTest: 'wizard.start_test',
+        
+        // Test types translations
+        leakTest: 'tests.leak_test',
+        leakTestDesc: 'tests.leak_test_desc',
+        filtrationTest: 'tests.filtration_test',
+        filtrationTestDesc: 'tests.filtration_test_desc',
+        pressureTest: 'tests.pressure_test',
+        pressureTestDesc: 'tests.pressure_test_desc',
+        
+        // Global translations
+        next: 'global.next',
+        back: 'global.back',
+        cancel: 'global.cancel',
+        loading: 'global.loading',
+        error: 'global.error',
+        success: 'global.success',
+        warning: 'global.warning'
+      },
+      
+      // Wizard steps configuration
       wizardSteps: [
         { id: 'type', titleKey: 'wizard.test_type', title: 'Typ testu' },
         { id: 'device', titleKey: 'wizard.device', title: 'Urządzenie' },

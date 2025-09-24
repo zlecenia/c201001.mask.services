@@ -184,11 +184,110 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Filter configuration
+      DEFAULT_STATUS_FILTER: 'ALL',
+      DEFAULT_PRIORITY_FILTER: 'ALL',
+      SEARCH_DEBOUNCE_DELAY: 300, // ms
+      
+      // Task management configuration
+      MAX_TASKS_DISPLAY: 100,
+      TASKS_PER_PAGE: 20,
+      AUTO_REFRESH_INTERVAL: 30000, // 30 seconds
+      
+      // Modal configuration
+      MODAL_ANIMATION_DURATION: 200, // ms
+      MODAL_MAX_WIDTH: 600, // px
+      
+      // Date/time configuration
+      DATE_FORMAT_OPTIONS: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      },
+      
+      // Touch configuration (for 400x1280 display)
+      TOUCH_TARGET_MIN_SIZE: 44, // px
+      TABLE_MIN_WIDTH: 800, // px for mobile scroll
+      
+      // Task priority levels
+      PRIORITY_LEVELS: {
+        HIGH: { weight: 3, color: '#dc3545' },
+        MEDIUM: { weight: 2, color: '#ffc107' },
+        LOW: { weight: 1, color: '#17a2b8' }
+      },
+      
+      // Task status types
+      STATUS_TYPES: {
+        PENDING: { label: 'Oczekujące', color: '#6c757d' },
+        IN_PROGRESS: { label: 'W trakcie', color: '#17a2b8' },
+        COMPLETED: { label: 'Ukończone', color: '#28a745' },
+        OVERDUE: { label: 'Przeterminowane', color: '#dc3545' }
+      },
+      
+      // Component state variables
       selectedStatus: 'ALL',
       selectedPriority: 'ALL',
       searchQuery: '',
       showTaskModal: false,
       modalTask: null,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Workshop section translations
+        maintenanceManagement: 'workshop.maintenance_management',
+        newTask: 'workshop.new_task',
+        generateReport: 'workshop.generate_report',
+        urgentTasks: 'workshop.urgent_tasks',
+        dueToday: 'workshop.due_today',
+        thisWeek: 'workshop.this_week',
+        completed: 'workshop.completed',
+        thisMonth: 'workshop.this_month',
+        requireAttention: 'workshop.require_attention',
+        tasks: 'workshop.tasks',
+        scheduled: 'workshop.scheduled',
+        
+        // Task management translations
+        status: 'workshop.status',
+        priority: 'workshop.priority',
+        searchTasks: 'workshop.search_tasks',
+        taskId: 'workshop.task_id',
+        title: 'workshop.title',
+        device: 'workshop.device',
+        dueDate: 'workshop.due_date',
+        assignedTo: 'workshop.assigned_to',
+        actions: 'workshop.actions',
+        
+        // Status translations
+        allStatuses: 'workshop.all_statuses',
+        pending: 'workshop.pending',
+        inProgress: 'workshop.in_progress',
+        overdue: 'workshop.overdue',
+        
+        // Priority translations
+        allPriorities: 'workshop.all_priorities',
+        high: 'workshop.high',
+        medium: 'workshop.medium',
+        low: 'workshop.low',
+        
+        // Modal translations
+        taskDetails: 'workshop.task_details',
+        description: 'workshop.description',
+        created: 'workshop.created',
+        edit: 'workshop.edit',
+        
+        // Common translations
+        close: 'common.close',
+        cancel: 'common.cancel',
+        save: 'common.save',
+        delete: 'common.delete',
+        confirm: 'common.confirm'
+      },
+      
+      // Maintenance tasks data
       maintenanceTasks: [
         {
           id: 'MT001',

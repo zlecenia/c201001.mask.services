@@ -6,8 +6,44 @@
 
 class VueSensorMonitoring {
     constructor() {
+        // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+        
+        // Data generation interval (as requested: 100ms)
+        this.DATA_GENERATION_INTERVAL = 100;
+        
+        // Sensor update and monitoring intervals
+        this.UPDATE_INTERVAL = 1000; // 1 second for UI updates
+        this.HISTORY_LENGTH = 60; // Keep 60 data points for charts
+        
+        // Sensor variance and limits
+        this.PRESSURE_VARIANCE = 0.5;
+        this.FLOW_VARIANCE = 2.0;
+        this.TEMPERATURE_VARIANCE = 0.3;
+        this.HUMIDITY_VARIANCE = 1.0;
+        
+        // Sensor value limits
+        this.PRESSURE_MIN = 0;
+        this.PRESSURE_MAX = 50;
+        this.FLOW_MIN = 0;
+        this.FLOW_MAX = 100;
+        this.TEMPERATURE_MIN = 15;
+        this.TEMPERATURE_MAX = 35;
+        this.HUMIDITY_MIN = 30;
+        this.HUMIDITY_MAX = 70;
+        
+        // Base sensor values (will be overridden by config)
+        this.BASE_PRESSURE_LOW = 10;
+        this.BASE_PRESSURE_MEDIUM = 20;
+        this.BASE_PRESSURE_HIGH = 30;
+        this.BASE_FLOW_INLET = 50;
+        this.BASE_FLOW_OUTLET = 45;
+        this.BASE_TEMPERATURE = 23;
+        this.BASE_HUMIDITY = 50;
+        
+        // Component and system state
         this.sensorData = new Map();
         this.updateInterval = null;
+        this.dataGenerationInterval = null; // New interval for 100ms data generation
         this.isMonitoring = false;
         this.vueComponents = new Set();
         
@@ -19,8 +55,9 @@ class VueSensorMonitoring {
         
         // Configuration loaded from external JSON
         this.sensorConfig = null;
-
         this.alarmThresholds = new Map();
+        
+        // Initialize the monitoring system
         this.init();
     }
 

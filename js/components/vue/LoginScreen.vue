@@ -154,13 +154,88 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Login method configuration
+      DEFAULT_LOGIN_METHOD: 'keyword',
+      PASSWORD_MIN_LENGTH: 4,
+      VIRTUAL_KEYBOARD_ENABLED: true,
+      
+      // Animation and UI timing
+      ACCORDION_ANIMATION_DURATION: 300,
+      FOCUS_DELAY: 100,
+      
+      // Login state variables
       selectedMethod: 'keyword',
       password: '',
       showPassword: false,
       showVirtualKeyboard: false,
-      expandedRole: null,
       isLoggedIn: false,
       currentUserRole: null,
+      expandedRole: null,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Login section translations
+        scanner: 'login.scanner',
+        keyword: 'login.keyword',
+        userLoginByKeyword: 'login.user_login_by_keyword',
+        userLoginByScanner: 'login.user_login_by_scanner',
+        password: 'login.password',
+        passwordPlaceholder: 'login.password_placeholder',
+        loginAsOperator: 'login.login_as_operator',
+        loginAsAdmin: 'login.login_as_admin',
+        loginAsSuperuser: 'login.login_as_superuser',
+        loginAsServiceuser: 'login.login_as_serviceuser',
+        scannerNotDetected: 'login.scanner_not_detected',
+        codeNotRead: 'login.code_not_read',
+        useKeyboard: 'login.use_keyboard',
+        enterPassword: 'login.enter_password',
+        loginFailed: 'login.login_failed',
+        invalidCredentials: 'login.invalid_credentials',
+        loggedIn: 'login.logged_in',
+        
+        // Menu section translations
+        logout: 'menu.logout',
+        userMenu: 'menu.user_menu',
+        welcome: 'menu.welcome',
+        systemReady: 'menu.system_ready',
+        testWizard: 'menu.test_wizard',
+        testQuick: 'menu.test_quick',
+        testScenarios: 'menu.test_scenarios',
+        userdata: 'menu.user_data',
+        realtimeSensors: 'menu.realtime_sensors',
+        deviceHistory: 'menu.device_history',
+        reportsView: 'menu.reports_view',
+        reportsBatch: 'menu.reports_batch',
+        reportsSchedule: 'menu.reports_schedule',
+        workshopParts: 'menu.workshop_parts',
+        workshopMaintenance: 'menu.workshop_maintenance',
+        workshopTools: 'menu.workshop_tools',
+        workshopInventory: 'menu.workshop_inventory',
+        settingsScenarios: 'menu.settings_scenarios',
+        settingsIntegration: 'menu.settings_integration',
+        settingsStandards: 'menu.settings_standards',
+        settingsSystem: 'menu.settings_system',
+        users: 'menu.users',
+        serviceMenu: 'menu.service_menu',
+        advancedDiagnostics: 'menu.advanced_diagnostics',
+        
+        // Global translations
+        loading: 'global.loading',
+        error: 'global.error',
+        success: 'global.success',
+        warning: 'global.warning',
+        info: 'global.info',
+        
+        // Roles translations
+        roleOperator: 'roles.OPERATOR',
+        roleAdmin: 'roles.ADMIN',
+        roleSuperuser: 'roles.SUPERUSER',
+        roleServiceuser: 'roles.SERVICEUSER'
+      },
+      
+      // Role definitions with menu items
       loginRoles: [
         {
           id: 'OPERATOR',

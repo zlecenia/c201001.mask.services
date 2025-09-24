@@ -688,6 +688,28 @@ class MenuManager {
         }
     }
 
+    showAdvancedDiagnostics() {
+        console.log('Opening Advanced Diagnostics...');
+        // Use Vue.js navigation for advanced diagnostics
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('system-settings', 'pl', 'diagnostics');
+        } else {
+            // Fallback to alert for now
+            alert('Advanced Diagnostics - Feature coming soon!');
+        }
+    }
+
+    showSystemConfig() {
+        console.log('Opening System Config...');
+        // Use Vue.js navigation for system configuration
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('system-settings', 'pl', 'config');
+        } else {
+            // Fallback implementation
+            this.loadTemplate('system-settings-template');
+        }
+    }
+
     showServiceScreen() {
         console.log('Opening Service Screen...');
         // Use Vue.js navigation instead of legacy template loading

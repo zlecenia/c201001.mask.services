@@ -397,9 +397,12 @@
             <div class="pressure-box">
                 <div class="pressure-item">
                     <div class="pressure-status" id="pressure-low-status"></div>
-                    <div id="pressure-low-label" class="pressure-label" data-i18n="data.low">Low</div>
                     <div id="pressure-low" class="pressure-value">10</div>
-                    <div id="pressure-low-unit" class="pressure-unit">mbar</div>
+
+                    <span class="pressure-label-unit">
+                        <span id="pressure-low-label" class="pressure-label" data-i18n="data.low">Low</span>
+                        [<span id="pressure-low-unit" class="pressure-unit">mbar</span>]
+                    </span>
                     <div id="pressure-low-dia" class="pressure-dia">
                         <div class="pressure-chart-container"></div>
                     </div>
@@ -409,9 +412,10 @@
                 <div class="pressure-item">
                     <div class="pressure-status" id="pressure-medium-status"></div>
                     <div id="pressure-medium" class="pressure-value">20</div>
-                    <div id="pressure-medium-label" class="pressure-label" data-i18n="data.medium">Medium</div>
-                    
-                    <div id="pressure-medium-unit" class="pressure-unit">bar</div>
+                    <span class="pressure-label-unit">
+                        <span id="pressure-medium-label" class="pressure-label" data-i18n="data.medium">Medium</span>
+                        [<span id="pressure-medium-unit" class="pressure-unit">bar</span>]
+                    </span>
                     <div id="pressure-medium-dia" class="pressure-dia">
                         <div class="pressure-chart-container"></div>
                     </div>
@@ -420,9 +424,13 @@
             <div class="pressure-box">
                 <div class="pressure-item">
                     <div class="pressure-status" id="pressure-high-status"></div>
-                    <div id="pressure-high-label" class="pressure-label" data-i18n="data.high">High</div>
+                    
+
                     <div id="pressure-high" class="pressure-value">30</div>
-                    <div id="pressure-high-unit" class="pressure-unit">bar</div>
+                    <span class="pressure-label-unit">
+                        <span id="pressure-high-label" class="pressure-label" data-i18n="data.high">High</span>
+                        [<span id="pressure-high-unit" class="pressure-unit">bar</span>]
+                    </span>
                     <div id="pressure-high-dia" class="pressure-dia">
                         <div class="pressure-chart-container"></div>
                     </div>

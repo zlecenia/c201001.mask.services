@@ -224,7 +224,10 @@ class TemplateValidator {
             'settings_scenarios': 'system-settings-template',
             'settings_integration': 'system-settings-template',
             'settings_standards': 'system-settings-template',
-            'settings_system': 'system-settings-template'
+            'settings_system': 'system-settings-template',
+            // New mappings for missing menu options
+            'system_config': 'system-settings-template',
+            'advanced_diagnostics': 'system-settings-template'
         };
         
         return templateMap[optionKey] || 'unknown-template';

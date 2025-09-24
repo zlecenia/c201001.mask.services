@@ -340,8 +340,106 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Settings configuration
+      DEFAULT_TAB: 'general',
+      SAVE_DEBOUNCE_DELAY: 500, // ms
+      AUTO_SAVE_INTERVAL: 30000, // 30 seconds
+      
+      // Validation constraints
+      MIN_AUTO_LOGOUT: 5, // minutes
+      MAX_AUTO_LOGOUT: 480, // 8 hours
+      MIN_SESSION_TIMEOUT: 15, // minutes
+      MAX_SESSION_TIMEOUT: 240, // 4 hours
+      MIN_MEASUREMENT_INTERVAL: 1, // seconds
+      MAX_MEASUREMENT_INTERVAL: 60, // seconds
+      
+      // UI configuration
+      TABS_BREAKPOINT: 450, // px
+      SETTING_GROUP_MIN_WIDTH: 300, // px
+      
+      // Touch configuration (for 400x1280 display)
+      TOUCH_TARGET_MIN_SIZE: 44, // px
+      INPUT_MIN_HEIGHT: 40, // px
+      CHECKBOX_SIZE: 20, // px
+      
+      // Animation timing
+      TAB_TRANSITION_DURATION: 200, // ms
+      SAVE_ANIMATION_DURATION: 300, // ms
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Main settings translations
+        systemSettings: 'settings.system_settings',
+        resetDefaults: 'settings.reset_defaults',
+        saveAll: 'settings.save_all',
+        
+        // Tab translations
+        general: 'settings.general',
+        device: 'settings.device',
+        security: 'settings.security',
+        network: 'settings.network',
+        deviceSettings: 'settings.device_settings',
+        
+        // General settings
+        systemLanguage: 'settings.system_language',
+        timezone: 'settings.timezone',
+        dateFormat: 'settings.date_format',
+        autoLogout: 'settings.auto_logout',
+        enableSounds: 'settings.enable_sounds',
+        enableAnimations: 'settings.enable_animations',
+        minutes: 'settings.minutes',
+        
+        // Device settings
+        deviceName: 'settings.device_name',
+        deviceNamePlaceholder: 'settings.device_name_placeholder',
+        deviceLocation: 'settings.device_location',
+        measurementInterval: 'settings.measurement_interval',
+        pressureUnits: 'settings.pressure_units',
+        flowUnits: 'settings.flow_units',
+        autoCalibration: 'settings.auto_calibration',
+        seconds: 'settings.seconds',
+        
+        // Security settings
+        passwordPolicy: 'settings.password_policy',
+        sessionTimeout: 'settings.session_timeout',
+        maxFailedLogins: 'settings.max_failed_logins',
+        enableAuditLog: 'settings.enable_audit_log',
+        requirePasswordChange: 'settings.require_password_change',
+        passwordChangeInterval: 'settings.password_change_interval',
+        days: 'settings.days',
+        
+        // Network settings
+        networkMode: 'settings.network_mode',
+        ipAddress: 'settings.ip_address',
+        subnetMask: 'settings.subnet_mask',
+        gateway: 'settings.gateway',
+        dnsServers: 'settings.dns_servers',
+        enableSSL: 'settings.enable_ssl',
+        apiTimeout: 'settings.api_timeout',
+        
+        // Actions
+        save: 'settings.save',
+        discard: 'settings.discard',
+        confirmLeave: 'settings.confirm_leave',
+        unsavedChanges: 'settings.unsaved_changes',
+        
+        // Validation
+        invalidValue: 'settings.invalid_value',
+        required: 'settings.required',
+        
+        // Common
+        loading: 'global.loading',
+        error: 'global.error',
+        success: 'global.success'
+      },
+      
+      // Component state variables
       activeTab: 'general',
       hasUnsavedChanges: false,
+      
+      // Settings tabs configuration
       settingsTabs: [
         { id: 'general', icon: '🌐', label: 'settings.general', defaultLabel: 'Ogólne' },
         { id: 'device', icon: '📱', label: 'settings.device', defaultLabel: 'Urządzenie' },

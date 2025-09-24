@@ -85,9 +85,66 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Batch processing configuration
+      MAX_CONCURRENT_JOBS: 5,
+      JOB_PROGRESS_UPDATE_INTERVAL: 1000, // ms
+      BATCH_SIZE_LIMIT: 1000, // reports per batch
+      
+      // UI configuration
+      GRID_MIN_COLUMN_WIDTH: 120, // px
+      CARD_HOVER_TRANSFORM: 1, // px
+      
+      // Date formatting
+      DATE_FORMAT_OPTIONS: {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      },
+      
+      // Touch configuration (for 400x1280 display)
+      TOUCH_TARGET_MIN_SIZE: 44, // px
+      BUTTON_MIN_HEIGHT: 40, // px
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Batch reports translations
+        batchTitle: 'reports.batch_title',
+        activeJobs: 'reports.active_jobs',
+        quickFilters: 'reports.quick_filters',
+        recentBatch: 'reports.recent_batch',
+        
+        // Template translations
+        templateCustomer: 'reports.template_customer',
+        templateCustomerDesc: 'reports.template_customer_desc',
+        templatePeriod: 'reports.template_period',
+        templatePeriodDesc: 'reports.template_period_desc',
+        templateDevice: 'reports.template_device',
+        templateDeviceDesc: 'reports.template_device_desc',
+        templateFailure: 'reports.template_failure',
+        templateFailureDesc: 'reports.template_failure_desc',
+        
+        // Filter translations
+        filterToday: 'reports.filter_today',
+        filterWeek: 'reports.filter_week',
+        filterMonth: 'reports.filter_month',
+        filterFailures: 'reports.filter_failures',
+        
+        // Menu translations
+        reports: 'menu.reports',
+        
+        // Common translations
+        back: 'common.back',
+        loading: 'global.loading'
+      },
+      
+      // Component state variables
       batchJobs: new Map(),
       activeBatchJobs: new Map(),
       recentBatchReports: [],
+      
+      // Quick filters configuration
       quickFilters: [
         { id: 'today', icon: '📅', label: 'reports.filter_today' },
         { id: 'week', icon: '📊', label: 'reports.filter_week' },

@@ -73,13 +73,100 @@ export default {
   },
   data() {
     return {
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Pressure measurement configuration
+      PRESSURE_TYPES: ['low', 'medium', 'high'],
+      CHART_DATA_POINTS: 60, // number of historical data points
+      CHART_UPDATE_INTERVAL: 1000, // ms
+      
+      // Pressure range thresholds
+      PRESSURE_RANGES: {
+        low: { min: 8, max: 12, unit: 'mbar' },
+        medium: { min: 18, max: 22, unit: 'bar' },
+        high: { min: 28, max: 32, unit: 'bar' }
+      },
+      
+      // Visual configuration
+      PANEL_WIDTH: 200, // px
+      CHART_HEIGHT: 30, // px
+      CHART_LINE_WIDTH: 1.5, // px
+      CHART_LINE_HOVER_WIDTH: 3, // px
+      
+      // Animation timing
+      HOVER_TRANSITION_DURATION: 200, // ms
+      PULSE_ANIMATION_DURATION: 2000, // ms for warnings
+      CRITICAL_PULSE_DURATION: 1000, // ms for critical alerts
+      SLIDE_UP_ANIMATION_DURATION: 500, // ms
+      
+      // Color scheme
+      PRESSURE_COLORS: {
+        normal: '#22c55e', // Green
+        warning: '#f97316', // Orange  
+        danger: '#ef4444', // Red
+        primary: '#3498db' // Blue
+      },
+      
+      // Touch configuration (for 400x1280 display)
+      TOUCH_TARGET_MIN_SIZE: 44, // px
+      MOBILE_BREAKPOINT: 450, // px
+      SMALL_MOBILE_BREAKPOINT: 350, // px
+      
+      // Tooltip configuration
+      TOOLTIP_OFFSET_X: 10, // px
+      TOOLTIP_OFFSET_Y: -10, // px
+      TOOLTIP_Z_INDEX: 1000,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Panel title
+        pressureTitle: 'device.pressure_title',
+        
+        // Pressure type labels
+        low: 'data.low',
+        medium: 'data.medium', 
+        high: 'data.high',
+        
+        // Status indicators
+        normal: 'device.pressure_normal',
+        warning: 'device.pressure_warning',
+        critical: 'device.pressure_critical',
+        
+        // Units
+        bar: 'units.bar',
+        mbar: 'units.mbar',
+        psi: 'units.psi',
+        kpa: 'units.kpa',
+        
+        // Tooltip content
+        currentValue: 'device.current_value',
+        averageValue: 'device.average_value',
+        minValue: 'device.min_value',
+        maxValue: 'device.max_value',
+        timestamp: 'device.timestamp',
+        
+        // Chart labels
+        pressureHistory: 'device.pressure_history',
+        dataPoint: 'device.data_point',
+        timeAgo: 'device.time_ago',
+        
+        // Error states
+        noData: 'device.no_data',
+        sensorError: 'device.sensor_error',
+        calibrationNeeded: 'device.calibration_needed'
+      },
+      
+      // Component state variables
       pressureTypes: ['low', 'medium', 'high'],
       pressureRanges: {
         low: { min: 8, max: 12 },
         medium: { min: 18, max: 22 },
         high: { min: 28, max: 32 }
       },
-      currentTooltip: null
+      currentTooltip: null,
+      
+      // Chart animation delays
+      chartLineDelays: Array.from({ length: 60 }, (_, i) => i * 20) // ms delays for each line
     }
   },
   methods: {

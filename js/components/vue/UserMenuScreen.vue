@@ -72,7 +72,72 @@ export default {
   },
   data() {
     return {
-      selectedMenuItem: null
+      // === MODULE CONFIGURATION - ALL VARIABLES DEFINED HERE ===
+      
+      // Component state configuration
+      DEFAULT_COMPONENT: 'DefaultMenuComponent',
+      LAZY_LOADING_ENABLED: true,
+      
+      // Animation and UI timing
+      SLIDE_ANIMATION_DURATION: 300,
+      HOVER_TRANSFORM_DISTANCE: 5, // px
+      
+      // Mobile breakpoints (for 400x1280 display)
+      MOBILE_BREAKPOINT: 450, // px
+      SMALL_MOBILE_BREAKPOINT: 350, // px
+      SIDEBAR_MOBILE_HEIGHT: '40vh',
+      
+      // Component state variables
+      selectedMenuItem: null,
+      
+      // Translation constants from locales/*.json
+      TRANSLATION_KEYS: {
+        // Menu section translations
+        welcome: 'menu.welcome',
+        logout: 'menu.logout',
+        selectOption: 'menu.select_option',
+        userMenu: 'menu.user_menu',
+        inactive: 'menu.inactive',
+        
+        // System section translations
+        systemReady: 'system.system_ready',
+        ready: 'system.ready',
+        
+        // Global translations
+        loading: 'global.loading',
+        error: 'global.error',
+        success: 'global.success',
+        
+        // Roles translations
+        roleOperator: 'roles.OPERATOR',
+        roleAdmin: 'roles.ADMIN',
+        roleSuperuser: 'roles.SUPERUSER',
+        roleServiceuser: 'roles.SERVICEUSER'
+      },
+      
+      // Component mapping for dynamic loading
+      COMPONENT_MAP: {
+        'test_wizard': 'TestWizardComponent',
+        'test_quick': 'QuickTestComponent',
+        'test_scenarios': 'TestScenariosComponent',
+        'device_history': 'DeviceHistoryComponent',
+        'reports_view': 'ReportsViewComponent',
+        'reports_batch': 'ReportsBatchCore',
+        'reports_schedule': 'ReportsScheduleComponent',
+        'users_management': 'UsersManagementComponent',
+        'settings_system': 'SystemSettingsComponent',
+        'workshop_inventory': 'WorkshopInventoryCore',
+        'workshop_maintenance': 'WorkshopMaintenanceComponent',
+        'workshop_parts': 'WorkshopPartsComponent',
+        'workshop_tools': 'WorkshopToolsComponent',
+        'device_diagnostics': 'DeviceDiagnosticsComponent',
+        'system_config': 'SystemConfigComponent',
+        'advanced_diagnostics': 'AdvancedDiagnosticsComponent',
+        'security_settings': 'SecuritySettingsComponent',
+        'backup_restore': 'BackupRestoreComponent',
+        'audit_logs': 'AuditLogsComponent',
+        'network_config': 'NetworkConfigComponent'
+      }
     }
   },
   computed: {
