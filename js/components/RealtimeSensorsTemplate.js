@@ -28,7 +28,7 @@ const RealtimeSensorsTemplate = {
         const sensorState = reactive({
             isLive: true,
             updateInterval: null,
-            refreshRate: 500, // ms
+            refreshRate: 200, // ms
             alertsEnabled: true,
             recordingData: false,
             dataHistory: []

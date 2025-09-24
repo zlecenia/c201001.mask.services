@@ -145,7 +145,7 @@ class VueSensorMonitoring {
             this.updateSensorReadings();
             this.checkAlarms();
             this.updateReactiveData();
-        }, 1000); // Update every second
+        }, 200); // Update every second
         
         console.log('✅ Vue Sensor monitoring started - 1 second intervals');
         

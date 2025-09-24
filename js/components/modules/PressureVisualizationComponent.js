@@ -149,7 +149,7 @@ const PressureVisualizationComponent = {
             initializePressureChart();
             
             // Start real-time updates
-            pressureState.chartUpdateInterval = setInterval(updatePressureChart, 5000); // Update every 5 seconds
+            pressureState.chartUpdateInterval = setInterval(updatePressureChart, 500); // Update every 5 seconds
         });
         
         onUnmounted(() => {

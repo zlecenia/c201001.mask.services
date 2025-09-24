@@ -10,54 +10,11 @@
     <script>
         // Cache-busting for CSS
         const cssVersion = Date.now();
+        document.write('<link rel="stylesheet" href="css/vue.css?v=' + cssVersion + '">');
         document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
         document.write('<link rel="stylesheet" href="css/lcd-optimization.css?v=' + cssVersion + '">');
     </script>
 
-    <!-- Vue.js Styles -->
-    <style>
-        /* Vue.js specific styles */
-        .vue-component {
-            animation: vue-fade-in 0.5s ease-in-out;
-        }
-        
-        .vue-badge {
-            background: #42b883;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.7em;
-            margin-left: 8px;
-        }
-        
-        #vue-app {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 9999;
-            background: white;
-            display: none;
-        }
-        
-        #vue-app.active {
-            display: block;
-        }
-        
-        @keyframes vue-fade-in {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .screen-fade-enter-active, .screen-fade-leave-active {
-            transition: opacity 0.3s ease;
-        }
-        
-        .screen-fade-enter-from, .screen-fade-leave-to {
-            opacity: 0;
-        }
-    </style>
 </head>
 <body>
 <div id="app" class="container">
@@ -115,26 +72,130 @@
 
                                     </span>
                         <span class="login-buttons">
-
-                                        <button id="login-operator-btn" class="menu-item btn-gray"
-                                                onclick="navigateAction('login-operator-btn'); mockLogin('OPERATOR')">
-                                            Login as OPERATOR
-                                        </button>
-                                        <button id="login-admin-btn" class="menu-item btn-green"
-                                                onclick="navigateAction('login-admin-btn'); mockLogin('ADMIN')">Login as
-                                            ADMIN
-                                        </button>
-                            <button id="login-serviceuser-btn" class="menu-item btn-yellow"
-                                    onclick="navigateAction('login-serviceuser-btn'); mockLogin('SERVICEUSER')">
-                                            Login as SERVICEUSER
-                                        </button>
-                            <button id="login-superuser-btn" class="menu-item btn-red"
-                                    onclick="navigateAction('login-superuser-btn'); mockLogin('SUPERUSER')">
-                                            Login as SUPERUSER
-                                        </button>
-
-
-                                    </span>
+                            <!-- OPERATOR Role -->
+                            <div class="role-menu-container">
+                                <button id="login-operator-btn" class="menu-item btn-gray login-btn"
+                                        onclick="toggleRoleMenu('OPERATOR'); mockLoginWithMenu('OPERATOR')">
+                                    Login as OPERATOR
+                                </button>
+                                <div id="operator-menu" class="menu-sidebar-extended role-menu-collapsed">
+                                    <div class="extended-menu-item" onclick="selectMenuOption('test_wizard')">
+                                        <span class="extended-menu-icon">🧙</span>
+                                        <span class="extended-menu-label">Test Wizard</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('test_quick')">
+                                        <span class="extended-menu-icon">⚡</span>
+                                        <span class="extended-menu-label">Quick Test</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('device_history')">
+                                        <span class="extended-menu-icon">📜</span>
+                                        <span class="extended-menu-label">Device History</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('reports_view')">
+                                        <span class="extended-menu-icon">📄</span>
+                                        <span class="extended-menu-label">View Reports</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- ADMIN Role -->
+                            <div class="role-menu-container">
+                                <button id="login-admin-btn" class="menu-item btn-green login-btn"
+                                        onclick="toggleRoleMenu('ADMIN'); mockLoginWithMenu('ADMIN')">
+                                    Login as ADMIN
+                                </button>
+                                <div id="admin-menu" class="menu-sidebar-extended role-menu-collapsed">
+                                    <div class="extended-menu-item" onclick="selectMenuOption('test_wizard')">
+                                        <span class="extended-menu-icon">🧙</span>
+                                        <span class="extended-menu-label">Test Wizard</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('test_scenarios')">
+                                        <span class="extended-menu-icon">📋</span>
+                                        <span class="extended-menu-label">Test Scenarios</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('reports_batch')">
+                                        <span class="extended-menu-icon">📊</span>
+                                        <span class="extended-menu-label">Batch Reports</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('reports_schedule')">
+                                        <span class="extended-menu-icon">⏰</span>
+                                        <span class="extended-menu-label">Report Schedule</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('users_management')">
+                                        <span class="extended-menu-icon">👥</span>
+                                        <span class="extended-menu-label">User Management</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('settings_system')">
+                                        <span class="extended-menu-icon">⚙️</span>
+                                        <span class="extended-menu-label">System Settings</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SERVICEUSER Role -->
+                            <div class="role-menu-container">
+                                <button id="login-serviceuser-btn" class="menu-item btn-yellow login-btn"
+                                        onclick="toggleRoleMenu('SERVICEUSER'); mockLoginWithMenu('SERVICEUSER')">
+                                    Login as SERVICEUSER
+                                </button>
+                                <div id="serviceuser-menu" class="menu-sidebar-extended role-menu-collapsed">
+                                    <div class="extended-menu-item" onclick="selectMenuOption('workshop_inventory')">
+                                        <span class="extended-menu-icon">📦</span>
+                                        <span class="extended-menu-label">Workshop Inventory</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('workshop_maintenance')">
+                                        <span class="extended-menu-icon">🔧</span>
+                                        <span class="extended-menu-label">Maintenance</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('workshop_parts')">
+                                        <span class="extended-menu-icon">🛠️</span>
+                                        <span class="extended-menu-label">Spare Parts</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('workshop_tools')">
+                                        <span class="extended-menu-icon">🔨</span>
+                                        <span class="extended-menu-label">Calibration Tools</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('device_diagnostics')">
+                                        <span class="extended-menu-icon">🔍</span>
+                                        <span class="extended-menu-label">Device Diagnostics</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- SUPERUSER Role -->
+                            <div class="role-menu-container">
+                                <button id="login-superuser-btn" class="menu-item btn-red login-btn"
+                                        onclick="toggleRoleMenu('SUPERUSER'); mockLoginWithMenu('SUPERUSER')">
+                                    Login as SUPERUSER
+                                </button>
+                                <div id="superuser-menu" class="menu-sidebar-extended role-menu-collapsed">
+                                    <div class="extended-menu-item" onclick="selectMenuOption('system_config')">
+                                        <span class="extended-menu-icon">🔧</span>
+                                        <span class="extended-menu-label">System Configuration</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('advanced_diagnostics')">
+                                        <span class="extended-menu-icon">🔬</span>
+                                        <span class="extended-menu-label">Advanced Diagnostics</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('security_settings')">
+                                        <span class="extended-menu-icon">🔐</span>
+                                        <span class="extended-menu-label">Security Settings</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('backup_restore')">
+                                        <span class="extended-menu-icon">💾</span>
+                                        <span class="extended-menu-label">Backup & Restore</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('audit_logs')">
+                                        <span class="extended-menu-icon">📋</span>
+                                        <span class="extended-menu-label">Audit Logs</span>
+                                    </div>
+                                    <div class="extended-menu-item" onclick="selectMenuOption('network_config')">
+                                        <span class="extended-menu-icon">🌐</span>
+                                        <span class="extended-menu-label">Network Configuration</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
 
                     </div>
                     <div class="menu-content">
@@ -335,30 +396,36 @@
             <h3 id="pressure-panel-title" data-i18n="device.pressure_title">PRESSURE</h3>
             <div class="pressure-box">
                 <div class="pressure-item">
-                    <div id="pressure-low-label" class="pressure-label" data-i18n="device.pressure_low">Low</div>
+                    <div class="pressure-status" id="pressure-low-status"></div>
+                    <div id="pressure-low-label" class="pressure-label" data-i18n="data.low">Low</div>
                     <div id="pressure-low" class="pressure-value">10</div>
                     <div id="pressure-low-unit" class="pressure-unit">mbar</div>
-                    <div id="pressure-low-dia" class="pressure-dia"></div>
-                </div>
-            </div>
-            <div class="pressure-box">
-
-                <div class="pressure-item">
-                    <div id="pressure-medium-label" class="pressure-label" data-i18n="device.pressure_medium">Medium
+                    <div id="pressure-low-dia" class="pressure-dia">
+                        <div class="pressure-chart-container"></div>
                     </div>
-                    <div id="pressure-medium" class="pressure-value">20</div>
-                    <div id="pressure-medium-unit" class="pressure-unit">bar</div>
-                    <div id="pressure-medium-dia" class="pressure-dia"></div>
                 </div>
             </div>
             <div class="pressure-box">
-
                 <div class="pressure-item">
-                    <div id="pressure-high-label" class="pressure-label" data-i18n="device.pressure_high">High</div>
+                    <div class="pressure-status" id="pressure-medium-status"></div>
+                    <div id="pressure-medium" class="pressure-value">20</div>
+                    <div id="pressure-medium-label" class="pressure-label" data-i18n="data.medium">Medium</div>
+                    
+                    <div id="pressure-medium-unit" class="pressure-unit">bar</div>
+                    <div id="pressure-medium-dia" class="pressure-dia">
+                        <div class="pressure-chart-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="pressure-box">
+                <div class="pressure-item">
+                    <div class="pressure-status" id="pressure-high-status"></div>
+                    <div id="pressure-high-label" class="pressure-label" data-i18n="data.high">High</div>
                     <div id="pressure-high" class="pressure-value">30</div>
                     <div id="pressure-high-unit" class="pressure-unit">bar</div>
-                    <div id="pressure-high-dia" class="pressure-dia"></div>
-
+                    <div id="pressure-high-dia" class="pressure-dia">
+                        <div class="pressure-chart-container"></div>
+                    </div>
                 </div>
             </div>
         </aside>
@@ -1235,6 +1302,498 @@
             }
         }, 100);
     });
+
+    // Advanced Pressure Visualization System
+    class AdvancedPressureVisualization {
+        constructor() {
+            this.pressureHistory = {
+                low: Array(60).fill(10),
+                medium: Array(60).fill(20),
+                high: Array(60).fill(30)
+            };
+            this.init();
+        }
+
+        init() {
+            this.initializePressureCharts();
+            this.startSimulation();
+        }
+
+        initializePressureCharts() {
+            const types = ['low', 'medium', 'high'];
+            types.forEach(type => {
+                const container = document.querySelector(`#pressure-${type}-dia .pressure-chart-container`);
+                if (container) {
+                    this.renderPressureChart(type);
+                }
+            });
+        }
+
+        renderPressureChart(type) {
+            const container = document.querySelector(`#pressure-${type}-dia .pressure-chart-container`);
+            if (!container) return;
+
+            const data = this.pressureHistory[type];
+            const maxValue = Math.max(...data) || 1;
+            const minValue = Math.min(...data) || 0;
+            const range = maxValue - minValue || 1;
+
+            container.innerHTML = '';
+
+            data.forEach((value, index) => {
+                const line = document.createElement('div');
+                line.className = 'pressure-chart-line';
+                
+                const normalizedValue = ((value - minValue) / range) * 100;
+                const height = Math.max(2, normalizedValue);
+                
+                line.style.height = `${height}%`;
+                line.style.left = `${(index / 59) * 100}%`;
+                line.style.backgroundColor = this.getPressureColor(type, value);
+                
+                line.addEventListener('mouseenter', (e) => {
+                    this.showTooltip(e, type, value, index);
+                });
+                
+                line.addEventListener('mouseleave', () => {
+                    this.hideTooltip();
+                });
+                
+                container.appendChild(line);
+            });
+
+            this.updatePressureStatus(type, data[data.length - 1]);
+        }
+
+        getPressureColor(type, value) {
+            const ranges = {
+                low: { min: 8, max: 12 },
+                medium: { min: 18, max: 22 },
+                high: { min: 28, max: 32 }
+            };
+
+            const range = ranges[type];
+            if (!range) return '#3498db';
+            
+            if (value < range.min) {
+                return '#ef4444';
+            } else if (value > range.max) {
+                return '#f97316';
+            } else {
+                return '#22c55e';
+            }
+        }
+
+        updatePressureStatus(type, value) {
+            const statusElement = document.getElementById(`pressure-${type}-status`);
+            const valueElement = document.getElementById(`pressure-${type}`);
+            
+            if (!statusElement || !valueElement) return;
+
+            const ranges = {
+                low: { min: 8, max: 12 },
+                medium: { min: 18, max: 22 },
+                high: { min: 28, max: 32 }
+            };
+
+            const range = ranges[type];
+            statusElement.className = 'pressure-status';
+            valueElement.className = 'pressure-value';
+            
+            if (range) {
+                if (value < range.min || value > range.max) {
+                    statusElement.classList.add('danger');
+                    valueElement.classList.add('danger');
+                } else if (value < range.min + 1 || value > range.max - 1) {
+                    statusElement.classList.add('warning');
+                    valueElement.classList.add('warning');
+                }
+            }
+        }
+
+        showTooltip(event, type, value, index) {
+            this.hideTooltip();
+            
+            const tooltip = document.createElement('div');
+            tooltip.className = 'pressure-tooltip';
+            tooltip.innerHTML = `
+                <div class="tooltip-header">${type.toUpperCase()} Pressure</div>
+                <div class="tooltip-value">${value.toFixed(1)} ${this.getUnit(type)}</div>
+                <div class="tooltip-time">${60 - index}s ago</div>
+            `;
+            
+            document.body.appendChild(tooltip);
+            
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + window.scrollX}px`;
+            tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
+        }
+
+        hideTooltip() {
+            const tooltip = document.querySelector('.pressure-tooltip');
+            if (tooltip) {
+                tooltip.remove();
+            }
+        }
+
+        getUnit(type) {
+            const units = { low: 'mbar', medium: 'bar', high: 'bar' };
+            return units[type] || 'bar';
+        }
+
+        updatePressure(type, value) {
+            this.pressureHistory[type].shift();
+            this.pressureHistory[type].push(value);
+            
+            const valueElement = document.getElementById(`pressure-${type}`);
+            if (valueElement) {
+                valueElement.textContent = value.toFixed(1);
+            }
+            
+            this.renderPressureChart(type);
+        }
+
+        startSimulation() {
+            setInterval(() => {
+                this.updatePressure('low', 10 + Math.random() * 2);
+                this.updatePressure('medium', 20 + Math.random() * 2);
+                this.updatePressure('high', 30 + Math.random() * 2);
+            }, 1000);
+        }
+    }
+
+    // Enhanced Translation System
+    class EnhancedTranslationSystem {
+        constructor() {
+            this.translations = {};
+            this.currentLanguage = 'pl';
+            this.init();
+        }
+
+        async init() {
+            await this.loadTranslations();
+            this.setupLanguageButtons();
+            this.applyTranslations();
+        }
+
+        async loadTranslations() {
+            try {
+                const languages = ['pl', 'en', 'de'];
+                
+                for (const lang of languages) {
+                    const response = await fetch(`./locales/${lang}.json`);
+                    const data = await response.json();
+                    this.translations[lang] = data;
+                }
+                
+                console.log('✅ Translations loaded from /locales');
+            } catch (error) {
+                console.error('❌ Failed to load translations:', error);
+                this.loadFallbackTranslations();
+            }
+        }
+
+        loadFallbackTranslations() {
+            this.translations = {
+                pl: {
+                    global: { offline: 'OFFLINE', online: 'ONLINE' },
+                    data: { pressure: 'Ciśnienie', low: 'Niskie', medium: 'Średnie', high: 'Wysokie' }
+                },
+                en: {
+                    global: { offline: 'OFFLINE', online: 'ONLINE' },
+                    data: { pressure: 'Pressure', low: 'Low', medium: 'Medium', high: 'High' }
+                },
+                de: {
+                    global: { offline: 'OFFLINE', online: 'ONLINE' },
+                    data: { pressure: 'Druck', low: 'Niedrig', medium: 'Mittel', high: 'Hoch' }
+                }
+            };
+        }
+
+        setupLanguageButtons() {
+            const buttons = document.querySelectorAll('.lang-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const lang = e.target.id.split('-')[1];
+                    this.changeLanguage(lang);
+                });
+            });
+        }
+
+        changeLanguage(lang) {
+            if (!this.translations[lang]) return;
+            
+            this.currentLanguage = lang;
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            this.applyTranslations();
+            console.log(`🌐 Language changed to: ${lang}`);
+        }
+
+        applyTranslations() {
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = this.getTranslation(key);
+                if (translation) {
+                    element.textContent = translation;
+                }
+            });
+        }
+
+        getTranslation(key) {
+            const keys = key.split('.');
+            let value = this.translations[this.currentLanguage];
+            
+            for (const k of keys) {
+                if (value && typeof value === 'object') {
+                    value = value[k];
+                } else {
+                    return null;
+                }
+            }
+            
+            return value;
+        }
+    }
+
+    // Enhanced Role Menu Management System
+    class RoleMenuManager {
+        constructor() {
+            this.currentRole = null;
+            this.currentExpandedMenu = null;
+            this.menuContent = new Map();
+            this.init();
+        }
+
+        init() {
+            this.setupMenuContent();
+            console.log('✅ Role Menu Manager initialized');
+        }
+
+        setupMenuContent() {
+            // Define role-specific menu content
+            this.menuContent.set('OPERATOR', {
+                welcome: {
+                    title: 'Operator Panel',
+                    description: 'Access test operations and basic reports'
+                },
+                cards: [
+                    { id: 'test_wizard', icon: '🧙', title: 'Test Wizard', desc: 'Guided test setup' },
+                    { id: 'test_quick', icon: '⚡', title: 'Quick Test', desc: 'Fast device testing' },
+                    { id: 'device_history', icon: '📜', title: 'Device History', desc: 'View test history' },
+                    { id: 'reports_view', icon: '📄', title: 'View Reports', desc: 'Browse test reports' }
+                ]
+            });
+
+            this.menuContent.set('ADMIN', {
+                welcome: {
+                    title: 'Administrator Panel',
+                    description: 'Manage users, reports, and system settings'
+                },
+                cards: [
+                    { id: 'test_wizard', icon: '🧙', title: 'Test Wizard', desc: 'Advanced test configuration' },
+                    { id: 'test_scenarios', icon: '📋', title: 'Test Scenarios', desc: 'Manage test templates' },
+                    { id: 'reports_batch', icon: '📊', title: 'Batch Reports', desc: 'Generate bulk reports' },
+                    { id: 'reports_schedule', icon: '⏰', title: 'Report Schedule', desc: 'Automated reporting' },
+                    { id: 'users_management', icon: '👥', title: 'User Management', desc: 'Manage system users' },
+                    { id: 'settings_system', icon: '⚙️', title: 'System Settings', desc: 'Configure system' }
+                ]
+            });
+
+            this.menuContent.set('SERVICEUSER', {
+                welcome: {
+                    title: 'Service Panel',
+                    description: 'Workshop management and device maintenance'
+                },
+                cards: [
+                    { id: 'workshop_inventory', icon: '📦', title: 'Inventory', desc: 'Manage spare parts' },
+                    { id: 'workshop_maintenance', icon: '🔧', title: 'Maintenance', desc: 'Schedule maintenance' },
+                    { id: 'workshop_parts', icon: '🛠️', title: 'Spare Parts', desc: 'Parts catalog' },
+                    { id: 'workshop_tools', icon: '🔨', title: 'Tools', desc: 'Calibration tools' },
+                    { id: 'device_diagnostics', icon: '🔍', title: 'Diagnostics', desc: 'Device analysis' }
+                ]
+            });
+
+            this.menuContent.set('SUPERUSER', {
+                welcome: {
+                    title: 'Super Admin Panel',
+                    description: 'Full system access and configuration'
+                },
+                cards: [
+                    { id: 'system_config', icon: '🔧', title: 'System Config', desc: 'Core system settings' },
+                    { id: 'advanced_diagnostics', icon: '🔬', title: 'Advanced Diagnostics', desc: 'Deep system analysis' },
+                    { id: 'security_settings', icon: '🔐', title: 'Security', desc: 'Security configuration' },
+                    { id: 'backup_restore', icon: '💾', title: 'Backup & Restore', desc: 'Data management' },
+                    { id: 'audit_logs', icon: '📋', title: 'Audit Logs', desc: 'System audit trail' },
+                    { id: 'network_config', icon: '🌐', title: 'Network Config', desc: 'Network settings' }
+                ]
+            });
+        }
+
+        toggleRoleMenu(role) {
+            const menuId = role.toLowerCase() + '-menu';
+            const menu = document.getElementById(menuId);
+            
+            if (!menu) return;
+            
+            // Close other expanded menus
+            if (this.currentExpandedMenu && this.currentExpandedMenu !== menuId) {
+                const prevMenu = document.getElementById(this.currentExpandedMenu);
+                if (prevMenu) {
+                    prevMenu.classList.remove('role-menu-expanded');
+                    prevMenu.classList.add('role-menu-collapsed');
+                }
+            }
+            
+            // Toggle current menu
+            if (menu.classList.contains('role-menu-collapsed')) {
+                menu.classList.remove('role-menu-collapsed');
+                menu.classList.add('role-menu-expanded');
+                this.currentExpandedMenu = menuId;
+            } else {
+                menu.classList.remove('role-menu-expanded');
+                menu.classList.add('role-menu-collapsed');
+                this.currentExpandedMenu = null;
+            }
+        }
+
+        mockLoginWithMenu(role) {
+            this.currentRole = role;
+            
+            // Skip loading screen - go directly to menu
+            setTimeout(() => {
+                this.showRoleMenu(role);
+                this.updateUserInfo(role);
+            }, 100);
+        }
+
+        showRoleMenu(role) {
+            const menuContent = document.getElementById('menu-content');
+            if (!menuContent) return;
+
+            const content = this.menuContent.get(role);
+            if (!content) return;
+
+            // Create compact horizontal menu layout
+            const html = `
+                <div class="welcome-message">
+                    <h2>${content.welcome.title}</h2>
+                    <p>${content.welcome.description}</p>
+                </div>
+                
+                <div class="menu-content-horizontal">
+                    ${content.cards.map(card => `
+                        <div class="menu-card" onclick="window.MenuManager?.selectMenuOption('${card.id}') || selectMenuOption('${card.id}')">
+                            <h3>${card.icon} ${card.title}</h3>
+                            <p>${card.desc}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                ${content.cards.length > 4 ? this.createExtendedMenuSidebar(content.cards.slice(4)) : ''}
+            `;
+
+            menuContent.innerHTML = html;
+            
+            // Update header status
+            const statusText = document.getElementById('status-text');
+            if (statusText) {
+                statusText.textContent = 'ONLINE';
+                statusText.className = 'role-badge online';
+            }
+            
+            console.log(`🎯 Logged in as ${role} - Menu displayed`);
+        }
+
+        createExtendedMenuSidebar(extraCards) {
+            return `
+                <div class="menu-sidebar-extended" style="position: static; margin-top: 1rem;">
+                    <h4 style="padding: 0.75rem 1rem; margin: 0; background: #f8f9fa; font-size: 0.9rem;">Additional Options</h4>
+                    ${extraCards.map(card => `
+                        <div class="extended-menu-item" onclick="window.MenuManager?.selectMenuOption('${card.id}') || selectMenuOption('${card.id}')">
+                            <span class="extended-menu-icon">${card.icon}</span>
+                            <span class="extended-menu-label">${card.title}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        updateUserInfo(role) {
+            // Update session info if exists
+            const sessionInfo = document.getElementById('session-info');
+            if (sessionInfo) {
+                sessionInfo.style.display = 'block';
+            }
+            
+            // Update any user role displays
+            const roleElements = document.querySelectorAll('[data-role]');
+            roleElements.forEach(el => {
+                el.textContent = role;
+            });
+        }
+
+        selectMenuOption(optionId) {
+            console.log(`📂 Selected menu option: ${optionId}`);
+            
+            // Handle menu selection
+            if (window.MenuManager && window.MenuManager.selectMenuOption) {
+                window.MenuManager.selectMenuOption(optionId);
+            } else {
+                // Fallback handling
+                this.handleMenuSelection(optionId);
+            }
+        }
+
+        handleMenuSelection(optionId) {
+            const menuContent = document.getElementById('menu-content');
+            if (!menuContent) return;
+
+            // Simple fallback content
+            menuContent.innerHTML = `
+                <div class="welcome-message">
+                    <h2>🔧 ${optionId.replace('_', ' ').toUpperCase()}</h2>
+                    <p>Module loading... Please wait.</p>
+                </div>
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner" style="margin: 0 auto 1rem;"></div>
+                    <p>Loading ${optionId} module...</p>
+                </div>
+            `;
+        }
+    }
+
+    // Global functions for role menu management
+    window.toggleRoleMenu = function(role) {
+        if (window.roleMenuManager) {
+            window.roleMenuManager.toggleRoleMenu(role);
+        }
+    };
+
+    window.mockLoginWithMenu = function(role) {
+        if (window.roleMenuManager) {
+            window.roleMenuManager.mockLoginWithMenu(role);
+        }
+    };
+
+    window.selectMenuOption = function(optionId) {
+        if (window.roleMenuManager) {
+            window.roleMenuManager.selectMenuOption(optionId);
+        }
+    };
+
+    // Initialize Enhanced Systems
+    document.addEventListener('DOMContentLoaded', () => {
+        window.advancedPressureViz = new AdvancedPressureVisualization();
+        window.enhancedTranslations = new EnhancedTranslationSystem();
+        window.roleMenuManager = new RoleMenuManager();
+        console.log('🚀 Advanced Systems Initialized');
+    });
+
 </script>
 
 <!-- Modular architecture: utils → auth → menu → i18n → router → keyboard → app → ui-tester → Vue.js -->

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASKTRONIC C20 1001 - System Mock v2.0</title>
+    
+    <!-- Vue.js CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    
+    <!-- Base CSS -->
+    <script>
+        const cssVersion = Date.now();
+        document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
+        document.write('<link rel="stylesheet" href="css/lcd-optimization.css?v=' + cssVersion + '">');
+    </script>
+    
+    <style>
+        /* Base Vue App Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            overflow: hidden;
+        }
+        
+        #app {
+            height: 100vh;
+            width: 100vw;
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 9999;
+            font-size: 1.2rem;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Global tooltip styles for pressure panel */
+        .pressure-tooltip {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            position: absolute;
+        }
+        
+        .tooltip-header {
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #3498db;
+        }
+        
+        .tooltip-value {
+            font-size: 13px;
+            color: white;
+            margin-bottom: 2px;
+        }
+        
+        .tooltip-time {
+            font-size: 10px;
+            color: #bdc3c7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loading" class="loading-screen">
+        <div class="loading-spinner"></div>
+        <span>Loading MASKSERVICE C20...</span>
+    </div>
+    
+    <!-- Vue App Container -->
+    <div id="app"></div>
+
+    <script>
+        const { createApp } = Vue;
+        
+        // Enhanced Translation System
+        class TranslationSystem {
+            constructor() {
+                this.translations = {};
+                this.currentLanguage = 'pl';
+                this.init();
+            }
+
+            async init() {
+                await this.loadTranslations();
+            }
+
+            async loadTranslations() {
+                try {
+                    const languages = ['pl', 'en', 'de'];
+                    let loadedCount = 0;
+                    
+                    for (const lang of languages) {
+                        try {
+                            // Try multiple paths for translations
+                            let response;
+                            const paths = [`./locales/${lang}.json`, `/locales/${lang}.json`, `locales/${lang}.json`];
+                            
+                            for (const path of paths) {
+                                try {
+                                    response = await fetch(path);
+                                    if (response.ok) {
+                                        break;
+                                    }
+                                } catch (e) {
+                                    continue;
+                                }
+                            }
+                            
+                            if (response && response.ok) {
+                                const data = await response.json();
+                                this.translations[lang] = data;
+                                loadedCount++;
+                            } else {
+                                console.warn(`⚠️ Could not load ${lang}.json from any path`);
+                            }
+                        } catch (langError) {
+                            console.warn(`⚠️ Error loading ${lang} translations:`, langError);
+                        }
+                    }
+                    
+                    if (loadedCount > 0) {
+                        console.log(`✅ Translations loaded from /locales (${loadedCount}/${languages.length})`);
+                    } else {
+                        throw new Error('No translations could be loaded');
+                    }
+                } catch (error) {
+                    console.error('❌ Failed to load translations:', error);
+                    this.loadFallbackTranslations();
+                }
+            }
+
+            loadFallbackTranslations() {
+                this.translations = {
+                    pl: {
+                        global: { offline: 'OFFLINE', online: 'ONLINE' },
+                        login: { menu_header: 'MENU LOGOWANIA', password: 'Hasło' },
+                        menu: { logout: 'Wyloguj', welcome: 'Witamy' },
+                        data: { pressure: 'Ciśnienie', low: 'Niskie', medium: 'Średnie', high: 'Wysokie' }
+                    },
+                    en: {
+                        global: { offline: 'OFFLINE', online: 'ONLINE' },
+                        login: { menu_header: 'LOGIN MENU', password: 'Password' },
+                        menu: { logout: 'Logout', welcome: 'Welcome' },
+                        data: { pressure: 'Pressure', low: 'Low', medium: 'Medium', high: 'High' }
+                    },
+                    de: {
+                        global: { offline: 'OFFLINE', online: 'ONLINE' },
+                        login: { menu_header: 'ANMELDE MENÜ', password: 'Passwort' },
+                        menu: { logout: 'Abmelden', welcome: 'Willkommen' },
+                        data: { pressure: 'Druck', low: 'Niedrig', medium: 'Mittel', high: 'Hoch' }
+                    }
+                };
+            }
+
+            t(key) {
+                const keys = key.split('.');
+                let value = this.translations[this.currentLanguage];
+                
+                for (const k of keys) {
+                    if (value && typeof value === 'object') {
+                        value = value[k];
+                    } else {
+                        return key; // Return key if translation not found
+                    }
+                }
+                
+                return value || key;
+            }
+
+            setLanguage(lang) {
+                if (this.translations[lang]) {
+                    this.currentLanguage = lang;
+                }
+            }
+        }
+
+        // Main App Component
+        const MaskServiceApp = {
+            template: `
+                <div class="mask-service-app">
+                    <app-header 
+                        :device-status="deviceStatus"
+                        :device-info="deviceInfo"
+                        :current-language="currentLanguage"
+                        @language-changed="handleLanguageChange"
+                    />
+                    
+                    <main class="main-content">
+                        <login-screen 
+                            v-if="!currentUser"
+                            @user-logged-in="handleUserLogin"
+                        />
+                        
+                        <user-menu-screen 
+                            v-else
+                            :current-user="currentUser"
+                            :menu-items="userMenuItems"
+                            @menu-selected="handleMenuSelection"
+                            @logout="handleLogout"
+                        />
+                    </main>
+                    
+                    <pressure-panel 
+                        v-if="showPressurePanel"
+                        :pressure-data="pressureData"
+                    />
+                    
+                    <app-footer 
+                        :current-user="currentUser"
+                        :current-time="currentTime"
+                        @logout="handleLogout"
+                    />
+                </div>
+            `,
+            data() {
+                return {
+                    currentUser: null,
+                    currentLanguage: 'pl',
+                    deviceStatus: 'OFFLINE',
+                    deviceInfo: {
+                        name: 'CONNECT',
+                        type: '500',
+                        url: 'c201001.mask.services'
+                    },
+                    currentTime: new Date().toLocaleTimeString(),
+                    pressureData: {
+                        low: { value: 10, unit: 'mbar', history: Array(60).fill(10) },
+                        medium: { value: 20, unit: 'bar', history: Array(60).fill(20) },
+                        high: { value: 30, unit: 'bar', history: Array(60).fill(30) }
+                    }
+                }
+            },
+            computed: {
+                showPressurePanel() {
+                    return this.currentUser && ['OPERATOR', 'SERVICEUSER'].includes(this.currentUser.role);
+                },
+                
+                userMenuItems() {
+                    if (!this.currentUser) return [];
+                    
+                    const menuConfig = {
+                        OPERATOR: [
+                            { id: 'test_wizard', icon: '🧙', label: 'Test Wizard', description: 'Guided test setup' },
+                            { id: 'test_quick', icon: '⚡', label: 'Quick Test', description: 'Fast device testing' },
+                            { id: 'device_history', icon: '📜', label: 'Device History', description: 'View test history' },
+                            { id: 'reports_view', icon: '📄', label: 'View Reports', description: 'Browse test reports' }
+                        ],
+                        ADMIN: [
+                            { id: 'test_wizard', icon: '🧙', label: 'Test Wizard', description: 'Advanced test configuration' },
+                            { id: 'test_scenarios', icon: '📋', label: 'Test Scenarios', description: 'Manage test templates' },
+                            { id: 'reports_batch', icon: '📊', label: 'Batch Reports', description: 'Generate bulk reports' },
+                            { id: 'users_management', icon: '👥', label: 'User Management', description: 'Manage system users' },
+                            { id: 'settings_system', icon: '⚙️', label: 'System Settings', description: 'Configure system' }
+                        ],
+                        SERVICEUSER: [
+                            { id: 'workshop_inventory', icon: '📦', label: 'Inventory', description: 'Manage spare parts' },
+                            { id: 'workshop_maintenance', icon: '🔧', label: 'Maintenance', description: 'Schedule maintenance' },
+                            { id: 'workshop_parts', icon: '🛠️', label: 'Spare Parts', description: 'Parts catalog' },
+                            { id: 'device_diagnostics', icon: '🔍', label: 'Diagnostics', description: 'Device analysis' }
+                        ],
+                        SUPERUSER: [
+                            { id: 'system_config', icon: '🔧', label: 'System Config', description: 'Core system settings' },
+                            { id: 'advanced_diagnostics', icon: '🔬', label: 'Advanced Diagnostics', description: 'Deep system analysis' },
+                            { id: 'security_settings', icon: '🔐', label: 'Security', description: 'Security configuration' },
+                            { id: 'network_config', icon: '🌐', label: 'Network Config', description: 'Network settings' }
+                        ]
+                    };
+                    
+                    return menuConfig[this.currentUser.role] || [];
+                }
+            },
+            methods: {
+                handleUserLogin(userData) {
+                    this.currentUser = userData;
+                    this.deviceStatus = 'ONLINE';
+                    this.startPressureSimulation();
+                    console.log(`🎯 User logged in: ${userData.role}`);
+                },
+                
+                handleLogout() {
+                    this.currentUser = null;
+                    this.deviceStatus = 'OFFLINE';
+                    if (this.pressureSimulation) {
+                        clearInterval(this.pressureSimulation);
+                    }
+                    console.log('👋 User logged out');
+                },
+                
+                handleMenuSelection(menuItem) {
+                    console.log(`📂 Menu selected: ${menuItem.id}`);
+                },
+                
+                handleLanguageChange(language) {
+                    this.currentLanguage = language;
+                    if (window.translationSystem) {
+                        window.translationSystem.setLanguage(language);
+                    }
+                    console.log(`🌐 Language changed to: ${language}`);
+                },
+                
+                startPressureSimulation() {
+                    if (this.pressureSimulation) {
+                        clearInterval(this.pressureSimulation);
+                    }
+                    
+                    this.pressureSimulation = setInterval(() => {
+                        this.updatePressureData('low', 10 + Math.random() * 2);
+                        this.updatePressureData('medium', 20 + Math.random() * 2);
+                        this.updatePressureData('high', 30 + Math.random() * 2);
+                    }, 1000);
+                },
+                
+                updatePressureData(type, value) {
+                    if (this.pressureData[type]) {
+                        this.pressureData[type].value = parseFloat(value.toFixed(1));
+                        this.pressureData[type].history.shift();
+                        this.pressureData[type].history.push(this.pressureData[type].value);
+                    }
+                },
+                
+                updateTime() {
+                    this.currentTime = new Date().toLocaleTimeString();
+                }
+            },
+            
+            mounted() {
+                // Update time every second
+                this.timeInterval = setInterval(this.updateTime, 1000);
+                console.log('🚀 MaskService App mounted');
+            },
+            
+            beforeUnmount() {
+                if (this.timeInterval) clearInterval(this.timeInterval);
+                if (this.pressureSimulation) clearInterval(this.pressureSimulation);
+            }
+        };
+
+        // Initialize App
+        async function initializeApp() {
+            try {
+                // Initialize translation system
+                window.translationSystem = new TranslationSystem();
+                await window.translationSystem.init();
+                
+                // Hide loading screen
+                document.getElementById('loading').style.display = 'none';
+                
+                // Create Vue app
+                const app = createApp(MaskServiceApp);
+                
+                // Add translation method to global properties
+                app.config.globalProperties.$t = (key) => {
+                    return window.translationSystem?.t(key) || key;
+                };
+                
+                // Register components with placeholders (avoiding MIME type issues with .vue imports)
+                const componentNames = [
+                    'AppHeader', 'AppFooter', 'LoginScreen', 
+                    'UserMenuScreen', 'PressurePanel'
+                ];
+                
+                // Register placeholder components to prevent template errors
+                componentNames.forEach(componentName => {
+                    const kebabName = componentName.toLowerCase().replace(/([A-Z])/g, '-$1').substring(1);
+                    app.component(kebabName, {
+                        template: `
+                            <div class="vue-component-placeholder ${kebabName}">
+                                <div class="placeholder-content">
+                                    <div class="placeholder-icon">🔧</div>
+                                    <div class="placeholder-text">Loading ${componentName}...</div>
+                                    <div class="placeholder-note">Component will be available after server configuration</div>
+                                </div>
+                            </div>
+                        `,
+                        style: `
+                            .vue-component-placeholder {
+                                padding: 2rem;
+                                text-align: center;
+                                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+                                border-radius: 8px;
+                                margin: 1rem;
+                            }
+                            .placeholder-content {
+                                max-width: 400px;
+                                margin: 0 auto;
+                            }
+                            .placeholder-icon {
+                                font-size: 3rem;
+                                margin-bottom: 1rem;
+                            }
+                            .placeholder-text {
+                                font-size: 1.2rem;
+                                color: #2c3e50;
+                                font-weight: 600;
+                                margin-bottom: 0.5rem;
+                            }
+                            .placeholder-note {
+                                font-size: 0.9rem;
+                                color: #6c757d;
+                            }
+                        `
+                    });
+                });
+                
+                console.log('✅ Vue components registered with placeholders (MIME type workaround)');
+                
+                
+                // Mount app
+                app.mount('#app');
+                
+                console.log('✅ Vue SFC App initialized successfully');
+                
+            } catch (error) {
+                console.error('❌ Failed to initialize app:', error);
+                document.getElementById('loading').innerHTML = `
+                    <div class="loading-spinner"></div>
+                    <span>Error loading application. Please refresh.</span>
+                `;
+            }
+        }
+
+        // Start app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+    </script>
+</body>
+</html>
