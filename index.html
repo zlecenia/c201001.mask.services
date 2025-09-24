@@ -1015,6 +1015,13 @@
 <!-- Vue.js Migration Scripts -->
 <script src="js/components/LoginScreen.js?v=" type="text/javascript"></script>
 <script src="js/components/SystemScreen.js?v=" type="text/javascript"></script>
+<script src="js/components/UserMenuScreen.js?v=" type="text/javascript"></script>
+<script src="js/components/TestMenuTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/UserDataTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/DeviceSelectTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/DeviceDataTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/RealtimeSensorsTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/ReportsViewTemplate.js?v=" type="text/javascript"></script>
 <script src="js/vue-app.js?v=" type="text/javascript"></script>
 
 <!-- Vue.js Application Initialization -->
@@ -1035,6 +1042,41 @@
                 if (window.MaskServiceVue && window.SystemScreen) {
                     window.MaskServiceVue.registerComponent('SystemScreen', window.SystemScreen);
                     console.log('✅ SystemScreen component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.UserMenuScreen) {
+                    window.MaskServiceVue.registerComponent('UserMenuScreen', window.UserMenuScreen);
+                    console.log('✅ UserMenuScreen component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.TestMenuTemplate) {
+                    window.MaskServiceVue.registerComponent('TestMenuTemplate', window.TestMenuTemplate);
+                    console.log('✅ TestMenuTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.UserDataTemplate) {
+                    window.MaskServiceVue.registerComponent('UserDataTemplate', window.UserDataTemplate);
+                    console.log('✅ UserDataTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.DeviceSelectTemplate) {
+                    window.MaskServiceVue.registerComponent('DeviceSelectTemplate', window.DeviceSelectTemplate);
+                    console.log('✅ DeviceSelectTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.DeviceDataTemplate) {
+                    window.MaskServiceVue.registerComponent('DeviceDataTemplate', window.DeviceDataTemplate);
+                    console.log('✅ DeviceDataTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.RealtimeSensorsTemplate) {
+                    window.MaskServiceVue.registerComponent('RealtimeSensorsTemplate', window.RealtimeSensorsTemplate);
+                    console.log('✅ RealtimeSensorsTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.ReportsViewTemplate) {
+                    window.MaskServiceVue.registerComponent('ReportsViewTemplate', window.ReportsViewTemplate);
+                    console.log('✅ ReportsViewTemplate component registered with Vue app');
                 }
                 
                 // Mount Vue app
