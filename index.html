@@ -1025,6 +1025,7 @@
 <script src="js/components/SystemSettingsTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/ServiceMenuTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/UsersTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/WorkshopTemplate.js?v=" type="text/javascript"></script>
 <script src="js/vue-app.js?v=" type="text/javascript"></script>
 
 <!-- Vue.js Application Initialization -->
@@ -1095,6 +1096,11 @@
                 if (window.MaskServiceVue && window.UsersTemplate) {
                     window.MaskServiceVue.registerComponent('UsersTemplate', window.UsersTemplate);
                     console.log('✅ UsersTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.WorkshopTemplate) {
+                    window.MaskServiceVue.registerComponent('WorkshopTemplate', window.WorkshopTemplate);
+                    console.log('✅ WorkshopTemplate component registered with Vue app');
                 }
                 
                 // Mount Vue app
