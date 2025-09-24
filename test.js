@@ -1,37 +1,57 @@
 /**
- * MASKSERVICE C20 - Automated Template Loading Tests
- * Comprehensive test suite for UI template verification
+ * MASKSERVICE C20 - Vue.js Architecture Test Suite
+ * Comprehensive testing for Vue components, reactive systems, and external configs
+ * Post-Migration: Tests for Vue.js-based architecture (September 2025)
  */
 
-const MASKSERVICE_TEST_CONFIG = {
-    baseUrl: 'http://localhost:8084',
-    testTimeout: 10000,
-    roles: ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERVICEUSER'],
+const MASKSERVICE_VUE_TEST_CONFIG = {
+    baseUrl: 'http://localhost:8081',
+    testTimeout: 15000,
+    roles: ['OPERATOR', 'ADMIN', 'SUPERUSER', 'SERWISANT'],
     expectedMenuCounts: {
         'OPERATOR': 7,
         'ADMIN': 9,
         'SUPERUSER': 15,
-        'SERVICEUSER': 18
-    }
+        'SERWISANT': 18
+    },
+    vueComponents: [
+        'LoginScreen', 'SystemScreen', 'UserMenuScreen',
+        'TestMenuTemplate', 'UserDataTemplate', 'DeviceSelectTemplate',
+        'DeviceDataTemplate', 'RealtimeSensorsTemplate', 'ReportsViewTemplate',
+        'SystemSettingsTemplate', 'ServiceMenuTemplate', 'UsersTemplate',
+        'WorkshopTemplate', 'TestReportsTemplate', 'DeviceHistoryTemplate',
+        'ReportsBatchTemplate', 'ReportsScheduleTemplate', 'WorkshopInventoryTemplate',
+        'WorkshopMaintenanceTemplate', 'WorkshopPartsTemplate', 'WorkshopToolsTemplate'
+    ],
+    externalConfigs: [
+        '/config/sensors.json',
+        '/config/routing.json', 
+        '/config/app.json',
+        '/config/menu.json'
+    ],
+    localeFiles: [
+        '/locales/pl.json',
+        '/locales/en.json',
+        '/locales/de.json'
+    ]
 };
 
-class MaskserviceTemplateTest {
+class MaskServiceVueTest {
     constructor() {
         this.results = {
             passed: 0,
             failed: 0,
             total: 0,
-            details: []
+            details: [],
+            vueComponents: [],
+            configTests: [],
+            reactiveTests: []
         };
-        this.discoveredTemplates = [];
-        this.discoveredMenuLinks = [];
-        this.discoveredViewLinks = [];
-        this.templateAnalysis = {
-            working: [],
-            missing: [],
-            withExport: [],
-            withoutExport: []
-        };
+        this.vueApp = null;
+        this.vueComponents = new Map();
+        this.externalConfigs = new Map();
+        this.reactiveData = new Map();
+        this.testStartTime = Date.now();
     }
 
     log(message, type = 'info') {
@@ -40,34 +60,269 @@ class MaskserviceTemplateTest {
             'info': '✅',
             'error': '❌',
             'warn': '⚠️',
-            'test': '🧪'
+            'test': '🧪',
+            'vue': '🔶'
         }[type] || 'ℹ️';
         
         console.log(`[${timestamp}] ${prefix} ${message}`);
         this.results.details.push({ timestamp, type, message });
     }
 
-    async testModuleLoading() {
-        this.log('Starting Module Loading Tests', 'test');
+    /**
+     * Test Vue.js app initialization and mounting
+     */
+    async testVueAppInitialization() {
+        this.log('🔶 Testing Vue.js App Initialization', 'test');
         
-        const expectedModules = [
-            'Utils', 'ConfigManager', 'AuthManager', 'MenuManager', 
-            'DataExportManager', 'Router', 'App', 'VirtualKeyboard'
-        ];
+        try {
+            // Check if Vue is available
+            if (typeof Vue === 'undefined') {
+                this.log('Vue.js not loaded', 'error');
+                this.results.failed++;
+                this.results.total++;
+                return;
+            }
+            
+            // Check if MaskServiceVueApp is available
+            if (typeof window.maskServiceVueApp !== 'undefined') {
+                this.vueApp = window.maskServiceVueApp;
+                this.log('Vue App instance found', 'info');
+                this.results.passed++;
+            } else {
+                this.log('Vue App instance not found', 'error');
+                this.results.failed++;
+            }
+            
+            // Check if Vue app is mounted
+            const vueAppElement = document.querySelector('#vue-app');
+            if (vueAppElement && vueAppElement.__vue_app__) {
+                this.log('Vue App successfully mounted', 'info');
+                this.results.passed++;
+            } else {
+                this.log('Vue App not mounted or mount element missing', 'warn');
+                this.results.failed++;
+            }
+            
+            this.results.total += 2;
+            
+        } catch (error) {
+            this.log(`Vue App initialization error: ${error.message}`, 'error');
+            this.results.failed++;
+            this.results.total++;
+        }
+    }
+
+    /**
+     * Test Vue component registration and loading
+     */
+    async testVueComponentLoading() {
+        this.log('🔶 Testing Vue Component Loading', 'test');
         
-        for (const module of expectedModules) {
+        const expectedComponents = MASKSERVICE_VUE_TEST_CONFIG.vueComponents;
+        
+        for (const componentName of expectedComponents) {
             try {
-                if (typeof window[module] !== 'undefined' || 
-                    typeof window[module.toLowerCase()] !== 'undefined') {
-                    this.log(`Module ${module} loaded successfully`, 'info');
+                // Check if component is registered globally
+                if (typeof window[componentName] !== 'undefined') {
+                    this.vueComponents.set(componentName, window[componentName]);
+                    this.log(`Component ${componentName} loaded successfully`, 'vue');
+                    this.results.passed++;
+                    this.results.vueComponents.push({ name: componentName, status: 'loaded' });
+                } else {
+                    this.log(`Component ${componentName} not found`, 'error');
+                    this.results.failed++;
+                    this.results.vueComponents.push({ name: componentName, status: 'missing' });
+                }
+                this.results.total++;
+            } catch (error) {
+                this.log(`Error checking component ${componentName}: ${error.message}`, 'error');
+                this.results.failed++;
+                this.results.total++;
+                this.results.vueComponents.push({ name: componentName, status: 'error', error: error.message });
+            }
+        }
+    }
+
+    /**
+     * Test external JSON configuration loading
+     */
+    async testExternalConfigLoading() {
+        this.log('🗺 Testing External Config Loading', 'test');
+        
+        const configPaths = MASKSERVICE_VUE_TEST_CONFIG.externalConfigs;
+        
+        for (const configPath of configPaths) {
+            try {
+                const response = await fetch(configPath);
+                if (response.ok) {
+                    const configData = await response.json();
+                    this.externalConfigs.set(configPath, configData);
+                    this.log(`Config ${configPath} loaded successfully`, 'info');
+                    this.results.passed++;
+                    this.results.configTests.push({ path: configPath, status: 'loaded', size: JSON.stringify(configData).length });
+                } else {
+                    this.log(`Config ${configPath} failed to load (${response.status})`, 'error');
+                    this.results.failed++;
+                    this.results.configTests.push({ path: configPath, status: 'failed', error: response.status });
+                }
+                this.results.total++;
+            } catch (error) {
+                this.log(`Config ${configPath} error: ${error.message}`, 'error');
+                this.results.failed++;
+                this.results.total++;
+                this.results.configTests.push({ path: configPath, status: 'error', error: error.message });
+            }
+        }
+    }
+
+    /**
+     * Test Vue reactive systems (i18n, sensors, app state)
+     */
+    async testVueReactiveSystems() {
+        this.log('⚡ Testing Vue Reactive Systems', 'test');
+        
+        // Test VueI18nManager
+        try {
+            if (typeof window.vueI18nManager !== 'undefined') {
+                const i18nManager = window.vueI18nManager;
+                this.reactiveData.set('i18n', i18nManager.reactiveTranslations);
+                this.log('VueI18nManager reactive system active', 'vue');
+                this.results.passed++;
+                this.results.reactiveTests.push({ system: 'i18n', status: 'active' });
+            } else {
+                this.log('VueI18nManager not found', 'error');
+                this.results.failed++;
+                this.results.reactiveTests.push({ system: 'i18n', status: 'missing' });
+            }
+            this.results.total++;
+        } catch (error) {
+            this.log(`VueI18nManager error: ${error.message}`, 'error');
+            this.results.failed++;
+            this.results.total++;
+        }
+
+        // Test VueSensorMonitoring 
+        try {
+            if (typeof window.vueSensorMonitoring !== 'undefined') {
+                const sensorMonitoring = window.vueSensorMonitoring;
+                this.reactiveData.set('sensors', sensorMonitoring.reactiveSensorData);
+                this.log('VueSensorMonitoring reactive system active', 'vue');
+                this.results.passed++;
+                this.results.reactiveTests.push({ system: 'sensors', status: 'active' });
+            } else {
+                this.log('VueSensorMonitoring not found', 'error');
+                this.results.failed++;
+                this.results.reactiveTests.push({ system: 'sensors', status: 'missing' });
+            }
+            this.results.total++;
+        } catch (error) {
+            this.log(`VueSensorMonitoring error: ${error.message}`, 'error');
+            this.results.failed++;
+            this.results.total++;
+        }
+
+        // Test Vue App State Reactivity
+        try {
+            if (this.vueApp && this.vueApp.appState) {
+                this.reactiveData.set('appState', this.vueApp.appState);
+                this.log('Vue App state reactivity active', 'vue');
+                this.results.passed++;
+                this.results.reactiveTests.push({ system: 'appState', status: 'active' });
+            } else {
+                this.log('Vue App state not reactive or not found', 'warn');
+                this.results.failed++;
+                this.results.reactiveTests.push({ system: 'appState', status: 'missing' });
+            }
+            this.results.total++;
+        } catch (error) {
+            this.log(`Vue App state error: ${error.message}`, 'error');
+            this.results.failed++;
+            this.results.total++;
+        }
+    }
+
+    /**
+     * Test Vue router and navigation system
+     */
+    async testVueRouterNavigation() {
+        this.log('🛣️ Testing Vue Router Navigation', 'test');
+        
+        try {
+            // Check if C20Router exists
+            if (typeof window.C20Router === 'undefined') {
+                this.log('C20Router not found', 'error');
+                this.results.failed++;
+                this.results.total++;
+                return;
+            }
+
+            const router = window.C20Router;
+            const initialHash = window.location.hash;
+            
+            // Test navigation method
+            if (typeof router.navigateToView === 'function') {
+                this.log('Router navigation method available', 'info');
+                this.results.passed++;
+            } else {
+                this.log('Router navigation method missing', 'error');
+                this.results.failed++;
+            }
+
+            // Test route parsing
+            if (typeof router.parseRoute === 'function') {
+                const testRoute = router.parseRoute('#/login-screen/pl/default');
+                if (testRoute && testRoute.view) {
+                    this.log('Router parsing working', 'info');
                     this.results.passed++;
                 } else {
-                    this.log(`Module ${module} not found`, 'error');
+                    this.log('Router parsing failed', 'error');
+                    this.results.failed++;
+                }
+            } else {
+                this.log('Router parseRoute method missing', 'error');
+                this.results.failed++;
+            }
+
+            this.results.total += 2;
+            
+        } catch (error) {
+            this.log(`Router navigation error: ${error.message}`, 'error');
+            this.results.failed++;
+            this.results.total++;
+        }
+    }
+
+    /**
+     * Test Vue component mounting and template validation
+     */
+    async testVueComponentMounting() {
+        this.log('🏗️ Testing Vue Component Mounting', 'test');
+        
+        const testComponents = ['LoginScreen', 'SystemScreen', 'UserMenuScreen'];
+        
+        for (const componentName of testComponents) {
+            try {
+                if (this.vueComponents.has(componentName)) {
+                    const component = this.vueComponents.get(componentName);
+                    
+                    // Check if component has required properties
+                    if (component.name && component.setup) {
+                        this.log(`Component ${componentName} structure valid`, 'vue');
+                        this.results.passed++;
+                    } else if (component.template || component.render) {
+                        this.log(`Component ${componentName} template/render valid`, 'vue');
+                        this.results.passed++;
+                    } else {
+                        this.log(`Component ${componentName} missing required structure`, 'error');
+                        this.results.failed++;
+                    }
+                } else {
+                    this.log(`Component ${componentName} not available for testing`, 'warn');
                     this.results.failed++;
                 }
                 this.results.total++;
             } catch (error) {
-                this.log(`Error checking module ${module}: ${error.message}`, 'error');
+                this.log(`Component ${componentName} mounting error: ${error.message}`, 'error');
                 this.results.failed++;
                 this.results.total++;
             }
@@ -95,21 +350,7 @@ class MaskserviceTemplateTest {
             hasLinks: el.querySelectorAll('a').length
         }));
         
-        this.log(`📊 Discovered ${this.discoveredTemplates.length} templates total`, 'info');
-        
-        // Categorize templates
-        this.discoveredTemplates.forEach(template => {
-            if (template.hasContent && template.element.parentElement) {
-                this.templateAnalysis.working.push(template);
-                if (template.hasExportSection) {
-                    this.templateAnalysis.withExport.push(template);
-                } else {
-                    this.templateAnalysis.withoutExport.push(template);
-                }
-            } else {
-                this.templateAnalysis.missing.push(template);
-            }
-        });
+        // Legacy template discovery removed - Vue components are tested via component loading tests
         
         this.log(`✅ Working templates: ${this.templateAnalysis.working.length}`, 'info');
         this.log(`📊 With export functionality: ${this.templateAnalysis.withExport.length}`, 'info');
@@ -346,98 +587,150 @@ class MaskserviceTemplateTest {
         }
     }
 
-    generateReport() {
-        const successRate = ((this.results.passed / this.results.total) * 100).toFixed(1);
+    /**
+     * Generate comprehensive Vue.js test report
+     */
+    generateVueReport() {
+        const testDuration = Date.now() - this.testStartTime;
+        const successRate = this.results.total > 0 ? ((this.results.passed / this.results.total) * 100).toFixed(1) : 0;
         
         console.log('\n' + '='.repeat(80));
-        console.log('🧪 MASKSERVICE C20 COMPREHENSIVE TEMPLATE & LINK TEST REPORT');
+        console.log('🔶 MASKSERVICE C20 VUE.JS ARCHITECTURE TEST REPORT');
         console.log('='.repeat(80));
         console.log(`📊 Total Tests: ${this.results.total}`);
         console.log(`✅ Passed: ${this.results.passed}`);
         console.log(`❌ Failed: ${this.results.failed}`);
         console.log(`📈 Success Rate: ${successRate}%`);
+        console.log(`⏱️ Test Duration: ${testDuration}ms`);
         console.log('='.repeat(80));
         
         if (this.results.failed === 0) {
-            console.log('🎉 ALL TESTS PASSED! System is stable and ready for production.');
+            console.log('🎉 ALL VUE.JS TESTS PASSED! System is production-ready.');
         } else {
-            console.log('⚠️  Some tests failed. Review the details above.');
+            console.log('⚠️  Some Vue.js tests failed. Review the details above.');
         }
         
-        console.log('\n📋 COMPREHENSIVE DISCOVERY RESULTS:');
-        console.log(`🔍 Total Templates Discovered: ${this.discoveredTemplates.length}`);
-        console.log(`✅ Working Templates: ${this.templateAnalysis.working.length}`);
-        console.log(`📊 Templates with Export: ${this.templateAnalysis.withExport.length}`);
-        console.log(`⚠️ Templates without Export: ${this.templateAnalysis.withoutExport.length}`);
-        console.log(`❌ Empty/Missing Templates: ${this.templateAnalysis.missing.length}`);
-        console.log(`🔗 Menu Links Discovered: ${this.discoveredMenuLinks.length}`);
-        console.log(`🖥️ View Screens Discovered: ${this.discoveredViewLinks.length}`);
-        console.log('🔧 Module Loading: Complete');
-        console.log('🔐 Auth System: Logout protection active');
+        // Vue Components Report
+        console.log('\n🔶 VUE COMPONENTS REPORT:');
+        console.log(`📊 Total Components Expected: ${MASKSERVICE_VUE_TEST_CONFIG.vueComponents.length}`);
+        const loadedComponents = this.results.vueComponents.filter(c => c.status === 'loaded').length;
+        const missingComponents = this.results.vueComponents.filter(c => c.status === 'missing').length;
+        const errorComponents = this.results.vueComponents.filter(c => c.status === 'error').length;
+        console.log(`✅ Components Loaded: ${loadedComponents}`);
+        console.log(`❌ Components Missing: ${missingComponents}`);
+        console.log(`⚠️ Components with Errors: ${errorComponents}`);
         
-        console.log('\n📊 DETAILED TEMPLATE LIST:');
-        this.discoveredTemplates.forEach(template => {
-            const status = template.hasContent ? '✅' : '❌';
-            const exportStatus = template.hasExportSection ? '📊' : '⚪';
-            console.log(`${status} ${exportStatus} ${template.id} (${template.hasButtons} buttons, ${template.hasLinks} links)`);
-        });
+        // External Config Report
+        console.log('\n🗺 EXTERNAL CONFIG REPORT:');
+        console.log(`📊 Total Configs Expected: ${MASKSERVICE_VUE_TEST_CONFIG.externalConfigs.length}`);
+        const loadedConfigs = this.results.configTests.filter(c => c.status === 'loaded').length;
+        const failedConfigs = this.results.configTests.filter(c => c.status === 'failed').length;
+        const errorConfigs = this.results.configTests.filter(c => c.status === 'error').length;
+        console.log(`✅ Configs Loaded: ${loadedConfigs}`);
+        console.log(`❌ Configs Failed: ${failedConfigs}`);
+        console.log(`⚠️ Configs with Errors: ${errorConfigs}`);
+        
+        // Reactive Systems Report
+        console.log('\n⚡ REACTIVE SYSTEMS REPORT:');
+        const activeSystems = this.results.reactiveTests.filter(r => r.status === 'active').length;
+        const missingSystems = this.results.reactiveTests.filter(r => r.status === 'missing').length;
+        console.log(`✅ Reactive Systems Active: ${activeSystems}`);
+        console.log(`❌ Reactive Systems Missing: ${missingSystems}`);
+        
+        // Detailed Component List
+        if (this.results.vueComponents.length > 0) {
+            console.log('\n📊 DETAILED COMPONENT STATUS:');
+            this.results.vueComponents.forEach(component => {
+                const status = {
+                    'loaded': '✅',
+                    'missing': '❌',
+                    'error': '⚠️'
+                }[component.status] || '❓';
+                console.log(`${status} ${component.name} (${component.status})`);
+            });
+        }
         
         return {
             success: this.results.failed === 0,
             passed: this.results.passed,
             failed: this.results.failed,
             total: this.results.total,
-            successRate: successRate,
-            discovery: {
-                templates: this.discoveredTemplates.length,
-                workingTemplates: this.templateAnalysis.working.length,
-                withExport: this.templateAnalysis.withExport.length,
-                menuLinks: this.discoveredMenuLinks.length,
-                viewScreens: this.discoveredViewLinks.length
+            successRate: parseFloat(successRate),
+            testDuration: testDuration,
+            vueComponents: {
+                total: MASKSERVICE_VUE_TEST_CONFIG.vueComponents.length,
+                loaded: loadedComponents,
+                missing: missingComponents,
+                errors: errorComponents
+            },
+            externalConfigs: {
+                total: MASKSERVICE_VUE_TEST_CONFIG.externalConfigs.length,
+                loaded: loadedConfigs,
+                failed: failedConfigs,
+                errors: errorConfigs
+            },
+            reactiveSystems: {
+                active: activeSystems,
+                missing: missingSystems
             }
         };
     }
 
-    async runAllTests() {
-        this.log('🚀 Starting MASKSERVICE C20 COMPREHENSIVE Template & Link Tests', 'test');
+    /**
+     * Run comprehensive Vue.js architecture test suite
+     */
+    async runAllVueTests() {
+        this.log('🚀 Starting MASKSERVICE C20 VUE.JS ARCHITECTURE Tests', 'test');
+        this.testStartTime = Date.now();
         
-        // Module and system tests
-        await this.testModuleLoading();
-        await this.testExportFunctions();
-        await this.testDataExportManager();
-        await this.testAuthSystem();
+        try {
+            // Core Vue.js architecture tests
+            await this.testVueAppInitialization();
+            await this.testVueComponentLoading();
+            await this.testExternalConfigLoading();
+            await this.testVueReactiveSystems();
+            await this.testVueRouterNavigation();
+            await this.testVueComponentMounting();
+            
+            // Legacy compatibility tests (minimal)
+            await this.testDataExportManager();
+            
+        } catch (error) {
+            this.log(`Critical test execution error: ${error.message}`, 'error');
+            this.results.failed++;
+            this.results.total++;
+        }
         
-        // Dynamic discovery tests
-        await this.discoverAllTemplates();
-        await this.testAllDiscoveredTemplates();
-        await this.discoverAllMenuLinks();
-        await this.testAllMenuLinks();
-        await this.testAllViewLinks();
-        
-        return this.generateReport();
+        return this.generateVueReport();
     }
 }
 
-// Auto-run tests when page loads (if not in production)
+// Auto-run Vue.js tests when page loads (if not in production)
 if (typeof window !== 'undefined' && window.location.hostname === 'localhost') {
     window.addEventListener('load', async () => {
-        // Wait for all modules to load
+        // Wait for Vue.js app and components to load
         setTimeout(async () => {
-            const tester = new MaskserviceTemplateTest();
-            const results = await tester.runAllTests();
+            console.log('🔶 Starting MASKSERVICE C20 Vue.js Architecture Tests...');
+            const vueTester = new MaskServiceVueTest();
+            const results = await vueTester.runAllVueTests();
             
-            // Export results to global scope for Makefile access
-            window.MASKSERVICE_TEST_RESULTS = results;
-        }, 3000); // Wait 3 seconds for all modules to initialize
+            // Export results to global scope for Makefile and automation access
+            window.MASKSERVICE_VUE_TEST_RESULTS = results;
+            window.MASKSERVICE_TEST_RESULTS = results; // Legacy compatibility
+            
+            console.log('🎯 Vue.js test results exported to window.MASKSERVICE_VUE_TEST_RESULTS');
+        }, 5000); // Wait 5 seconds for Vue.js components to initialize
     });
 }
 
 // Export for manual testing
 if (typeof window !== 'undefined') {
-    window.MaskserviceTemplateTest = MaskserviceTemplateTest;
+    window.MaskServiceVueTest = MaskServiceVueTest;
+    // Legacy export for compatibility
+    window.MaskserviceTemplateTest = MaskServiceVueTest;
 }
 
 // Node.js export for testing frameworks
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = MaskserviceTemplateTest;
+    module.exports = MaskServiceVueTest;
 }
