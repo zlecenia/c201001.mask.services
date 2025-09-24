@@ -53,11 +53,14 @@ const UsersTemplate = {
                 lastLogin: null
             };
             
-            users.push(user);
-            Object.assign(newUser, { username: '', email: '', role: 'OPERATOR', password: '', active: true });
-            userState.showAddUser = false;
-            
-            emit('user-changed', { action: 'added', user });
+            // PRODUCTION FIX: Use nextTick for safe DOM updates
+            Vue.nextTick(() => {
+                users.push(user);
+                Object.assign(newUser, { username: '', email: '', role: 'OPERATOR', password: '', active: true });
+                userState.showAddUser = false;
+                
+                emit('user-changed', { action: 'added', user });
+            });
         };
 
         const editUser = (user) => {
