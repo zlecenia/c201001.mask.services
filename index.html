@@ -1024,6 +1024,7 @@
 <script src="js/components/ReportsViewTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/SystemSettingsTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/ServiceMenuTemplate.js?v=" type="text/javascript"></script>
+<script src="js/components/UsersTemplate.js?v=" type="text/javascript"></script>
 <script src="js/vue-app.js?v=" type="text/javascript"></script>
 
 <!-- Vue.js Application Initialization -->
@@ -1089,6 +1090,11 @@
                 if (window.MaskServiceVue && window.ServiceMenuTemplate) {
                     window.MaskServiceVue.registerComponent('ServiceMenuTemplate', window.ServiceMenuTemplate);
                     console.log('✅ ServiceMenuTemplate component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.UsersTemplate) {
+                    window.MaskServiceVue.registerComponent('UsersTemplate', window.UsersTemplate);
+                    console.log('✅ UsersTemplate component registered with Vue app');
                 }
                 
                 // Mount Vue app
