@@ -119,18 +119,78 @@ class MaskServiceVueApp {
             
             methods: {
                 getCurrentScreenComponent() {
-                    // Return appropriate Vue component based on current screen
-                    const componentMap = {
-                        'login-screen': 'LoginScreen',
-                        'user-menu-screen': 'UserMenuScreen',
-                        'system-screen': 'SystemScreen'
-                        // More components will be added as we migrate
-                    };
+                // Complete Vue component mapping for all views/templates
+                const componentMap = {
+                    // Core Screens
+                    'login-screen': 'LoginScreen',
+                    'user-menu-screen': 'UserMenuScreen', 
+                    'system-screen': 'SystemScreen',
                     
-                    return componentMap[this.appState.currentScreen] || 'LoginScreen';
+                    // Service Menu & Templates
+                    'service-menu': 'ServiceMenuTemplate',
+                    'service-menu-template': 'ServiceMenuTemplate',
+                    
+                    // Test Templates
+                    'test-menu': 'TestMenuTemplate',
+                    'test-menu-template': 'TestMenuTemplate',
+                    'test-reports': 'TestReportsTemplate',
+                    'test-reports-template': 'TestReportsTemplate',
+                    
+                    // User & Device Templates
+                    'user-data': 'UserDataTemplate',
+                    'user-data-template': 'UserDataTemplate',
+                    'users': 'UsersTemplate',
+                    'users-template': 'UsersTemplate',
+                    'device-select': 'DeviceSelectTemplate',
+                    'device-select-template': 'DeviceSelectTemplate',
+                    'device-data': 'DeviceDataTemplate',
+                    'device-data-template': 'DeviceDataTemplate',
+                    'device-history': 'DeviceHistoryTemplate',
+                    'device-history-template': 'DeviceHistoryTemplate',
+                    
+                    // Sensors & Monitoring
+                    'realtime-sensors': 'RealtimeSensorsTemplate',
+                    'realtime-sensors-template': 'RealtimeSensorsTemplate',
+                    
+                    // Reports Templates
+                    'reports-view': 'ReportsViewTemplate',
+                    'reports-view-template': 'ReportsViewTemplate',
+                    'reports-batch': 'ReportsBatchTemplate',
+                    'reports-batch-template': 'ReportsBatchTemplate',
+                    'reports-schedule': 'ReportsScheduleTemplate',
+                    'reports-schedule-template': 'ReportsScheduleTemplate',
+                    
+                    // Settings Templates
+                    'system-settings': 'SystemSettingsTemplate',
+                    'system-settings-template': 'SystemSettingsTemplate',
+                    'settings-system': 'SystemSettingsTemplate',
+                    'settings-standards': 'SystemSettingsTemplate',
+                    'settings-scenarios': 'SystemSettingsTemplate',
+                    
+                    // Workshop Templates
+                    'workshop': 'WorkshopTemplate',
+                    'workshop-template': 'WorkshopTemplate',
+                    'workshop-inventory': 'WorkshopInventoryTemplate',
+                    'workshop-inventory-template': 'WorkshopInventoryTemplate',
+                    'workshop-maintenance': 'WorkshopMaintenanceTemplate',
+                    'workshop-maintenance-template': 'WorkshopMaintenanceTemplate',
+                    'workshop-parts': 'WorkshopPartsTemplate',
+                    'workshop-parts-template': 'WorkshopPartsTemplate',
+                    'workshop-tools': 'WorkshopToolsTemplate',
+                    'workshop-tools-template': 'WorkshopToolsTemplate'
+                };
+                
+                const componentName = componentMap[this.appState.currentScreen];
+                if (!componentName) {
+                    console.warn(`⚠️ Vue: Unknown screen '${this.appState.currentScreen}', falling back to LoginScreen`);
+                    return 'LoginScreen';
                 }
+                
+                console.log(`🔶 Vue: Loading component ${componentName} for screen '${this.appState.currentScreen}'`);
+                return componentName;
             }
-        });
+        }
+    });
 
         // Register global properties for backwards compatibility
         this.app.config.globalProperties.$maskService = {

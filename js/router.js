@@ -264,54 +264,299 @@ class C20Router {
      */
     initializeRoutes() {
         this.routes = {
+            // Core Screens (Vue Components)
             'login-screen': {
                 element: '#login-screen',
                 title: 'Login Screen',
-                actions: [
-                    'login-scanner-btn',
-                    'login-keyword-btn', 
-                    'login-operator-btn',
-                    'login-admin-btn',
-                    'login-superuser-btn',
-                    'login-serviceuser-btn',
-                    'key-*', // Virtual keyboard keys
-                    'password-input'
-                ]
+                actions: ['login-scanner-btn', 'login-keyword-btn', 'login-operator-btn', 'login-admin-btn', 'login-superuser-btn', 'login-serviceuser-btn', 'key-*', 'password-input']
             },
             'user-menu-screen': {
                 element: '#user-menu-screen',
                 title: 'User Menu',
-                actions: [
-                    'menu-item-*',
-                    'logout-btn'
-                ]
+                actions: ['menu-item-*', 'logout-btn']
             },
             'system-screen': {
                 element: '#system-screen',
                 title: 'System View',
-                actions: [
-                    'system-info',
-                    'system-status'
-                ]
+                actions: ['system-info', 'system-status']
             },
-            'data-screen': {
-                element: '#data-screen', 
-                title: 'Data Sensors',
-                actions: [
-                    'pressure-sensor',
-                    'temperature-sensor',
-                    'humidity-sensor'
-                ]
+            
+            // Service Menu & Templates (Vue Components)
+            'service-menu': {
+                element: '#service-menu-template',
+                title: 'Service Menu',
+                vue: 'ServiceMenuTemplate',
+                actions: ['menu-item-*']
+            },
+            'service-menu-template': {
+                element: '#service-menu-template',
+                title: 'Service Menu Template',
+                vue: 'ServiceMenuTemplate',
+                actions: ['menu-item-*']
+            },
+            
+            // Test Templates (Vue Components)
+            'test-menu': {
+                element: '#test-menu-template',
+                title: 'Test Menu',
+                vue: 'TestMenuTemplate',
+                actions: ['test-item-*']
+            },
+            'test-menu-template': {
+                element: '#test-menu-template',
+                title: 'Test Menu Template', 
+                vue: 'TestMenuTemplate',
+                actions: ['test-item-*']
+            },
+            'test-reports': {
+                element: '#test-reports-template',
+                title: 'Test Reports',
+                vue: 'TestReportsTemplate',
+                actions: ['report-item-*']
+            },
+            'test-reports-template': {
+                element: '#test-reports-template',
+                title: 'Test Reports Template',
+                vue: 'TestReportsTemplate', 
+                actions: ['report-item-*']
+            },
+            'test-scenarios': {
+                element: '#test-menu-template',
+                title: 'Test Scenarios',
+                vue: 'TestMenuTemplate',
+                actions: ['scenario-*']
+            },
+            'test-quick': {
+                element: '#test-menu-template',
+                title: 'Quick Test',
+                vue: 'TestMenuTemplate',
+                actions: ['quick-test-*']
+            },
+            'test-wizard': {
+                element: '#test-menu-template',
+                title: 'Test Wizard',
+                vue: 'TestMenuTemplate',
+                actions: ['wizard-*']
+            },
+            
+            // User & Device Templates (Vue Components)
+            'user-data': {
+                element: '#user-data-template',
+                title: 'User Data',
+                vue: 'UserDataTemplate',
+                actions: ['user-item-*']
+            },
+            'user-data-template': {
+                element: '#user-data-template',
+                title: 'User Data Template',
+                vue: 'UserDataTemplate',
+                actions: ['user-item-*']
+            },
+            'users': {
+                element: '#users-template',
+                title: 'Users Management',
+                vue: 'UsersTemplate',
+                actions: ['user-management-*']
+            },
+            'users-template': {
+                element: '#users-template',
+                title: 'Users Template',
+                vue: 'UsersTemplate',
+                actions: ['user-management-*']
+            },
+            'device-select': {
+                element: '#device-select-template',
+                title: 'Device Select',
+                vue: 'DeviceSelectTemplate',
+                actions: ['device-*']
+            },
+            'device-select-template': {
+                element: '#device-select-template',
+                title: 'Device Select Template',
+                vue: 'DeviceSelectTemplate',
+                actions: ['device-*']
+            },
+            'device-data': {
+                element: '#device-data-template',
+                title: 'Device Data',
+                vue: 'DeviceDataTemplate',
+                actions: ['device-data-*']
+            },
+            'device-data-template': {
+                element: '#device-data-template',
+                title: 'Device Data Template',
+                vue: 'DeviceDataTemplate',
+                actions: ['device-data-*']
+            },
+            'device-history': {
+                element: '#device-history-template',
+                title: 'Device History',
+                vue: 'DeviceHistoryTemplate',
+                actions: ['history-*']
+            },
+            'device-history-template': {
+                element: '#device-history-template',
+                title: 'Device History Template',
+                vue: 'DeviceHistoryTemplate',
+                actions: ['history-*']
+            },
+            
+            // Sensors & Monitoring (Vue Components)
+            'realtime-sensors': {
+                element: '#realtime-sensors-template',
+                title: 'Realtime Sensors',
+                vue: 'RealtimeSensorsTemplate',
+                actions: ['sensor-*']
+            },
+            'realtime-sensors-template': {
+                element: '#realtime-sensors-template',
+                title: 'Realtime Sensors Template',
+                vue: 'RealtimeSensorsTemplate',
+                actions: ['sensor-*']
+            },
+            
+            // Reports Templates (Vue Components)
+            'reports-view': {
+                element: '#reports-view-template',
+                title: 'Reports View',
+                vue: 'ReportsViewTemplate',
+                actions: ['report-*']
+            },
+            'reports-view-template': {
+                element: '#reports-view-template',
+                title: 'Reports View Template',
+                vue: 'ReportsViewTemplate',
+                actions: ['report-*']
+            },
+            'reports-batch': {
+                element: '#reports-batch-template',
+                title: 'Reports Batch',
+                vue: 'ReportsBatchTemplate',
+                actions: ['batch-*']
+            },
+            'reports-batch-template': {
+                element: '#reports-batch-template',
+                title: 'Reports Batch Template',
+                vue: 'ReportsBatchTemplate',
+                actions: ['batch-*']
+            },
+            'reports-schedule': {
+                element: '#reports-schedule-template',
+                title: 'Reports Schedule',
+                vue: 'ReportsScheduleTemplate',
+                actions: ['schedule-*']
+            },
+            'reports-schedule-template': {
+                element: '#reports-schedule-template',
+                title: 'Reports Schedule Template',
+                vue: 'ReportsScheduleTemplate',
+                actions: ['schedule-*']
+            },
+            
+            // Settings Templates (Vue Components)
+            'system-settings': {
+                element: '#system-settings-template',
+                title: 'System Settings',
+                vue: 'SystemSettingsTemplate',
+                actions: ['settings-*']
+            },
+            'system-settings-template': {
+                element: '#system-settings-template',
+                title: 'System Settings Template',
+                vue: 'SystemSettingsTemplate',
+                actions: ['settings-*']
+            },
+            'settings-system': {
+                element: '#system-settings-template',
+                title: 'Settings System',
+                vue: 'SystemSettingsTemplate',
+                actions: ['settings-*']
+            },
+            'settings-standards': {
+                element: '#system-settings-template',
+                title: 'Settings Standards',
+                vue: 'SystemSettingsTemplate',
+                actions: ['standards-*']
+            },
+            'settings-scenarios': {
+                element: '#system-settings-template',
+                title: 'Settings Scenarios',
+                vue: 'SystemSettingsTemplate',
+                actions: ['scenarios-*']
             },
             'settings-screen': {
                 element: '#settings-screen',
-                title: 'System Settings',
-                actions: [
-                    'device-settings',
-                    'network-settings',
-                    'system-config',
-                    'save-settings-btn'
-                ]
+                title: 'Settings Screen',
+                actions: ['device-settings', 'network-settings', 'system-config', 'save-settings-btn']
+            },
+            
+            // Workshop Templates (Vue Components)
+            'workshop': {
+                element: '#workshop-template',
+                title: 'Workshop',
+                vue: 'WorkshopTemplate',
+                actions: ['workshop-*']
+            },
+            'workshop-template': {
+                element: '#workshop-template',
+                title: 'Workshop Template',
+                vue: 'WorkshopTemplate',
+                actions: ['workshop-*']
+            },
+            'workshop-inventory': {
+                element: '#workshop-inventory-template',
+                title: 'Workshop Inventory',
+                vue: 'WorkshopInventoryTemplate',
+                actions: ['inventory-*']
+            },
+            'workshop-inventory-template': {
+                element: '#workshop-inventory-template',
+                title: 'Workshop Inventory Template',
+                vue: 'WorkshopInventoryTemplate',
+                actions: ['inventory-*']
+            },
+            'workshop-maintenance': {
+                element: '#workshop-maintenance-template',
+                title: 'Workshop Maintenance',
+                vue: 'WorkshopMaintenanceTemplate',
+                actions: ['maintenance-*']
+            },
+            'workshop-maintenance-template': {
+                element: '#workshop-maintenance-template',
+                title: 'Workshop Maintenance Template',
+                vue: 'WorkshopMaintenanceTemplate',
+                actions: ['maintenance-*']
+            },
+            'workshop-parts': {
+                element: '#workshop-parts-template',
+                title: 'Workshop Parts',
+                vue: 'WorkshopPartsTemplate',
+                actions: ['parts-*']
+            },
+            'workshop-parts-template': {
+                element: '#workshop-parts-template',
+                title: 'Workshop Parts Template',
+                vue: 'WorkshopPartsTemplate',
+                actions: ['parts-*']
+            },
+            'workshop-tools': {
+                element: '#workshop-tools-template',
+                title: 'Workshop Tools',
+                vue: 'WorkshopToolsTemplate',
+                actions: ['tools-*']
+            },
+            'workshop-tools-template': {
+                element: '#workshop-tools-template',
+                title: 'Workshop Tools Template',
+                vue: 'WorkshopToolsTemplate',
+                actions: ['tools-*']
+            },
+            
+            // Legacy compatibility
+            'data-screen': {
+                element: '#data-screen',
+                title: 'Data Sensors',
+                actions: ['pressure-sensor', 'temperature-sensor', 'humidity-sensor']
             }
         };
 
