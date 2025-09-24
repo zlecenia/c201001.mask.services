@@ -4,11 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="global.page_title">MASKSERVICE C20 1001 - System Mock v2.0</title>
+    <!-- Vue.js CDN for development -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
     <script>
         // Cache-busting for CSS
         const cssVersion = Date.now();
         document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
     </script>
+    
+    <!-- Vue.js Styles -->
+    <style>
+        /* Vue.js specific styles */
+        .vue-component {
+            animation: vue-fade-in 0.5s ease-in-out;
+        }
+        
+        .vue-badge {
+            background: #42b883;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7em;
+            margin-left: 8px;
+        }
+        
+        #vue-app {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background: white;
+            display: none;
+        }
+        
+        #vue-app.active {
+            display: block;
+        }
+        
+        @keyframes vue-fade-in {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .screen-fade-enter-active, .screen-fade-leave-active {
+            transition: opacity 0.3s ease;
+        }
+        
+        .screen-fade-enter-from, .screen-fade-leave-to {
+            opacity: 0;
+        }
+    </style>
 </head>
 <body>
 <div id="app" class="container">
@@ -959,6 +1007,78 @@
 <!-- jsPDF Library for PDF Export -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-<!-- Modular architecture: utils → auth → menu → i18n → router → keyboard → app → ui-tester -->
+<!-- Vue.js Application Container -->
+<div id="vue-app" class="vue-overlay">
+    <!-- Vue components will be mounted here -->
+</div>
+
+<!-- Vue.js Migration Scripts -->
+<script src="js/components/LoginScreen.js?v=" type="text/javascript"></script>
+<script src="js/components/SystemScreen.js?v=" type="text/javascript"></script>
+<script src="js/vue-app.js?v=" type="text/javascript"></script>
+
+<!-- Vue.js Application Initialization -->
+<script>
+    // Vue.js Application Startup
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🔶 Starting Vue.js integration for MASKSERVICE C20...');
+        
+        // Initialize Vue app when DOM is ready
+        setTimeout(() => {
+            try {
+                // Register Vue components
+                if (window.MaskServiceVue && window.LoginScreen) {
+                    window.MaskServiceVue.registerComponent('LoginScreen', window.LoginScreen);
+                    console.log('✅ LoginScreen component registered with Vue app');
+                }
+                
+                if (window.MaskServiceVue && window.SystemScreen) {
+                    window.MaskServiceVue.registerComponent('SystemScreen', window.SystemScreen);
+                    console.log('✅ SystemScreen component registered with Vue app');
+                }
+                
+                // Mount Vue app
+                if (window.MaskServiceVue) {
+                    const vueAppInstance = window.MaskServiceVue.mount('#vue-app');
+                    if (vueAppInstance) {
+                        console.log('✅ Vue.js app mounted successfully');
+                        
+                        // Add Vue toggle functionality
+                        window.toggleVueMode = function() {
+                            const vueContainer = document.getElementById('vue-app');
+                            const vanillaContainer = document.getElementById('app');
+                            
+                            if (vueContainer.classList.contains('active')) {
+                                // Switch to vanilla
+                                vueContainer.classList.remove('active');
+                                vanillaContainer.style.display = 'block';
+                                console.log('🔄 Switched to Vanilla JS mode');
+                            } else {
+                                // Switch to Vue
+                                vueContainer.classList.add('active');
+                                vanillaContainer.style.display = 'none';
+                                console.log('🔄 Switched to Vue.js mode');
+                            }
+                        };
+                        
+                        // Add keyboard shortcut to toggle Vue mode (Ctrl+Shift+V)
+                        document.addEventListener('keydown', function(e) {
+                            if (e.ctrlKey && e.shiftKey && e.key === 'V') {
+                                e.preventDefault();
+                                window.toggleVueMode();
+                            }
+                        });
+                        
+                        console.log('🔶 Vue/Vanilla toggle ready: Press Ctrl+Shift+V');
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Vue.js initialization failed:', error);
+            }
+        }, 100);
+    });
+</script>
+
+<!-- Modular architecture: utils → auth → menu → i18n → router → keyboard → app → ui-tester → Vue.js -->
 </body>
 </html>

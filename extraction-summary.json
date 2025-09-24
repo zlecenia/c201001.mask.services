@@ -1,0 +1,12 @@
+{
+  "timestamp": "2025-09-24T07:25:49.454Z",
+  "extracted": {
+    "templates": 17,
+    "screens": 3,
+    "total": 20
+  },
+  "structure": {
+    "views/templates/": 17,
+    "views/screens/": 3
+  }
+}

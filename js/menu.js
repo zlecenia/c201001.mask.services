@@ -85,15 +85,33 @@ class MenuManager {
 
     /**
      * Handle menu option selection
+     * Enhanced for modular architecture with fallback handling
      */
-    selectMenuOption(optionKey) {
+    async selectMenuOption(optionKey) {
         console.log('Selected menu option:', optionKey);
         
         // Find the selected menu item
         const menuItem = this.currentMenu?.find(item => item.key === optionKey);
         if (!menuItem) {
-            console.error('Menu item not found:', optionKey);
-            return;
+            console.warn(`Menu item not found in currentMenu: ${optionKey}`);
+            console.log('🔍 Current menu state:', {
+                activeRole: this.activeRole,
+                currentMenuLength: this.currentMenu?.length || 0,
+                availableKeys: this.currentMenu?.map(item => item.key) || []
+            });
+            
+            // Try to reinitialize menu for current role
+            if (this.activeRole) {
+                console.log(`🔄 Attempting to reinitialize menu for role: ${this.activeRole}`);
+                await this.initializeMenu(this.activeRole);
+                
+                // Try to find menu item again after reinitialization
+                const retryMenuItem = this.currentMenu?.find(item => item.key === optionKey);
+                if (!retryMenuItem) {
+                    console.error(`❌ Menu item still not found after reinitialization: ${optionKey}`);
+                    // Continue anyway - attempt direct template loading
+                }
+            }
         }
 
         // Handle different menu options
@@ -198,37 +216,22 @@ class MenuManager {
 
     showUserData() {
         console.log('Opening User Data...');
-        this.loadTemplate('user-data-template');
+        this.navigateToTemplate('user-data-template', 'user-data');
     }
 
     showRealtimeSensors() {
         console.log('Opening Real-time Sensors...');
-        // Use enhanced module if available to show only sensors
-        if (window.deviceDataEnhanced) {
-            deviceDataEnhanced.showRealtimeSensors();
-        } else {
-            this.loadTemplate('realtime-sensors-template');
-        }
+        this.navigateToTemplate('realtime-sensors-template', 'realtime-sensors');
     }
 
     showDeviceHistory() {
         console.log('Opening Device History...');
-        // Use enhanced module if available to show only history
-        if (window.deviceDataEnhanced) {
-            deviceDataEnhanced.showDeviceHistory();
-        } else {
-            this.loadTemplate('device-history-template');
-        }
+        this.navigateToTemplate('device-history-template', 'device-history');
     }
 
     showReportsView() {
         console.log('Opening Reports View...');
-        // Use enhanced module if available
-        if (window.testReportsEnhanced) {
-            testReportsEnhanced.showReportsView();
-        } else {
-            this.loadTemplate('reports-view-template');
-        }
+        this.navigateToTemplate('reports-view-template', 'reports-view');
     }
 
     showReportsBatch() {
@@ -597,47 +600,27 @@ class MenuManager {
 
     showServiceMenu() {
         console.log('Opening Service Menu...');
-        this.loadTemplate('service-menu-template');
+        this.navigateToTemplate('service-menu-template', 'service-menu');
     }
 
     showSettingsScenarios() {
         console.log('Opening Settings Scenarios...');
-        // Use enhanced module if available
-        if (window.systemSettingsEnhanced) {
-            systemSettingsEnhanced.showSettingsScenarios();
-        } else {
-            this.loadTemplate('system-settings-template');
-        }
+        this.navigateToTemplate('system-settings-template', 'settings-scenarios');
     }
 
     showSettingsIntegration() {
         console.log('Opening Settings Integration...');
-        // Use enhanced module if available
-        if (window.systemSettingsEnhanced) {
-            systemSettingsEnhanced.showSettingsIntegration();
-        } else {
-            this.loadTemplate('system-settings-template');
-        }
+        this.navigateToTemplate('system-settings-template', 'settings-integration');
     }
 
     showSettingsStandards() {
         console.log('Opening Settings Standards...');
-        // Use enhanced module if available
-        if (window.systemSettingsEnhanced) {
-            systemSettingsEnhanced.showSettingsStandards();
-        } else {
-            this.loadTemplate('system-settings-template');
-        }
+        this.navigateToTemplate('system-settings-template', 'settings-standards');
     }
 
     showSettingsSystem() {
         console.log('Opening Settings System...');
-        // Use enhanced module if available
-        if (window.systemSettingsEnhanced) {
-            systemSettingsEnhanced.showSettingsSystem();
-        } else {
-            this.loadTemplate('system-settings-template');
-        }
+        this.navigateToTemplate('system-settings-template', 'settings-system');
     }
 
     showAdvancedDiagnostics() {
@@ -647,31 +630,62 @@ class MenuManager {
 
     /**
      * Load HTML template into menu content area
+     * Now supports both static templates and dynamic loading via ViewLoader
      */
-    loadTemplate(templateId) {
+    async loadTemplate(templateId) {
         console.log(`🎯 Loading template: ${templateId}`);
         
-        const template = document.getElementById(templateId);
         const menuContent = document.getElementById('menu-content');
-        
-        if (!template) {
-            console.error(`❌ Template not found: ${templateId}`);
-            menuContent.innerHTML = `<div class="error-message">
-                <h2>Template Not Found</h2>
-                <p>Template "${templateId}" is not available.</p>
-            </div>`;
-            return false;
-        }
         
         if (!menuContent) {
             console.error('❌ Menu content container not found');
             return false;
         }
         
-        // Clone template content and insert into menu-content
-        menuContent.innerHTML = template.innerHTML;
-        console.log(`✅ Template loaded successfully: ${templateId}`);
-        return true;
+        try {
+            // First try to find template in DOM (for backward compatibility)
+            let template = document.getElementById(templateId);
+            let templateContent = '';
+            
+            if (template) {
+                // Static template found in DOM
+                templateContent = template.innerHTML;
+                console.log(`✅ Static template found: ${templateId}`);
+            } else if (window.viewLoader && window.viewLoader.hasView(templateId)) {
+                // Try dynamic loading with ViewLoader
+                console.log(`🔄 Loading template dynamically: ${templateId}`);
+                templateContent = await window.viewLoader.loadView(templateId);
+                console.log(`✅ Dynamic template loaded: ${templateId} (${templateContent.length} chars)`);
+            } else {
+                // Template not found anywhere
+                console.error(`❌ Template not found: ${templateId}`);
+                menuContent.innerHTML = `<div class="error-message">
+                    <h2>Template Not Found</h2>
+                    <p>Template "${templateId}" is not available.</p>
+                    <p>Available templates: ${window.viewLoader ? window.viewLoader.getRegisteredViews().join(', ') : 'ViewLoader not available'}</p>
+                </div>`;
+                return false;
+            }
+            
+            // Insert template content into menu-content
+            menuContent.innerHTML = templateContent;
+            
+            // Apply i18n if available
+            if (window.changeLanguage && window.currentLanguage) {
+                this._applyI18nToElement(menuContent);
+            }
+            
+            console.log(`✅ Template loaded successfully: ${templateId}`);
+            return true;
+            
+        } catch (error) {
+            console.error(`❌ Failed to load template ${templateId}:`, error);
+            menuContent.innerHTML = `<div class="error-message">
+                <h2>Template Load Error</h2>
+                <p>Failed to load template "${templateId}": ${error.message}</p>
+            </div>`;
+            return false;
+        }
     }
 
     /**
@@ -683,6 +697,58 @@ class MenuManager {
             items: this.currentMenu,
             config: this.menuConfig
         };
+    }
+
+    /**
+     * Apply internationalization to loaded element
+     */
+    _applyI18nToElement(element) {
+        try {
+            const i18nElements = element.querySelectorAll('[data-i18n]');
+            i18nElements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key && window.i18nManager?.translate) {
+                    const translation = window.i18nManager.translate(key);
+                    if (translation !== key) {
+                        el.textContent = translation;
+                    }
+                }
+            });
+        } catch (error) {
+            console.warn('Failed to apply i18n to element:', error);
+        }
+    }
+
+    /**
+     * Navigate to template with proper router/hash update
+     */
+    async navigateToTemplate(templateId, routePath) {
+        console.log(`🛣️ Navigating to template: ${templateId} (route: ${routePath})`);
+        
+        try {
+            // Update hash/router first
+            if (window.C20Router && routePath) {
+                const currentLang = window.currentLanguage || 'pl';
+                const newHash = `#/${routePath}/${currentLang}/default`;
+                console.log(`📍 Updating hash: ${window.location.hash} → ${newHash}`);
+                window.location.hash = newHash;
+            }
+            
+            // Load template
+            const result = await this.loadTemplate(templateId);
+            
+            if (result) {
+                console.log(`✅ Navigation completed: ${templateId}`);
+            } else {
+                console.error(`❌ Navigation failed: ${templateId}`);
+            }
+            
+            return result;
+            
+        } catch (error) {
+            console.error(`❌ Navigation error for ${templateId}:`, error);
+            return false;
+        }
     }
 }
 
