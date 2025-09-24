@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MASKSERVICE C20 1001 - System v3.0 Vue</title>
+    
+    <!-- Vue 3 & Dependencies -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-router@4"></script>
+    <script src="https://unpkg.com/vuex@4"></script>
+    <script src="https://unpkg.com/vue-i18n@9"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    
+    <style>
+        /* Optimized for 7.9" display (400x1280px) - landscape orientation */
+        :root {
+            --header-height: 40px;
+            --footer-height: 30px;
+            --sidebar-width: 180px;
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --text-size-base: 11px;
+            --padding-base: 4px;
+            --margin-base: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            font-size: var(--text-size-base);
+            background: #f5f5f5;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Main Layout */
+        #app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            height: var(--header-height);
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--padding-base);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .header-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e74c3c;
+        }
+
+        .status-dot.online {
+            background: #27ae60;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            height: calc(100vh - var(--header-height) - var(--footer-height));
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: white;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .menu-item {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-size: 11px;
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+        }
+
+        .menu-item.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .menu-icon {
+            font-size: 16px;
+        }
+
+        .content {
+            flex: 1;
+            padding: var(--padding-base);
+            overflow-y: auto;
+            background: #fafafa;
+        }
+
+        .footer {
+            height: var(--footer-height);
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--padding-base);
+            font-size: 10px;
+        }
+
+        /* Pressure Panel - Horizontal Layout for Wide Screen */
+        .pressure-panel {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            background: white;
+            padding: 8px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .pressure-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 4px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .pressure-label {
+            font-weight: bold;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .pressure-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--primary-color);
+            transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .pressure-unit {
+            font-size: 9px;
+            color: #999;
+        }
+
+        .pressure-chart {
+            width: 100%;
+            height: 40px;
+            margin-top: 4px;
+            position: relative;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        /* Advanced Pressure Chart Animations */
+        .pressure-chart-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: end;
+        }
+
+        .pressure-chart-line {
+            position: absolute;
+            bottom: 0;
+            width: 1.5px;
+            background: var(--secondary-color);
+            transition: all 0.3s ease;
+            border-radius: 1px 1px 0 0;
+        }
+
+        .pressure-chart-line:hover {
+            width: 3px;
+            z-index: 10;
+            box-shadow: 0 0 4px rgba(52, 152, 219, 0.6);
+        }
+
+        /* Pressure Range Colors */
+        .pressure-normal { background-color: #22c55e !important; }
+        .pressure-low { background-color: #ef4444 !important; }
+        .pressure-high { background-color: #f97316 !important; }
+        .pressure-critical { background-color: #dc2626 !important; }
+
+        /* Pressure Tooltip */
+        .pressure-tooltip {
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 10px;
+            pointer-events: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .tooltip-header {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        .tooltip-value {
+            font-size: 12px;
+            color: #3498db;
+        }
+
+        .tooltip-time {
+            font-size: 9px;
+            color: #bdc3c7;
+            margin-top: 2px;
+        }
+
+        /* Pressure Value Animation States */
+
+        .pressure-value.warning {
+            color: var(--warning-color);
+            animation: pulse 2s infinite;
+        }
+
+        .pressure-value.danger {
+            color: var(--danger-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Pressure Status Indicator */
+        .pressure-status {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #22c55e;
+        }
+
+        .pressure-status.warning { background: #f97316; }
+        .pressure-status.danger { background: #ef4444; }
+
+        /* Virtual Keyboard - Optimized for Touch */
+        .virtual-keyboard {
+            background: white;
+            padding: 8px;
+            border-top: 2px solid #ddd;
+            display: none;
+            position: fixed;
+            bottom: var(--footer-height);
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+
+        .virtual-keyboard.active {
+            display: block;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 2px;
+            justify-content: center;
+        }
+
+        .keyboard-key {
+            flex: 1;
+            max-width: 60px;
+            padding: 8px 4px;
+            background: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.1s;
+        }
+
+        .keyboard-key:active {
+            background: var(--secondary-color);
+            color: white;
+            transform: scale(0.95);
+        }
+
+        .keyboard-key.special {
+            background: #e0e0e0;
+            max-width: 80px;
+        }
+
+        .keyboard-key.space {
+            flex: 3;
+            max-width: 200px;
+        }
+
+        /* Login Screen */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        .login-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .login-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 11px;
+        }
+
+        .btn-operator { background: #27ae60; color: white; }
+        .btn-admin { background: #f39c12; color: white; }
+        .btn-superuser { background: #e74c3c; color: white; }
+        .btn-serwisant { background: #3498db; color: white; }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Language Selector */
+        .language-selector {
+            display: flex;
+            gap: 4px;
+        }
+
+        .lang-btn {
+            padding: 4px 8px;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .lang-btn.active {
+            background: rgba(255,255,255,0.4);
+            border-color: white;
+        }
+
+        /* Data Cards Grid */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .data-card {
+            background: white;
+            padding: 12px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .data-card h3 {
+            font-size: 12px;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .data-card-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .data-card-label {
+            font-size: 10px;
+            color: #999;
+        }
+
+        /* Tables - Compact for small screen */
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            font-size: 10px;
+        }
+
+        .data-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 6px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .data-table td {
+            padding: 6px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .btn-primary { background: var(--secondary-color); color: white; }
+        .btn-success { background: var(--success-color); color: white; }
+        .btn-warning { background: var(--warning-color); color: white; }
+        .btn-danger { background: var(--danger-color); color: white; }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive adjustments for 400x1280 display */
+        @media (max-aspect-ratio: 1/2) {
+            .sidebar { width: 140px; }
+            .menu-item { padding: 6px; font-size: 10px; }
+            .data-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* Hide native keyboard on mobile */
+        input[type="password"], 
+        input[type="text"] {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        input[readonly] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
+
+    <script>
+        const { createApp } = Vue;
+        const { createRouter, createWebHashHistory } = VueRouter;
+        const { createStore } = Vuex;
+        const { createI18n } = VueI18n;
+
+        // Load translations from /locales files
+        let messages = {};
+        
+        // Function to load translation files
+        async function loadTranslations() {
+            try {
+                const translations = ['pl', 'en', 'de'];
+                
+                for (const lang of translations) {
+                    const response = await fetch(`./locales/${lang}.json`);
+                    const data = await response.json();
+                    messages[lang] = {
+                        global: data.global || {},
+                        login: data.login || {},
+                        menu: data.menu || {},
+                        data: data.data || {},
+                        device: data.device || {},
+                        settings: data.settings || {},
+                        system: data.system || {},
+                        alarms: data.alarms || {},
+                        keyboard: data.keyboard || {},
+                        loading: data.loading || {},
+                        
+                        // Compatibility mappings for existing Vue components
+                        common: {
+                            offline: data.global?.offline || 'OFFLINE',
+                            online: data.global?.online || 'ONLINE',
+                            logout: data.menu?.logout || 'Logout',
+                            save: data.settings?.save_settings || 'Save',
+                            cancel: 'Cancel',
+                            add: 'Add',
+                            edit: 'Edit',
+                            delete: 'Delete',
+                            export: 'Export',
+                            import: 'Import',
+                            search: 'Search',
+                            filter: 'Filter'
+                        },
+                        pressure: {
+                            title: data.data?.pressure?.toUpperCase() || 'PRESSURE',
+                            low: data.data?.low || data.device?.pressure_low || 'Low',
+                            medium: data.data?.medium || data.device?.pressure_medium || 'Medium',
+                            high: data.data?.high || data.device?.pressure_high || 'High'
+                        },
+                        test: {
+                            kindOfDevice: 'Kind of Device',
+                            deviceType: 'Device Type',
+                            kindOfTest: 'Kind of Test',
+                            testFlow: 'Test Flow',
+                            selectDevice: 'Select device',
+                            ppMask: 'PP Mask',
+                            npMask: 'NP Mask',
+                            scba: 'SCBA',
+                            cps: 'CPS Protection Suit'
+                        }
+                    };
+                }
+            } catch (error) {
+                console.error('Error loading translations:', error);
+                
+                // Fallback to basic translations if loading fails
+                messages = {
+                    pl: {
+                        global: { offline: 'OFFLINE', online: 'ONLINE' },
+                        login: { menu_header: 'MENU LOGOWANIA', password: 'Hasło' },
+                        menu: { test_menu: 'Menu Testów', users: 'Użytkownicy' },
+                        data: { pressure: 'Ciśnienie', low: 'Niskie', medium: 'Średnie', high: 'Wysokie' },
+                        common: { logout: 'Wyloguj' },
+                        pressure: { title: 'CIŚNIENIE', low: 'Niskie', medium: 'Średnie', high: 'Wysokie' }
+                    },
+                    en: {
+                        global: { offline: 'OFFLINE', online: 'ONLINE' },
+                        login: { menu_header: 'LOGIN MENU', password: 'Password' },
+                        menu: { test_menu: 'Test Menu', users: 'Users' },
+                        data: { pressure: 'Pressure', low: 'Low', medium: 'Medium', high: 'High' },
+                        common: { logout: 'Logout' },
+                        pressure: { title: 'PRESSURE', low: 'Low', medium: 'Medium', high: 'High' }
+                    },
+                    de: {
+                        global: { offline: 'OFFLINE', online: 'ONLINE' },
+                        login: { menu_header: 'ANMELDE MENÜ', password: 'Passwort' },
+                        menu: { test_menu: 'Test Menü', users: 'Benutzer' },
+                        data: { pressure: 'Druck', low: 'Niedrig', medium: 'Mittel', high: 'Hoch' },
+                        common: { logout: 'Abmelden' },
+                        pressure: { title: 'DRUCK', low: 'Niedrig', medium: 'Mittel', high: 'Hoch' }
+                    }
+                };
+            }
+        }
+
+        // I18n instance - will be created after loading translations
+        let i18n;
+
+        // Vuex Store
+        const store = createStore({
+            state() {
+                return {
+                    user: null,
+                    language: 'pl',
+                    deviceStatus: 'OFFLINE',
+                    pressureData: {
+                        low: { value: 10, unit: 'mbar', history: [] },
+                        medium: { value: 20, unit: 'bar', history: [] },
+                        high: { value: 30, unit: 'bar', history: [] }
+                    },
+                    menuConfig: {
+                        OPERATOR: [
+                            { key: 'test_menu', icon: '📋', label: 'menu.testMenu' },
+                            { key: 'reports', icon: '📄', label: 'menu.reports' }
+                        ],
+                        ADMIN: [
+                            { key: 'test_menu', icon: '📋', label: 'menu.testMenu' },
+                            { key: 'users', icon: '👥', label: 'menu.users' },
+                            { key: 'reports', icon: '📄', label: 'menu.reports' },
+                            { key: 'settings', icon: '⚙️', label: 'menu.settings' }
+                        ],
+                        SUPERUSER: [
+                            { key: 'users', icon: '👥', label: 'menu.users' },
+                            { key: 'settings', icon: '⚙️', label: 'menu.settings' },
+                            { key: 'service', icon: '🛡️', label: 'menu.service' },
+                            { key: 'diagnostics', icon: '🔍', label: 'menu.diagnostics' }
+                        ],
+                        SERWISANT: [
+                            { key: 'sensors', icon: '📊', label: 'menu.sensors' },
+                            { key: 'workshop', icon: '🔧', label: 'menu.workshop' },
+                            { key: 'service', icon: '🛡️', label: 'menu.service' },
+                            { key: 'diagnostics', icon: '🔍', label: 'menu.diagnostics' },
+                            { key: 'device_data', icon: '📱', label: 'menu.deviceData' }
+                        ]
+                    }
+                };
+            },
+            mutations: {
+                setUser(state, user) {
+                    state.user = user;
+                },
+                setLanguage(state, lang) {
+                    state.language = lang;
+                    i18n.global.locale = lang;
+                },
+                setDeviceStatus(state, status) {
+                    state.deviceStatus = status;
+                },
+                updatePressure(state, { type, value }) {
+                    state.pressureData[type].value = value;
+                    state.pressureData[type].history.push(value);
+                    if (state.pressureData[type].history.length > 60) {
+                        state.pressureData[type].history.shift();
+                    }
+                }
+            },
+            actions: {
+                login({ commit }, { role, password }) {
+                    // Mock login
+                    if (password && password.length >= 3) {
+                        const user = {
+                            username: role.toLowerCase(),
+                            role: role,
+                            loginTime: new Date().toISOString()
+                        };
+                        commit('setUser', user);
+                        commit('setDeviceStatus', 'ONLINE');
+                        return true;
+                    }
+                    return false;
+                },
+                logout({ commit }) {
+                    commit('setUser', null);
+                    commit('setDeviceStatus', 'OFFLINE');
+                },
+                simulatePressureChanges({ commit }) {
+                    setInterval(() => {
+                        commit('updatePressure', { 
+                            type: 'low', 
+                            value: (10 + Math.random() * 2).toFixed(1) 
+                        });
+                        commit('updatePressure', { 
+                            type: 'medium', 
+                            value: (20 + Math.random() * 2).toFixed(1) 
+                        });
+                        commit('updatePressure', { 
+                            type: 'high', 
+                            value: (30 + Math.random() * 2).toFixed(1) 
+                        });
+                    }, 1000);
+                }
+            }
+        });
+
+        // Components
+        const LoginView = {
+            template: `
+                <div class="login-container">
+                    <div class="login-box">
+                        <div class="login-title">
+                            MASKSERVICE C20 1001<br>
+                            {{ $t('login.title') }}
+                        </div>
+                        
+                        <input 
+                            type="password" 
+                            class="login-input" 
+                            :placeholder="$t('login.enterPassword')"
+                            v-model="password"
+                            @focus="showKeyboard = true"
+                            readonly
+                        >
+                        
+                        <div class="login-buttons">
+                            <button class="login-btn btn-operator" @click="login('OPERATOR')">
+                                OPERATOR
+                            </button>
+                            <button class="login-btn btn-admin" @click="login('ADMIN')">
+                                ADMIN
+                            </button>
+                            <button class="login-btn btn-superuser" @click="login('SUPERUSER')">
+                                SUPERUSER
+                            </button>
+                            <button class="login-btn btn-serwisant" @click="login('SERWISANT')">
+                                SERWISANT
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="virtual-keyboard" :class="{ active: showKeyboard }">
+                        <div class="keyboard-row">
+                            <div class="keyboard-key" @click="addChar('1')">1</div>
+                            <div class="keyboard-key" @click="addChar('2')">2</div>
+                            <div class="keyboard-key" @click="addChar('3')">3</div>
+                            <div class="keyboard-key" @click="addChar('4')">4</div>
+                            <div class="keyboard-key" @click="addChar('5')">5</div>
+                            <div class="keyboard-key" @click="addChar('6')">6</div>
+                            <div class="keyboard-key" @click="addChar('7')">7</div>
+                            <div class="keyboard-key" @click="addChar('8')">8</div>
+                            <div class="keyboard-key" @click="addChar('9')">9</div>
+                            <div class="keyboard-key" @click="addChar('0')">0</div>
+                            <div class="keyboard-key special" @click="backspace">⌫</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="keyboard-key" @click="addChar('Q')">Q</div>
+                            <div class="keyboard-key" @click="addChar('W')">W</div>
+                            <div class="keyboard-key" @click="addChar('E')">E</div>
+                            <div class="keyboard-key" @click="addChar('R')">R</div>
+                            <div class="keyboard-key" @click="addChar('T')">T</div>
+                            <div class="keyboard-key" @click="addChar('Y')">Y</div>
+                            <div class="keyboard-key" @click="addChar('U')">U</div>
+                            <div class="keyboard-key" @click="addChar('I')">I</div>
+                            <div class="keyboard-key" @click="addChar('O')">O</div>
+                            <div class="keyboard-key" @click="addChar('P')">P</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="keyboard-key" @click="addChar('A')">A</div>
+                            <div class="keyboard-key" @click="addChar('S')">S</div>
+                            <div class="keyboard-key" @click="addChar('D')">D</div>
+                            <div class="keyboard-key" @click="addChar('F')">F</div>
+                            <div class="keyboard-key" @click="addChar('G')">G</div>
+                            <div class="keyboard-key" @click="addChar('H')">H</div>
+                            <div class="keyboard-key" @click="addChar('J')">J</div>
+                            <div class="keyboard-key" @click="addChar('K')">K</div>
+                            <div class="keyboard-key" @click="addChar('L')">L</div>
+                        </div>
+                        <div class="keyboard-row">
+                            <div class="keyboard-key special" @click="showKeyboard = false">Hide</div>
+                            <div class="keyboard-key space" @click="addChar(' ')">SPACE</div>
+                            <div class="keyboard-key special" @click="clearPassword">Clear</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            data() {
+                return {
+                    password: '',
+                    showKeyboard: false
+                };
+            },
+            methods: {
+                addChar(char) {
+                    this.password += char;
+                },
+                backspace() {
+                    this.password = this.password.slice(0, -1);
+                },
+                clearPassword() {
+                    this.password = '';
+                },
+                async login(role) {
+                    const success = await this.$store.dispatch('login', { 
+                        role, 
+                        password: this.password 
+                    });
+                    
+                    if (success) {
+                        this.$router.push('/main');
+                    } else {
+                        alert('Invalid password (min. 3 characters)');
+                    }
+                }
+            }
+        };
+
+        const MainView = {
+            template: `
+                <div style="height: 100vh; display: flex; flex-direction: column;">
+                    <!-- Header -->
+                    <header class="header">
+                        <div class="header-logo">
+                            <span>MASKSERVICE C20 1001</span>
+                        </div>
+                        <div class="header-status">
+                            <span>{{ deviceStatus }}</span>
+                            <div class="status-dot" :class="{ online: deviceStatus === 'ONLINE' }"></div>
+                        </div>
+                    </header>
+                    
+                    <!-- Main Container -->
+                    <div class="main-container">
+                        <!-- Sidebar -->
+                        <div class="sidebar">
+                            <div 
+                                v-for="item in menuItems" 
+                                :key="item.key"
+                                class="menu-item"
+                                :class="{ active: activeMenu === item.key }"
+                                @click="selectMenu(item.key)"
+                            >
+                                <span class="menu-icon">{{ item.icon }}</span>
+                                <span>{{ $t(item.label) }}</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="content">
+                            <!-- Advanced Pressure Panel -->
+                            <div class="pressure-panel" v-if="showPressure">
+                                <div class="pressure-item" v-for="type in ['low', 'medium', 'high']" :key="type">
+                                    <div class="pressure-status" :class="getPressureStatusClass(type)"></div>
+                                    <div class="pressure-label">{{ $t('pressure.' + type) }}</div>
+                                    <div class="pressure-value" :class="getPressureValueClass(type)">{{ pressureData[type].value }}</div>
+                                    <div class="pressure-unit">{{ pressureData[type].unit }}</div>
+                                    <div :id="'pressure-' + type + '-dia'" class="pressure-chart" @mouseenter="showChartTooltip" @mouseleave="hideChartTooltip">
+                                        <div class="pressure-chart-container"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dynamic Content -->
+                            <component :is="currentComponent"></component>
+                        </div>
+                    </div>
+                    
+                    <!-- Footer -->
+                    <footer class="footer">
+                        <div>
+                            {{ currentUser?.role }} | {{ currentTime }}
+                        </div>
+                        <div class="language-selector">
+                            <button 
+                                id="lang-pl"
+                                class="lang-btn"
+                                :class="{ active: currentLang === 'pl' }"
+                                @click="changeLanguage('pl')"
+                                title="Polski"
+                            >
+                                🇵🇱
+                            </button>
+                            <button 
+                                id="lang-en"
+                                class="lang-btn"
+                                :class="{ active: currentLang === 'en' }"
+                                @click="changeLanguage('en')"
+                                title="English"
+                            >
+                                🇺🇸
+                            </button>
+                            <button 
+                                id="lang-de"
+                                class="lang-btn"
+                                :class="{ active: currentLang === 'de' }"
+                                @click="changeLanguage('de')"
+                                title="Deutsch"
+                            >
+                                🇩🇪
+                            </button>
+                        </div>
+                        <div>
+                            <button class="btn btn-danger" @click="logout">
+                                {{ $t('common.logout') }}
+                            </button>
+                        </div>
+                    </footer>
+                </div>
+            `,
+            data() {
+                return {
+                    activeMenu: 'test_menu',
+                    currentTime: new Date().toLocaleTimeString(),
+                    charts: {}
+                };
+            },
+            computed: {
+                currentUser() {
+                    return this.$store.state.user;
+                },
+                deviceStatus() {
+                    return this.$store.state.deviceStatus;
+                },
+                menuItems() {
+                    const role = this.currentUser?.role;
+                    return this.$store.state.menuConfig[role] || [];
+                },
+                pressureData() {
+                    return this.$store.state.pressureData;
+                },
+                currentLang() {
+                    return this.$store.state.language;
+                },
+                showPressure() {
+                    return ['test_menu', 'sensors', 'diagnostics'].includes(this.activeMenu);
+                },
+                currentComponent() {
+                    const components = {
+                        'test_menu': TestMenuComponent,
+                        'reports': ReportsComponent,
+                        'users': UsersComponent,
+                        'sensors': SensorsComponent,
+                        'settings': SettingsComponent,
+                        'workshop': WorkshopComponent,
+                        'service': ServiceComponent,
+                        'diagnostics': DiagnosticsComponent,
+                        'device_data': DeviceDataComponent
+                    };
+                    return components[this.activeMenu] || DefaultComponent;
+                }
+            },
+            methods: {
+                selectMenu(key) {
+                    this.activeMenu = key;
+                    this.updateCharts();
+                },
+                changeLanguage(lang) {
+                    this.$store.commit('setLanguage', lang);
+                },
+                logout() {
+                    this.$store.dispatch('logout');
+                    this.$router.push('/');
+                },
+                updateCharts() {
+                    if (!this.showPressure) return;
+                    
+                    this.$nextTick(() => {
+                        ['low', 'medium', 'high'].forEach(type => {
+                            this.renderPressureChart(type);
+                        });
+                    });
+                },
+                renderPressureChart(type) {
+                    const chartContainer = document.querySelector(`#pressure-${type}-dia .pressure-chart-container`);
+                    if (!chartContainer) return;
+
+                    const data = this.pressureData[type].history;
+                    if (!data || data.length === 0) return;
+
+                    const maxValue = Math.max(...data) || 1;
+                    const minValue = Math.min(...data) || 0;
+                    const range = maxValue - minValue || 1;
+
+                    // Clear existing chart
+                    chartContainer.innerHTML = '';
+
+                    // Create animated chart lines (60 data points)
+                    data.forEach((value, index) => {
+                        const line = document.createElement('div');
+                        line.className = 'pressure-chart-line';
+                        
+                        // Calculate height as percentage (0-100%)
+                        const normalizedValue = ((value - minValue) / range) * 100;
+                        const height = Math.max(2, normalizedValue);
+                        
+                        line.style.height = `${height}%`;
+                        line.style.left = `${(index / 59) * 100}%`;
+                        line.style.backgroundColor = this.getPressureColor(type, value);
+                        
+                        // Add animation delay for smooth entrance
+                        line.style.animationDelay = `${index * 20}ms`;
+                        
+                        // Add interactive tooltip
+                        line.addEventListener('mouseenter', (e) => {
+                            this.showPressureTooltip(e, type, value, index);
+                        });
+                        
+                        line.addEventListener('mouseleave', () => {
+                            this.hidePressureTooltip();
+                        });
+                        
+                        chartContainer.appendChild(line);
+                    });
+                },
+                getPressureColor(type, value) {
+                    const ranges = {
+                        low: { min: 8, max: 12 },
+                        medium: { min: 18, max: 22 },
+                        high: { min: 28, max: 32 }
+                    };
+
+                    const range = ranges[type];
+                    if (!range) return '#3498db';
+                    
+                    if (value < range.min) {
+                        return '#ef4444'; // Red for low values
+                    } else if (value > range.max) {
+                        return '#f97316'; // Orange for high values
+                    } else {
+                        return '#22c55e'; // Green for normal range
+                    }
+                },
+                getPressureStatusClass(type) {
+                    const value = parseFloat(this.pressureData[type].value);
+                    const ranges = {
+                        low: { min: 8, max: 12 },
+                        medium: { min: 18, max: 22 },
+                        high: { min: 28, max: 32 }
+                    };
+
+                    const range = ranges[type];
+                    if (!range) return '';
+                    
+                    if (value < range.min || value > range.max) {
+                        return 'danger';
+                    } else if (value < range.min + 1 || value > range.max - 1) {
+                        return 'warning';
+                    }
+                    return '';
+                },
+                getPressureValueClass(type) {
+                    const value = parseFloat(this.pressureData[type].value);
+                    const ranges = {
+                        low: { min: 8, max: 12 },
+                        medium: { min: 18, max: 22 },
+                        high: { min: 28, max: 32 }
+                    };
+
+                    const range = ranges[type];
+                    if (!range) return '';
+                    
+                    if (value < range.min || value > range.max) {
+                        return 'danger';
+                    } else if (value < range.min + 1 || value > range.max - 1) {
+                        return 'warning';
+                    }
+                    return '';
+                },
+                showPressureTooltip(event, type, value, index) {
+                    this.hidePressureTooltip();
+                    
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'pressure-tooltip';
+                    tooltip.innerHTML = `
+                        <div class="tooltip-header">${type.toUpperCase()} Pressure</div>
+                        <div class="tooltip-value">${value.toFixed(1)} ${this.getPressureUnit(type)}</div>
+                        <div class="tooltip-time">${60 - index}s ago</div>
+                    `;
+                    
+                    document.body.appendChild(tooltip);
+                    
+                    const rect = event.target.getBoundingClientRect();
+                    tooltip.style.position = 'absolute';
+                    tooltip.style.left = `${rect.left + window.scrollX}px`;
+                    tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
+                    tooltip.style.zIndex = '1000';
+                },
+                hidePressureTooltip() {
+                    const existingTooltip = document.querySelector('.pressure-tooltip');
+                    if (existingTooltip) {
+                        existingTooltip.remove();
+                    }
+                },
+                getPressureUnit(type) {
+                    const units = {
+                        low: 'mbar',
+                        medium: 'bar',
+                        high: 'bar'
+                    };
+                    return units[type] || 'bar';
+                },
+                showChartTooltip() {
+                    // Handler for chart area mouse enter
+                },
+                hideChartTooltip() {
+                    this.hidePressureTooltip();
+                }
+            },
+            mounted() {
+                // Update time
+                setInterval(() => {
+                    this.currentTime = new Date().toLocaleTimeString();
+                }, 1000);
+                
+                // Start pressure simulation
+                this.$store.dispatch('simulatePressureChanges');
+                
+                // Update charts periodically
+                setInterval(() => this.updateCharts(), 1000);
+            },
+            beforeUnmount() {
+                Object.values(this.charts).forEach(chart => chart.destroy());
+            }
+        };
+
+        // Content Components
+        const TestMenuComponent = {
+            template: `
+                <div>
+                    <h2>{{ $t('menu.testMenu') }}</h2>
+                    <div class="data-grid">
+                        <div class="data-card" @click="selectTest('device')">
+                            <h3>{{ $t('test.kindOfDevice') }}</h3>
+                            <div class="data-card-value">4</div>
+                            <div class="data-card-label">Available</div>
+                        </div>
+                        <div class="data-card" @click="selectTest('type')">
+                            <h3>{{ $t('test.deviceType') }}</h3>
+                            <div class="data-card-value">8</div>
+                            <div class="data-card-label">Configured</div>
+                        </div>
+                        <div class="data-card" @click="selectTest('test')">
+                            <h3>{{ $t('test.kindOfTest') }}</h3>
+                            <div class="data-card-value">6</div>
+                            <div class="data-card-label">Scenarios</div>
+                        </div>
+                        <div class="data-card" @click="selectTest('flow')">
+                            <h3>{{ $t('test.testFlow') }}</h3>
+                            <div class="data-card-value">12</div>
+                            <div class="data-card-label">Steps</div>
+                        </div>
+                    </div>
+                    
+                    <div v-if="selectedTest" class="data-table" style="margin-top: 20px;">
+                        <table style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="item in testItems" :key="item.id">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.status }}</td>
+                                    <td>
+                                        <button class="btn btn-primary" @click="runTest(item)">Run</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `,
+            data() {
+                return {
+                    selectedTest: null,
+                    testItems: []
+                };
+            },
+            methods: {
+                selectTest(type) {
+                    this.selectedTest = type;
+                    this.loadTestItems(type);
+                },
+                loadTestItems(type) {
+                    const items = {
+                        device: [
+                            { id: 1, name: 'PP Mask', status: 'Ready' },
+                            { id: 2, name: 'NP Mask', status: 'Ready' },
+                            { id: 3, name: 'SCBA', status: 'Maintenance' },
+                            { id: 4, name: 'CPS', status: 'Ready' }
+                        ],
+                        type: [
+                            { id: 1, name: 'Mask G1', status: 'Active' },
+                            { id: 2, name: 'Mask Ultra Elite', status: 'Active' },
+                            { id: 3, name: 'Mask OptiPro', status: 'Active' },
+                            { id: 4, name: 'Aparat M1', status: 'Active' }
+                        ]
+                    };
+                    this.testItems = items[type] || [];
+                },
+                runTest(item) {
+                    alert(`Starting test for: ${item.name}`);
+                }
+            }
+        };
+
+        const ReportsComponent = {
+            template: `
+                <div>
+                    <h2>{{ $t('menu.reports') }}</h2>
+                    <div style="margin-bottom: 10px;">
+                        <button class="btn btn-primary" @click="exportPDF">Export PDF</button>
+                        <button class="btn btn-success" @click="exportCSV">Export CSV</button>
+                        <button class="btn btn-warning" @click="exportJSON">Export JSON</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Date</th>
+                                <th>Device</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="report in reports" :key="report.id">
+                                <td>{{ report.id }}</td>
+                                <td>{{ report.date }}</td>
+                                <td>{{ report.device }}</td>
+                                <td>{{ report.result }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            data() {
+                return {
+                    reports: [
+                        { id: 'R001', date: '2025-01-15', device: 'Connect 300', result: 'PASS' },
+                        { id: 'R002', date: '2025-01-14', device: 'Mask G1', result: 'PASS' },
+                        { id: 'R003', date: '2025-01-13', device: 'SCBA Unit', result: 'FAIL' }
+                    ]
+                };
+            },
+            methods: {
+                exportPDF() {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    doc.text('Test Reports', 10, 10);
+                    doc.save('reports.pdf');
+                },
+                exportCSV() {
+                    const csv = 'ID,Date,Device,Result\n' + 
+                        this.reports.map(r => `${r.id},${r.date},${r.device},${r.result}`).join('\n');
+                    this.downloadFile(csv, 'reports.csv', 'text/csv');
+                },
+                exportJSON() {
+                    const json = JSON.stringify(this.reports, null, 2);
+                    this.downloadFile(json, 'reports.json', 'application/json');
+                },
+                downloadFile(content, filename, type) {
+                    const blob = new Blob([content], { type });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = filename;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }
+            }
+        };
+
+        const UsersComponent = {
+            template: `
+                <div>
+                    <h2>{{ $t('menu.users') }}</h2>
+                    <button class="btn btn-success" @click="addUser" style="margin-bottom: 10px;">
+                        {{ $t('common.add') }} User
+                    </button>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Last Login</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="user in users" :key="user.id">
+                                <td>{{ user.username }}</td>
+                                <td>{{ user.role }}</td>
+                                <td>{{ user.lastLogin }}</td>
+                                <td>
+                                    <button class="btn btn-primary" @click="editUser(user)">Edit</button>
+                                    <button class="btn btn-danger" @click="deleteUser(user)">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `,
+            data() {
+                return {
+                    users: [
+                        { id: 1, username: 'operator1', role: 'OPERATOR', lastLogin: '2025-01-15 10:30' },
+                        { id: 2, username: 'admin1', role: 'ADMIN', lastLogin: '2025-01-15 09:15' },
+                        { id: 3, username: 'service1', role: 'SERWISANT', lastLogin: '2025-01-14 14:20' }
+                    ]
+                };
+            },
+            methods: {
+                addUser() {
+                    const username = prompt('Enter username:');
+                    if (username) {
+                        this.users.push({
+                            id: Date.now(),
+                            username,
+                            role: 'OPERATOR',
+                            lastLogin: 'Never'
+                        });
+                    }
+                },
+                editUser(user) {
+                    const newRole = prompt('Select role (OPERATOR/ADMIN/SUPERUSER/SERWISANT):', user.role);
+                    if (newRole) {
+                        user.role = newRole;
+                    }
+                },
+                deleteUser(user) {
+                    if (confirm(`Delete user ${user.username}?`)) {
+                        const index = this.users.indexOf(user);
+                        this.users.splice(index, 1);
+                    }
+                }
+            }
+        };
+
+        const SensorsComponent = {
+            template: `
+                <div>
+                    <h2>{{ $t('menu.sensors') }}</h2>
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <h3>Temperature</h3>
+                            <div class="data-card-value">{{ temperature }}°C</div>
+                            <div class="data-card-label">Normal Range: 20-25°C</div>
+                        </div>
+                        <div class="data-card">
+                            <h3>Humidity</h3>
+                            <div class="data-card-value">{{ humidity }}%</div>
+                            <div class="data-card-label">Normal Range: 40-60%</div>
+                        </div>
+                        <div class="data-card">
+                            <h3>Flow Rate</h3>
+                            <div class="data-card-value">{{ flowRate }} L/min</div>
+                            <div class="data-card-label">Target: 10 L/min</div>
+                        </div>
+                        <div class="data-card">
+                            <h3>System Uptime</h3>
+                            <div class="data-card-value">{{ uptime }}</div>
+                            <div class="data-card-label">Since last restart</div>
+                        </div>
+                    </div>
+                </div>
+            `,
+            data() {
+                return {
+                    temperature: 22.5,
+                    humidity: 45,
+                    flowRate: 10.2,
+                    uptime: '2d 14h 32m'
+                };
+            },
+            mounted() {
+                setInterval(() => {
+                    this.temperature = (22 + Math.random() * 3).toFixed(1);
+                    this.humidity = Math.floor(45 + Math.random() * 10);
+                    this.flowRate = (10 + Math.random() * 2 - 1).toFixed(1);
+                }, 2000);
+            }
+        };
+
+        const DefaultComponent = { template: `<div class="loading"><div class="spinner"></div></div>` };
+        const SettingsComponent = { template: '<div><h2>Settings</h2><p>System configuration options</p></div>' };
+        const WorkshopComponent = { template: '<div><h2>Workshop</h2><p>Workshop management tools</p></div>' };
+        const ServiceComponent = { template: '<div><h2>Service</h2><p>Service and maintenance tools</p></div>' };
+        const DiagnosticsComponent = { template: '<div><h2>Diagnostics</h2><p>System diagnostics and health check</p></div>' };
+        const DeviceDataComponent = { template: '<div><h2>Device Data</h2><p>Device information and status</p></div>' };
+
+        // Router
+        const routes = [
+            { path: '/', component: LoginView },
+            { path: '/main', component: MainView, meta: { requiresAuth: true } }
+        ];
+
+        const router = createRouter({
+            history: createWebHashHistory(),
+            routes
+        });
+
+        router.beforeEach((to, from, next) => {
+            if (to.matched.some(record => record.meta.requiresAuth)) {
+                if (!store.state.user) {
+                    next('/');
+                } else {
+                    next();
+                }
+            } else {
+                next();
+            }
+        });
+
+        // Initialize app with translations
+        async function initializeApp() {
+            // Load translations first
+            await loadTranslations();
+            
+            // Create i18n instance with loaded messages
+            i18n = createI18n({
+                locale: 'pl',
+                fallbackLocale: 'en',
+                messages
+            });
+            
+            // Create Vue App
+            const app = createApp({});
+            app.use(router);
+            app.use(store);
+            app.use(i18n);
+            app.mount('#app');
+        }
+        
+        // Initialize the app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
+
+        // Prevent native keyboard on mobile
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="password"]');
+            inputs.forEach(input => {
+                input.addEventListener('focus', (e) => {
+                    e.preventDefault();
+                    e.target.blur();
+                    setTimeout(() => e.target.focus(), 10);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
