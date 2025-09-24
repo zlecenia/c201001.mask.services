@@ -6,13 +6,13 @@
     <title data-i18n="global.page_title">MASKTRONIC C20 1001 - System Mock v2.0</title>
     <!-- Vue.js CDN for development -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    
+
     <script>
         // Cache-busting for CSS
         const cssVersion = Date.now();
         document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
     </script>
-    
+
     <!-- Vue.js Styles -->
     <style>
         /* Vue.js specific styles */
@@ -72,12 +72,13 @@
 
         </div>
         <div class="header-center">
-            <span  id="device-url" id="device_connection_status" class="status-indicator">
+            <span id="device-url" id="device_connection_status" class="status-indicator">
                 <span id="device_url" class="footer-host">
-                    <a href="https://c201001.mask.services" data-i18n="global.device_url_label">c201001.mask.services</a>
+                    <a href="https://c201001.mask.services"
+                       data-i18n="global.device_url_label">c201001.mask.services</a>
                 </span>
                 <span class="status-dot"></span>
-                <span id="status-text"  class="role-badge" data-i18n="global.offline">OFFLINE</span>
+                <span id="status-text" class="role-badge" data-i18n="global.offline">OFFLINE</span>
             </span>
 
         </div>
@@ -121,14 +122,15 @@
                                                 onclick="navigateAction('login-admin-btn'); mockLogin('ADMIN')">Login as
                                             ADMIN
                                         </button>
-                                        <button id="login-superuser-btn" class="menu-item btn-red"
-                                                onclick="navigateAction('login-superuser-btn'); mockLogin('SUPERUSER')">
-                                            Login as SUPERUSER
-                                        </button>
-                                        <button id="login-serviceuser-btn" class="menu-item btn-blue"
-                                                onclick="navigateAction('login-serviceuser-btn'); mockLogin('SERVICEUSER')">
+                            <button id="login-serviceuser-btn" class="menu-item btn-blue"
+                                    onclick="navigateAction('login-serviceuser-btn'); mockLogin('SERVICEUSER')">
                                             Login as SERVICEUSER
                                         </button>
+                            <button id="login-superuser-btn" class="menu-item btn-red"
+                                    onclick="navigateAction('login-superuser-btn'); mockLogin('SUPERUSER')">
+                                            Login as SUPERUSER
+                                        </button>
+
 
                                     </span>
 
@@ -140,7 +142,7 @@
                                 <div class="password-container">
                                     <input type="password" id="password-input" placeholder="Password"
                                            data-i18n-placeholder="login.password_placeholder"
-                                           readonly="readonly" 
+                                           readonly="readonly"
                                            inputmode="none"
                                            autocomplete="off"
                                            onclick="this.focus()"
@@ -275,10 +277,12 @@
                                 <div class="scanner-animation">
                                     <div class="scanner-line"></div>
                                 </div>
-                                <p class="error-msg" data-i18n="login.scanner_not_detected">+ Skaner nie został wykryty</p>
+                                <p class="error-msg" data-i18n="login.scanner_not_detected">+ Skaner nie został
+                                    wykryty</p>
                                 <p data-i18n="login.code_not_read">kod nie został poprawnie sczytany</p>
                                 <button id="use-keyboard-btn" class="btn"
-                                        onclick="navigateAction('use-keyboard-btn'); selectLoginMethod('keyword')" data-i18n="login.use_keyboard">Użyj
+                                        onclick="navigateAction('use-keyboard-btn'); selectLoginMethod('keyword')"
+                                        data-i18n="login.use_keyboard">Użyj
                                     klawiatury
                                 </button>
                             </div>
@@ -295,9 +299,9 @@
                 <div class="system-content">
                     <h1 data-i18n="system.welcome">Welcome</h1>
                     <div class="system-logo" data-i18n="global.system_name">MASKTRONIC</div>
-<!--                    <div class="loading-bar">-->
-<!--                        <div class="loading-progress" id="loading-progress"></div>-->
-<!--                    </div>-->
+                    <!--                    <div class="loading-bar">-->
+                    <!--                        <div class="loading-progress" id="loading-progress"></div>-->
+                    <!--                    </div>-->
                     <p id="loading-text" data-i18n="system.loading_message">System starting in Progress...</p>
                 </div>
             </div>
@@ -338,7 +342,8 @@
             <div class="pressure-box">
 
                 <div class="pressure-item">
-                    <div id="pressure-medium-label" class="pressure-label" data-i18n="device.pressure_medium">Medium</div>
+                    <div id="pressure-medium-label" class="pressure-label" data-i18n="device.pressure_medium">Medium
+                    </div>
                     <div id="pressure-medium" class="pressure-value">20</div>
                     <div id="pressure-medium-unit" class="pressure-unit">bar</div>
                     <div id="pressure-medium-dia" class="pressure-dia"></div>
@@ -386,7 +391,7 @@
 
         <div class="footer-right">
 
-            <span id="time-info" >
+            <span id="time-info">
                 <span id="footer-date">--/--/----</span>
                 <span id="footer-time" class="role-badge">--:--</span>
             </span>
@@ -418,12 +423,13 @@
                 <p data-i18n="test.test_scenario">Scenariusz testowy</p>
             </button>
         </div>
-        
+
         <!-- Export Section -->
         <div class="export-section">
             <h3 data-i18n="export.title">Export Test Data</h3>
             <div class="export-buttons">
-                <button class="btn-export btn-json" onclick="exportTestData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-json" onclick="exportTestData('json')" data-i18n="export.json">JSON
+                </button>
                 <button class="btn-export btn-xml" onclick="exportTestData('xml')" data-i18n="export.xml">XML</button>
                 <button class="btn-export btn-csv" onclick="exportTestData('csv')" data-i18n="export.csv">CSV</button>
                 <button class="btn-export btn-pdf" onclick="exportTestData('pdf')" data-i18n="export.pdf">PDF</button>
@@ -438,7 +444,8 @@
             <button class="device-item" onclick="selectDevice('PP_MASK')" data-i18n="devices.pp_mask">PP Mask</button>
             <button class="device-item" onclick="selectDevice('NP_MASK')" data-i18n="devices.np_mask">NP Mask</button>
             <button class="device-item" onclick="selectDevice('SCBA')" data-i18n="devices.scba">SCBA</button>
-            <button class="device-item" onclick="selectDevice('CPS')" data-i18n="devices.cps">CPS Protection Suit</button>
+            <button class="device-item" onclick="selectDevice('CPS')" data-i18n="devices.cps">CPS Protection Suit
+            </button>
         </div>
         <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
     </div>
@@ -477,12 +484,13 @@
                 <p data-i18n="user.last_activity">Last activity: <span id="last-activity">---</span></p>
             </div>
         </div>
-        
+
         <!-- Export Section -->
         <div class="export-section">
             <h3 data-i18n="export.title">Export User Data</h3>
             <div class="export-buttons">
-                <button class="btn-export btn-json" onclick="exportUserData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-json" onclick="exportUserData('json')" data-i18n="export.json">JSON
+                </button>
                 <button class="btn-export btn-xml" onclick="exportUserData('xml')" data-i18n="export.xml">XML</button>
                 <button class="btn-export btn-csv" onclick="exportUserData('csv')" data-i18n="export.csv">CSV</button>
                 <button class="btn-export btn-pdf" onclick="exportUserData('pdf')" data-i18n="export.pdf">PDF</button>
@@ -497,7 +505,8 @@
             <div class="device-card">
                 <h3 data-i18n="device.status_title">Device Status</h3>
                 <p data-i18n="device.device_id_label">Device ID: <span id="device-id">RPI_MOCK_001</span></p>
-                <p data-i18n="device.status_label">Status: <span id="device-status" class="status-online">ONLINE</span></p>
+                <p data-i18n="device.status_label">Status: <span id="device-status" class="status-online">ONLINE</span>
+                </p>
                 <p data-i18n="device.uptime_label">Uptime: <span id="device-uptime">---</span></p>
             </div>
             <div class="sensor-grid">
@@ -547,12 +556,13 @@
             </div>
         </div>
         <button class="btn btn-primary" data-i18n="users.add_user">Add User</button>
-        
+
         <!-- Export Section -->
         <div class="export-section">
             <h3 data-i18n="export.title">Export Users List</h3>
             <div class="export-buttons">
-                <button class="btn-export btn-json" onclick="exportUsersData('json')" data-i18n="export.json">JSON</button>
+                <button class="btn-export btn-json" onclick="exportUsersData('json')" data-i18n="export.json">JSON
+                </button>
                 <button class="btn-export btn-xml" onclick="exportUsersData('xml')" data-i18n="export.xml">XML</button>
                 <button class="btn-export btn-csv" onclick="exportUsersData('csv')" data-i18n="export.csv">CSV</button>
                 <button class="btn-export btn-pdf" onclick="exportUsersData('pdf')" data-i18n="export.pdf">PDF</button>
@@ -577,15 +587,19 @@
                 <p data-i18n="service.backup_desc">Kopia zapasowa danych</p>
             </button>
         </div>
-        
+
         <!-- Export Section -->
         <div class="export-section">
             <h3 data-i18n="export.title">Export Service Data</h3>
             <div class="export-buttons">
-                <button class="btn-export btn-json" onclick="exportServiceData('json')" data-i18n="export.json">JSON</button>
-                <button class="btn-export btn-xml" onclick="exportServiceData('xml')" data-i18n="export.xml">XML</button>
-                <button class="btn-export btn-csv" onclick="exportServiceData('csv')" data-i18n="export.csv">CSV</button>
-                <button class="btn-export btn-pdf" onclick="exportServiceData('pdf')" data-i18n="export.pdf">PDF</button>
+                <button class="btn-export btn-json" onclick="exportServiceData('json')" data-i18n="export.json">JSON
+                </button>
+                <button class="btn-export btn-xml" onclick="exportServiceData('xml')" data-i18n="export.xml">XML
+                </button>
+                <button class="btn-export btn-csv" onclick="exportServiceData('csv')" data-i18n="export.csv">CSV
+                </button>
+                <button class="btn-export btn-pdf" onclick="exportServiceData('pdf')" data-i18n="export.pdf">PDF
+                </button>
             </div>
         </div>
     </div>
@@ -601,20 +615,25 @@
             </div>
             <div class="setting-group">
                 <h3 data-i18n="settings.system_config">System Configuration</h3>
-                <label data-i18n="settings.update_interval">Update Interval: <input type="number" value="5"> seconds</label>
+                <label data-i18n="settings.update_interval">Update Interval: <input type="number" value="5">
+                    seconds</label>
                 <label data-i18n="settings.debug_mode">Debug Mode: <input type="checkbox"></label>
             </div>
         </div>
         <button class="btn btn-primary" data-i18n="actions.save_settings">Save Settings</button>
-        
+
         <!-- Export Section -->
         <div class="export-section">
             <h3 data-i18n="export.title">Export System Settings</h3>
             <div class="export-buttons">
-                <button class="btn-export btn-json" onclick="exportSettingsData('json')" data-i18n="export.json">JSON</button>
-                <button class="btn-export btn-xml" onclick="exportSettingsData('xml')" data-i18n="export.xml">XML</button>
-                <button class="btn-export btn-csv" onclick="exportSettingsData('csv')" data-i18n="export.csv">CSV</button>
-                <button class="btn-export btn-pdf" onclick="exportSettingsData('pdf')" data-i18n="export.pdf">PDF</button>
+                <button class="btn-export btn-json" onclick="exportSettingsData('json')" data-i18n="export.json">JSON
+                </button>
+                <button class="btn-export btn-xml" onclick="exportSettingsData('xml')" data-i18n="export.xml">XML
+                </button>
+                <button class="btn-export btn-csv" onclick="exportSettingsData('csv')" data-i18n="export.csv">CSV
+                </button>
+                <button class="btn-export btn-pdf" onclick="exportSettingsData('pdf')" data-i18n="export.pdf">PDF
+                </button>
             </div>
         </div>
     </div>
@@ -624,7 +643,8 @@
         <h2 data-i18n="device.history_title">Device History</h2>
         <div class="history-container">
             <div class="filter-section">
-                <input type="text" placeholder="Search devices..." data-i18n-placeholder="device.search_placeholder" class="search-input">
+                <input type="text" placeholder="Search devices..." data-i18n-placeholder="device.search_placeholder"
+                       class="search-input">
                 <select class="filter-select">
                     <option value="all" data-i18n="device.filter_all">All Devices</option>
                     <option value="PP_MASK" data-i18n="devices.pp_mask">PP Mask</option>
@@ -678,7 +698,9 @@
                         <option value="CPS" data-i18n="devices.cps">CPS Protection Suit</option>
                     </select>
                 </div>
-                <button class="btn btn-primary" onclick="generateReport()" data-i18n="reports.generate">Generate Report</button>
+                <button class="btn btn-primary" onclick="generateReport()" data-i18n="reports.generate">Generate
+                    Report
+                </button>
             </div>
             <div class="report-results">
                 <div class="report-summary">
@@ -725,7 +747,8 @@
                 </div>
                 <div class="setting-group">
                     <label data-i18n="reports.email_recipients">Email Recipients:</label>
-                    <textarea placeholder="Enter email addresses (one per line)" data-i18n-placeholder="reports.email_placeholder" class="email-input"></textarea>
+                    <textarea placeholder="Enter email addresses (one per line)"
+                              data-i18n-placeholder="reports.email_placeholder" class="email-input"></textarea>
                 </div>
                 <div class="setting-group">
                     <label data-i18n="reports.schedule">Schedule:</label>
@@ -738,8 +761,12 @@
                 </div>
             </div>
             <div class="batch-actions">
-                <button class="btn btn-primary" onclick="generateBatchReport()" data-i18n="reports.generate_now">Generate Now</button>
-                <button class="btn btn-secondary" onclick="scheduleBatchReport()" data-i18n="reports.schedule_report">Schedule Report</button>
+                <button class="btn btn-primary" onclick="generateBatchReport()" data-i18n="reports.generate_now">
+                    Generate Now
+                </button>
+                <button class="btn btn-secondary" onclick="scheduleBatchReport()" data-i18n="reports.schedule_report">
+                    Schedule Report
+                </button>
                 <button class="btn btn-info" onclick="previewBatchReport()" data-i18n="reports.preview">Preview</button>
             </div>
         </div>
@@ -773,8 +800,10 @@
                 </div>
             </div>
             <div class="sensor-controls">
-                <button class="btn btn-primary" onclick="refreshSensors()" data-i18n="sensors.refresh">Refresh Data</button>
-                <button class="btn btn-secondary" onclick="exportSensorData()" data-i18n="sensors.export">Export Data</button>
+                <button class="btn btn-primary" onclick="refreshSensors()" data-i18n="sensors.refresh">Refresh Data
+                </button>
+                <button class="btn btn-secondary" onclick="exportSensorData()" data-i18n="sensors.export">Export Data
+                </button>
             </div>
         </div>
         <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
@@ -808,7 +837,9 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="addScheduledReport()" data-i18n="reports.add_schedule">Add New Schedule</button>
+            <button class="btn btn-primary" onclick="addScheduledReport()" data-i18n="reports.add_schedule">Add New
+                Schedule
+            </button>
         </div>
         <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
     </div>
@@ -818,7 +849,8 @@
         <h2 data-i18n="workshop.parts_title">Workshop Parts</h2>
         <div class="parts-container">
             <div class="search-filter">
-                <input type="text" placeholder="Search parts..." data-i18n-placeholder="workshop.search_parts" class="search-input">
+                <input type="text" placeholder="Search parts..." data-i18n-placeholder="workshop.search_parts"
+                       class="search-input">
                 <select class="filter-select">
                     <option value="all" data-i18n="workshop.all_categories">All Categories</option>
                     <option value="masks" data-i18n="workshop.masks">Masks</option>
@@ -872,7 +904,9 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="addMaintenanceTask()" data-i18n="workshop.add_maintenance">Add Maintenance Task</button>
+            <button class="btn btn-primary" onclick="addMaintenanceTask()" data-i18n="workshop.add_maintenance">Add
+                Maintenance Task
+            </button>
         </div>
         <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
     </div>
@@ -901,7 +935,9 @@
                     <div class="tool-status status-due">Due Soon</div>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="scheduleCalibration()" data-i18n="tools.schedule_calibration">Schedule Calibration</button>
+            <button class="btn btn-primary" onclick="scheduleCalibration()" data-i18n="tools.schedule_calibration">
+                Schedule Calibration
+            </button>
         </div>
         <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>
     </div>
@@ -925,9 +961,14 @@
                 </div>
             </div>
             <div class="inventory-actions">
-                <button class="btn btn-primary" onclick="generateInventoryReport()" data-i18n="inventory.generate_report">Generate Report</button>
-                <button class="btn btn-secondary" onclick="orderParts()" data-i18n="inventory.order_parts">Order Parts</button>
-                <button class="btn btn-info" onclick="viewLowStock()" data-i18n="inventory.view_low_stock">View Low Stock</button>
+                <button class="btn btn-primary" onclick="generateInventoryReport()"
+                        data-i18n="inventory.generate_report">Generate Report
+                </button>
+                <button class="btn btn-secondary" onclick="orderParts()" data-i18n="inventory.order_parts">Order Parts
+                </button>
+                <button class="btn btn-info" onclick="viewLowStock()" data-i18n="inventory.view_low_stock">View Low
+                    Stock
+                </button>
             </div>
         </div>
         <button class="btn btn-back" onclick="backToMenu()" data-i18n="navigation.back">← Powrót</button>

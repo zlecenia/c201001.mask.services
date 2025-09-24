@@ -268,7 +268,7 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopParts();
         } else {
-            this.loadTemplate('workshop-parts-template');
+            this.navigateToTemplate('workshop-parts-template', 'workshop-parts');
         }
     }
 
@@ -278,7 +278,7 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopMaintenance();
         } else {
-            this.loadTemplate('workshop-maintenance-template');
+            this.navigateToTemplate('workshop-maintenance-template', 'workshop-maintenance');
         }
     }
 
