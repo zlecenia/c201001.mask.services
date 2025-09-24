@@ -198,7 +198,10 @@ class MenuManager {
         if (window.testMenuEnhanced) {
             testMenuEnhanced.showTestWizard();
         } else {
-            this.loadTemplate('test-menu-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('test-menu', 'pl', 'default');
+            }
         }
     }
 
@@ -208,7 +211,10 @@ class MenuManager {
         if (window.testMenuEnhanced) {
             testMenuEnhanced.showTestQuick();
         } else {
-            this.loadTemplate('test-menu-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('test-menu', 'pl', 'default');
+            }
         }
     }
 
@@ -218,28 +224,43 @@ class MenuManager {
         if (window.testMenuEnhanced) {
             testMenuEnhanced.showTestScenarios();
         } else {
-            this.loadTemplate('test-menu-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('test-menu', 'pl', 'default');
+            }
         }
     }
 
     showUserData() {
         console.log('Opening User Data...');
-        this.loadTemplate('user-data-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('user-data', 'pl', 'default');
+        }
     }
 
     showRealtimeSensors() {
         console.log('Opening Realtime Sensors...');
-        this.loadTemplate('realtime-sensors-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('realtime-sensors', 'pl', 'default');
+        }
     }
 
     showDeviceHistory() {
         console.log('Opening Device History...');
-        this.loadTemplate('device-history-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('device-history', 'pl', 'default');
+        }
     }
 
     showReportsView() {
         console.log('Opening Reports View...');
-        this.loadTemplate('reports-view-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('reports-view', 'pl', 'default');
+        }
     }
 
     showReportsBatch() {
@@ -248,7 +269,10 @@ class MenuManager {
         if (window.testReportsEnhanced) {
             testReportsEnhanced.showReportsBatch();
         } else {
-            this.loadTemplate('reports-batch-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('reports-batch', 'pl', 'default');
+            }
         }
     }
 
@@ -258,7 +282,10 @@ class MenuManager {
         if (window.testReportsEnhanced) {
             testReportsEnhanced.showReportsSchedule();
         } else {
-            this.loadTemplate('reports-schedule-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('reports-schedule', 'pl', 'default');
+            }
         }
     }
 
@@ -268,7 +295,10 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopParts();
         } else {
-            this.loadTemplate('workshop-parts-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('workshop-parts', 'pl', 'default');
+            }
         }
     }
 
@@ -278,7 +308,10 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopMaintenance();
         } else {
-            this.loadTemplate('workshop-maintenance-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('workshop-maintenance', 'pl', 'default');
+            }
         }
     }
 
@@ -288,7 +321,10 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopTools();
         } else {
-            this.loadTemplate('workshop-tools-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('workshop-tools', 'pl', 'default');
+            }
         }
     }
 
@@ -298,13 +334,19 @@ class MenuManager {
         if (window.workshopEnhanced) {
             workshopEnhanced.showWorkshopInventory();
         } else {
-            this.loadTemplate('workshop-inventory-template');
+            // Use Vue.js navigation instead of legacy template loading
+            if (window.MaskServiceVue) {
+                window.MaskServiceVue.navigateToScreen('workshop-inventory', 'pl', 'default');
+            }
         }
     }
 
     showUsers() {
         console.log('Opening Users Management...');
-        this.loadTemplate('users-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('users', 'pl', 'default');
+        }
         this.loadUsersList();
     }
 
@@ -608,32 +650,50 @@ class MenuManager {
 
     showServiceMenu() {
         console.log('Opening Service Menu...');
-        this.loadTemplate('service-menu-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('service-menu', 'pl', 'default');
+        }
     }
 
     showSettingsScenarios() {
         console.log('Opening Settings - Scenarios...');
-        this.loadTemplate('system-settings-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('system-settings', 'pl', 'scenarios');
+        }
     }
 
     showSettingsIntegration() {
         console.log('Opening Settings - Integration...');
-        this.loadTemplate('system-settings-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('system-settings', 'pl', 'integration');
+        }
     }
 
     showSettingsStandards() {
         console.log('Opening Settings - Standards...');
-        this.loadTemplate('system-settings-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('system-settings', 'pl', 'standards');
+        }
     }
 
     showSettingsSystem() {
         console.log('Opening Settings - System...');
-        this.loadTemplate('system-settings-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('system-settings', 'pl', 'system');
+        }
     }
 
     showServiceScreen() {
         console.log('Opening Service Screen...');
-        this.loadTemplate('service-menu-template');
+        // Use Vue.js navigation instead of legacy template loading
+        if (window.MaskServiceVue) {
+            window.MaskServiceVue.navigateToScreen('service-menu', 'pl', 'default');
+        }
     }
 
     /**

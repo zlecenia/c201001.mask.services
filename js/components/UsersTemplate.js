@@ -15,6 +15,9 @@ const UsersTemplate = {
     emits: ['navigate', 'user-changed'],
     
     setup(props, { emit }) {
+        // Vue.js imports - CRITICAL FIX for regression
+        const { reactive, computed, onMounted } = Vue;
+        
         const userState = reactive({
             isLoading: false,
             showAddUser: false,

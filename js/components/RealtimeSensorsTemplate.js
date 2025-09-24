@@ -21,6 +21,9 @@ const RealtimeSensorsTemplate = {
     emits: ['navigate', 'sensor-alert'],
     
     setup(props, { emit }) {
+        // Vue.js imports - CRITICAL FIX for regression
+        const { reactive, computed, onMounted, onUnmounted } = Vue;
+        
         // Reactive state
         const sensorState = reactive({
             isLive: true,

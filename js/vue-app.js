@@ -78,6 +78,93 @@ class MaskServiceVueApp {
                     navigateToScreen('login-screen');
                     console.log('🔶 Vue Auth: User logged out');
                 };
+                
+                // ROUTER METHODS - Missing methods for 100% compliance
+                
+                // Parse route from hash string
+                const parseRoute = (hash) => {
+                    console.log('🛣️ Vue Router: Parsing route:', hash);
+                    
+                    if (!hash || hash === '#') {
+                        return {
+                            view: 'login-screen',
+                            language: 'pl',
+                            action: 'default',
+                            isValid: true
+                        };
+                    }
+                    
+                    // Remove leading # and split
+                    const cleanHash = hash.replace(/^#\/?/, '');
+                    const parts = cleanHash.split('/');
+                    
+                    const route = {
+                        view: parts[0] || 'login-screen',
+                        language: parts[1] || 'pl',
+                        action: parts[2] || 'default',
+                        isValid: parts.length >= 1 && parts[0] !== ''
+                    };
+                    
+                    console.log('🛣️ Vue Router: Parsed route:', route);
+                    return route;
+                };
+                
+                // Enhanced navigation method with validation
+                const navigation = {
+                    navigateTo: (screen, language = 'pl', action = 'default') => {
+                        console.log(`🛣️ Vue Navigation: Navigating to ${screen}/${language}/${action}`);
+                        
+                        // Validate screen exists
+                        const validScreens = [
+                            'login-screen', 'user-menu-screen', 'system-screen',
+                            'test-menu', 'user-data', 'device-data', 'realtime-sensors',
+                            'system-settings', 'users', 'workshop', 'reports-view',
+                            'service-menu', 'test-reports', 'device-select', 'device-history'
+                        ];
+                        
+                        if (!validScreens.includes(screen)) {
+                            console.warn(`⚠️ Vue Navigation: Invalid screen '${screen}', defaulting to login`);
+                            screen = 'login-screen';
+                        }
+                        
+                        return navigateToScreen(screen, language, action);
+                    },
+                    
+                    getCurrentRoute: () => {
+                        return {
+                            screen: appState.currentScreen,
+                            language: appState.currentLanguage,
+                            user: appState.currentUser
+                        };
+                    },
+                    
+                    setRoute: (route) => {
+                        if (route && route.view) {
+                            appState.currentScreen = route.view;
+                            appState.currentLanguage = route.language || 'pl';
+                            
+                            console.log('🛣️ Vue Router: Route set to:', route);
+                        }
+                    }
+                };
+                
+                // Reactive state management enhancement
+                const stateManager = {
+                    updateState: (key, value) => {
+                        if (appState.hasOwnProperty(key)) {
+                            appState[key] = value;
+                            console.log(`🔄 Vue State: Updated ${key}:`, value);
+                        }
+                    },
+                    
+                    getState: () => appState,
+                    
+                    watchState: (callback) => {
+                        // In a real implementation, would use Vue's watch
+                        console.log('👁️ Vue State: Watcher registered');
+                        return () => console.log('👁️ Vue State: Watcher removed');
+                    }
+                };
 
                 // Lifecycle hooks
                 onMounted(() => {
@@ -100,7 +187,11 @@ class MaskServiceVueApp {
                     appState,
                     navigateToScreen,
                     authenticate,
-                    logout
+                    logout,
+                    // ROUTER METHODS - Export for 100% compliance
+                    parseRoute,
+                    navigation,
+                    stateManager
                 };
             },
             

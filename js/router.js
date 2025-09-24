@@ -802,14 +802,43 @@ class C20Router {
 
     /**
      * Show specific view and hide others
+     * FIXED: Skip legacy DOM manipulation for Vue-handled screens
      */
     showView(viewId) {
-        // Hide all screens
+        // List of screens handled by Vue.js - skip legacy DOM manipulation for these
+        const vueHandledScreens = [
+            'test-menu', 'test-menu-template',
+            'user-data', 'user-data-template', 
+            'device-select', 'device-select-template',
+            'device-data', 'device-data-template',
+            'realtime-sensors', 'realtime-sensors-template',
+            'reports-view', 'reports-view-template',
+            'reports-batch', 'reports-batch-template', 
+            'reports-schedule', 'reports-schedule-template',
+            'system-settings', 'system-settings-template',
+            'service-menu', 'service-menu-template',
+            'users', 'users-template',
+            'workshop', 'workshop-template',
+            'workshop-inventory', 'workshop-inventory-template',
+            'workshop-maintenance', 'workshop-maintenance-template',
+            'workshop-parts', 'workshop-parts-template',
+            'workshop-tools', 'workshop-tools-template',
+            'test-reports', 'test-reports-template',
+            'device-history', 'device-history-template'
+        ];
+        
+        // If screen is handled by Vue.js, skip legacy DOM manipulation
+        if (vueHandledScreens.includes(viewId)) {
+            console.log(`🔶 Skipping legacy DOM manipulation for Vue-handled screen: ${viewId}`);
+            return;
+        }
+        
+        // Hide all screens (legacy behavior for non-Vue screens)
         document.querySelectorAll('.screen').forEach(screen => {
             screen.classList.remove('active');
         });
 
-        // Show target screen
+        // Show target screen (legacy behavior)
         const targetScreen = document.querySelector(`#${viewId}`);
         if (targetScreen) {
             targetScreen.classList.add('active');

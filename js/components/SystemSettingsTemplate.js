@@ -21,6 +21,9 @@ const SystemSettingsTemplate = {
     emits: ['navigate', 'settings-changed'],
     
     setup(props, { emit }) {
+        // Vue.js imports - CRITICAL FIX for regression
+        const { reactive, computed, watch, onMounted } = Vue;
+        
         // Reactive state
         const settingsState = reactive({
             isLoading: false,

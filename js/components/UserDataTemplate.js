@@ -21,6 +21,9 @@ const UserDataTemplate = {
     emits: ['navigate', 'user-updated'],
     
     setup(props, { emit }) {
+        // Vue.js imports - CRITICAL FIX for regression
+        const { reactive, computed, onMounted, onUnmounted } = Vue;
+        
         // Reactive state
         const userState = reactive({
             loginTime: null,
