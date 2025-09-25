@@ -2,76 +2,956 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-i18n="global.page_title">MASKTRONIC C20 1001 - System Mock v2.0</title>
-    <!-- Vue.js CDN for production -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2c3e50">
+    
+    <title>{{ $t('app.title') || 'MASKSERVICE C20 - System v3.0 Vue' }}</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://unpkg.com/vue@3/dist/vue.global.prod.js" as="script">
+    <link rel="preload" href="/locales/pl.json" as="fetch" crossorigin>
+    <link rel="preload" href="/locales/en.json" as="fetch" crossorigin>
+    <link rel="preload" href="/locales/de.json" as="fetch" crossorigin>
+    
+    <!-- Vue.js 3 Production CDN -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-
-    <script>
-        // Cache-busting for CSS
-        const cssVersion = Date.now();
-        document.write('<link rel="stylesheet" href="css/vue.css?v=' + cssVersion + '">');
-        document.write('<link rel="stylesheet" href="css/style.css?v=' + cssVersion + '">');
-        document.write('<link rel="stylesheet" href="css/lcd-optimization.css?v=' + cssVersion + '">');
-    </script>
-
+    
+    <!-- Vue I18n for internationalization -->
+    <script src="https://cdn.jsdelivr.net/npm/vue-i18n@9/dist/vue-i18n.global.prod.js"></script>
+    
+    <!-- CSS Stylesheets with cache busting -->
+    <link rel="stylesheet" href="css/vue.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/lcd-optimization.css">
+    
+    <!-- App-specific styles -->
+    <style>
+        /* Critical CSS for initial load */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        #app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Loading spinner */
+        .app-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            flex-direction: column;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .loading-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Error state */
+        .app-error {
+            padding: 2rem;
+            text-align: center;
+            background: #fee;
+            border: 1px solid #fcc;
+            border-radius: 8px;
+            margin: 2rem;
+            color: #c33;
+        }
+        
+        /* Mobile optimizations for 400x1280px display */
+        @media (max-width: 450px) {
+            .loading-text {
+                font-size: 1rem;
+            }
+            
+            .loading-subtitle {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<div id="app" class="container">
-    <!-- Header -->
-    <header class="header">
-        <div class="header-left">
-            <a href="/">
-                <span class="logo" data-i18n="global.logo">MASKTRONIC</span>
-                <span class="hardware" data-i18n="global.hardware">C20</span>
-                <span class="product" data-i18n="global.product">1001</span>
-                <span class="software" data-i18n="global.software">v2.0 MOCK</span>
-            </a>
+<div id="app">
+    <!-- Loading state while Vue initializes -->
+    <div class="app-loading" v-if="isLoading">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">{{ $t('global.loading') || 'Ładowanie...' }}</div>
+        <div class="loading-subtitle">{{ $t('app.initializing') || 'Inicjalizacja systemu MASKSERVICE C20' }}</div>
+    </div>
+    
+    <!-- Error state -->
+    <div class="app-error" v-else-if="hasError">
+        <h2>{{ $t('global.error') || 'Błąd aplikacji' }}</h2>
+        <p>{{ errorMessage }}</p>
+        <button @click="retryInitialization" class="btn btn-primary">
+            {{ $t('global.retry') || 'Spróbuj ponownie' }}
+        </button>
+    </div>
+    
+    <!-- Main Vue Application -->
+    <MaskServiceApp 
+        v-else
+        @app-initialized="handleAppInitialized"
+        @language-changed="handleLanguageChange"
+        @menu-navigation="handleMenuNavigation"
+    />
+</div>
 
-        </div>
-        <div class="header-center">
-            <span id="device-url" id="device_connection_status" class="status-indicator">
-                <span id="device_url" class="footer-host">
-                    <a href="https://c201001.mask.services"
-                       data-i18n="global.device_url_label">c201001.mask.services</a>
-                </span>
-                <span class="status-dot"></span>
-                <span id="status-text" class="role-badge" data-i18n="global.offline">OFFLINE</span>
-            </span>
+<!-- Vue.js Application Initialization Script -->
+<script src="js/main.js" defer></script>
+<script>
+    // Cache buster for development
+    console.log('⚡ Cache buster: ' + Date.now());
+</script>
 
-        </div>
+<!-- Legacy content removed - now using js/main.js -->
 
-        <div class="header-right">
 
-            <span id="device-info">
-                    <span id="device_name" data-i18n="global.device_name">CONNECT</span>
-                    <span id="device_type" data-i18n="global.device_type">500</span>
-            </span>
+            
+            // Create i18n instance
+            const i18n = createI18n({
+                locale: localStorage.getItem('app-language') || 'pl',
+                fallbackLocale: 'en',
+                messages,
+                legacy: false,
+                globalInjection: true
+            });
+            
+            // Create Vue app
+            const app = createApp({
+                name: 'MaskServiceVueApp',
+                data() {
+                    return {
+                        // === MAIN APP CONFIGURATION ===
+                        
+                        // Application state
+                        isLoading: true,
+                        hasError: false,
+                        errorMessage: '',
+                        
+                        // Navigation state
+                        currentRoute: null,
+                        navigationHistory: [],
+                        
+                        // User session
+                        currentUser: null,
+                        sessionTimeout: null,
+                        
+                        // Application metadata
+                        APP_NAME: 'MASKSERVICE C20',
+                        APP_VERSION: '3.0 Vue',
+                        BUILD_DATE: new Date().toISOString().split('T')[0],
+                        
+                        // Performance monitoring
+                        initStartTime: performance.now(),
+                        componentLoadTimes: {},
+                        
+                        // Feature flags
+                        FEATURES: {
+                            PRESSURE_SIMULATION: true,
+                            VIRTUAL_KEYBOARD: true,
+                            OFFLINE_MODE: false,
+                            DEBUG_MODE: false
+                        }
+                    }
+                },
+                
+                async mounted() {
+                    console.log('🚀 Vue App mounting...');
+                    
+                    try {
+                        // Initialize app components
+                        await this.initializeComponents();
+                        
+                        // Setup event listeners
+                        this.setupEventListeners();
+                        
+                        // Check for saved session
+                        this.restoreSession();
+                        
+                        // Mark as loaded
+                        this.isLoading = false;
+                        
+                        const loadTime = performance.now() - this.initStartTime;
+                        console.log(`✅ Vue App initialized in ${loadTime.toFixed(2)}ms`);
+                        
+                    } catch (error) {
+                        console.error('❌ App initialization failed:', error);
+                        this.hasError = true;
+                        this.errorMessage = error.message || 'Unknown initialization error';
+                        this.isLoading = false;
+                    }
+                },
+                
+                methods: {
+                    async initializeComponents() {
+                        // Static component registration to avoid MIME type issues
+                        const componentStartTime = performance.now();
+                        
+                        try {
+                            // Register MaskServiceApp component directly on the Vue app instance
+                            const MaskServiceAppComponent = {
+                                name: 'MaskServiceApp',
+                                template: `
+                                    <div class="mask-service-container">
+                                        <!-- Header -->
+                                        <header class="app-header">
+                                            <div class="header-left">
+                                                <span class="logo">{{ $t('app.title') || 'MASKSERVICE' }}</span>
+                                                <span class="version">{{ APP_VERSION }}</span>
+                                            </div>
+                                            <div class="header-center">
+                                                <span class="device-status" :class="deviceStatusClass">
+                                                    {{ $t(deviceStatusKey) || deviceStatus }}
+                                                </span>
+                                            </div>
+                                            <div class="header-right">
+                                                <div class="language-switcher">
+                                                    <button 
+                                                        v-for="lang in availableLanguages" 
+                                                        :key="lang.code"
+                                                        @click="changeLanguage(lang.code)"
+                                                        :class="['lang-btn', { active: currentLanguage === lang.code }]"
+                                                        :title="lang.name"
+                                                    >
+                                                        {{ lang.flag }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </header>
+                                        
+                                        <!-- Main Content -->
+                                        <main class="main-content">
+                                            <!-- Login Screen -->
+                                            <div v-if="!currentUser" class="login-screen">
+                                                <div class="login-container">
+                                                    <h2>{{ $t('login.title') || 'Logowanie' }}</h2>
+                                                    
+                                                    <!-- Login Method Selector -->
+                                                    <div class="login-methods">
+                                                        <button 
+                                                            v-for="method in loginMethods" 
+                                                            :key="method.id"
+                                                            @click="selectLoginMethod(method.id)"
+                                                            :class="['method-btn', { active: selectedLoginMethod === method.id }]"
+                                                        >
+                                                            {{ $t(method.labelKey) || method.label }}
+                                                        </button>
+                                                    </div>
+                                                    
+                                                    <!-- Role Login Buttons -->
+                                                    <div class="role-login-buttons">
+                                                        <div v-for="role in availableRoles" :key="role.id" class="role-container">
+                                                            <button 
+                                                                @click="toggleRoleMenu(role.id)"
+                                                                :class="['role-btn', role.cssClass]"
+                                                            >
+                                                                {{ $t(role.labelKey) || role.label }}
+                                                            </button>
+                                                            
+                                                            <!-- Role Menu Accordion -->
+                                                            <div 
+                                                                v-if="expandedRole === role.id" 
+                                                                class="role-menu-accordion"
+                                                            >
+                                                                <div 
+                                                                    v-for="menuItem in role.menuItems" 
+                                                                    :key="menuItem.id"
+                                                                    @click="loginWithRole(role.id, menuItem)"
+                                                                    class="menu-item"
+                                                                >
+                                                                    <span class="menu-icon">{{ menuItem.icon }}</span>
+                                                                    <span class="menu-label">{{ $t(menuItem.labelKey) || menuItem.label }}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- User Menu Screen -->
+                                            <div v-else class="user-menu-screen">
+                                                <div class="menu-header">
+                                                    <h2>{{ $t('menu.welcome') || 'Menu główne' }}</h2>
+                                                    <div class="user-info">
+                                                        <span class="user-role">{{ currentUser.role }}</span>
+                                                        <button @click="logout" class="logout-btn">
+                                                            {{ $t('user.logout') || 'Wyloguj' }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="menu-grid">
+                                                    <div 
+                                                        v-for="menuItem in currentUserMenuItems" 
+                                                        :key="menuItem.id"
+                                                        @click="selectMenuItem(menuItem)"
+                                                        class="menu-card"
+                                                    >
+                                                        <div class="card-icon">{{ menuItem.icon }}</div>
+                                                        <div class="card-title">{{ $t(menuItem.labelKey) || menuItem.label }}</div>
+                                                        <div class="card-description">{{ $t(menuItem.descriptionKey) || menuItem.description }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </main>
+                                        
+                                        <!-- Pressure Panel -->
+                                        <div v-if="showPressurePanel" class="pressure-panel">
+                                            <h3>{{ $t('pressure.title') || 'Panel Ciśnień' }}</h3>
+                                            <div class="pressure-grid">
+                                                <div 
+                                                    v-for="(data, type) in pressureData" 
+                                                    :key="type"
+                                                    :class="['pressure-item', type]"
+                                                >
+                                                    <div class="pressure-label">{{ $t('pressure.' + type) || type }}</div>
+                                                    <div class="pressure-value">{{ data.value }} {{ data.unit }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Footer -->
+                                        <footer class="app-footer">
+                                            <div class="footer-left">
+                                                <span class="device-info">{{ deviceInfo.name }} - {{ deviceInfo.type }}</span>
+                                            </div>
+                                            <div class="footer-right">
+                                                <span class="current-time">{{ currentTime }}</span>
+                                            </div>
+                                        </footer>
+                                    </div>
+                                `,
+                                data() {
+                                    return {
+                                        // === COMPONENT CONFIGURATION ===
+                                        APP_VERSION: '3.0 Vue',
+                                        
+                                        // Device status
+                                        deviceStatus: 'OFFLINE',
+                                        deviceInfo: {
+                                            name: 'MASKSERVICE C20',
+                                            type: '1001'
+                                        },
+                                        
+                                        // User management
+                                        currentUser: null,
+                                        expandedRole: null,
+                                        selectedLoginMethod: 'keyword',
+                                        
+                                        // Language management
+                                        currentLanguage: 'pl',
+                                        availableLanguages: [
+                                            { code: 'pl', name: 'Polski', flag: '🇵🇱' },
+                                            { code: 'en', name: 'English', flag: '🇬🇧' },
+                                            { code: 'de', name: 'Deutsch', flag: '🇩🇪' }
+                                        ],
+                                        
+                                        // Login configuration
+                                        loginMethods: [
+                                            { id: 'scanner', labelKey: 'login.scanner', label: 'Scanner' },
+                                            { id: 'keyword', labelKey: 'login.keyword', label: 'Keyword' }
+                                        ],
+                                        
+                                        // Role configuration
+                                        availableRoles: [
+                                            {
+                                                id: 'OPERATOR',
+                                                labelKey: 'roles.OPERATOR',
+                                                label: 'Login as OPERATOR',
+                                                cssClass: 'btn-operator',
+                                                menuItems: [
+                                                    { id: 'test_wizard', icon: '🧙', labelKey: 'menu.test_wizard', label: 'Test Wizard' },
+                                                    { id: 'quick_test', icon: '⚡', labelKey: 'menu.quick_test', label: 'Quick Test' },
+                                                    { id: 'test_scenarios', icon: '📋', labelKey: 'menu.test_scenarios', label: 'Test Scenarios' },
+                                                    { id: 'device_history', icon: '📈', labelKey: 'menu.device_history', label: 'Device History' },
+                                                    { id: 'reports_view', icon: '📄', labelKey: 'menu.reports_view', label: 'View Reports' }
+                                                ]
+                                            },
+                                            {
+                                                id: 'ADMIN',
+                                                labelKey: 'roles.ADMIN',
+                                                label: 'Login as ADMIN',
+                                                cssClass: 'btn-admin',
+                                                menuItems: [
+                                                    { id: 'reports_batch', icon: '📊', labelKey: 'menu.reports_batch', label: 'Batch Reports' },
+                                                    { id: 'reports_schedule', icon: '⏰', labelKey: 'menu.reports_schedule', label: 'Schedule Reports' },
+                                                    { id: 'users_management', icon: '👥', labelKey: 'menu.users_management', label: 'Users Management' },
+                                                    { id: 'system_settings', icon: '⚙️', labelKey: 'menu.system_settings', label: 'System Settings' }
+                                                ]
+                                            },
+                                            {
+                                                id: 'SERVICEUSER',
+                                                labelKey: 'roles.SERVICEUSER',
+                                                label: 'Login as SERVICEUSER',
+                                                cssClass: 'btn-service',
+                                                menuItems: [
+                                                    { id: 'workshop_inventory', icon: '📦', labelKey: 'menu.workshop_inventory', label: 'Workshop Inventory' },
+                                                    { id: 'workshop_maintenance', icon: '🔧', labelKey: 'menu.workshop_maintenance', label: 'Maintenance' },
+                                                    { id: 'workshop_parts', icon: '⚙️', labelKey: 'menu.workshop_parts', label: 'Parts Management' },
+                                                    { id: 'workshop_tools', icon: '🛠️', labelKey: 'menu.workshop_tools', label: 'Tools Management' },
+                                                    { id: 'device_diagnostics', icon: '🔍', labelKey: 'menu.device_diagnostics', label: 'Device Diagnostics' }
+                                                ]
+                                            },
+                                            {
+                                                id: 'SUPERUSER',
+                                                labelKey: 'roles.SUPERUSER',
+                                                label: 'Login as SUPERUSER',
+                                                cssClass: 'btn-super',
+                                                menuItems: [
+                                                    { id: 'system_config', icon: '🔧', labelKey: 'menu.system_config', label: 'System Config' },
+                                                    { id: 'advanced_diagnostics', icon: '🔬', labelKey: 'menu.advanced_diagnostics', label: 'Advanced Diagnostics' },
+                                                    { id: 'security_settings', icon: '🔐', labelKey: 'menu.security_settings', label: 'Security Settings' },
+                                                    { id: 'backup_restore', icon: '💾', labelKey: 'menu.backup_restore', label: 'Backup & Restore' }
+                                                ]
+                                            }
+                                        ],
+                                        
+                                        // Pressure simulation data
+                                        pressureData: {
+                                            low: { value: 10, unit: 'mbar' },
+                                            medium: { value: 20, unit: 'bar' },
+                                            high: { value: 30, unit: 'bar' }
+                                        },
+                                        
+                                        // Time display
+                                        currentTime: new Date().toLocaleTimeString()
+                                    }
+                                },
+                                computed: {
+                                    deviceStatusClass() {
+                                        return `status-${this.deviceStatus.toLowerCase()}`;
+                                    },
+                                    deviceStatusKey() {
+                                        return `device.${this.deviceStatus.toLowerCase()}`;
+                                    },
+                                    showPressurePanel() {
+                                        return this.currentUser && ['OPERATOR', 'SERVICEUSER'].includes(this.currentUser.role);
+                                    },
+                                    currentUserMenuItems() {
+                                        if (!this.currentUser) return [];
+                                        const role = this.availableRoles.find(r => r.id === this.currentUser.role);
+                                        return role ? role.menuItems : [];
+                                    }
+                                },
+                                methods: {
+                                    selectLoginMethod(methodId) {
+                                        this.selectedLoginMethod = methodId;
+                                        console.log(`🔑 Selected login method: ${methodId}`);
+                                    },
+                                    
+                                    toggleRoleMenu(roleId) {
+                                        this.expandedRole = this.expandedRole === roleId ? null : roleId;
+                                        console.log(`📂 Toggled role menu: ${roleId}`);
+                                    },
+                                    
+                                    loginWithRole(roleId, menuItem) {
+                                        this.currentUser = { role: roleId, selectedMenuItem: menuItem };
+                                        this.deviceStatus = 'ONLINE';
+                                        this.expandedRole = null;
+                                        console.log(`✅ Logged in as ${roleId} with menu item:`, menuItem);
+                                    },
+                                    
+                                    logout() {
+                                        this.currentUser = null;
+                                        this.deviceStatus = 'OFFLINE';
+                                        this.expandedRole = null;
+                                        console.log('👋 User logged out');
+                                    },
+                                    
+                                    selectMenuItem(menuItem) {
+                                        console.log(`🎯 Selected menu item:`, menuItem);
+                                        // Emit to parent or handle navigation
+                                        this.$emit('menu-navigation', menuItem);
+                                    },
+                                    
+                                    changeLanguage(languageCode) {
+                                        this.currentLanguage = languageCode;
+                                        this.$emit('language-changed', languageCode);
+                                        console.log(`🌐 Language changed to: ${languageCode}`);
+                                    },
+                                    
+                                    updateTime() {
+                                        this.currentTime = new Date().toLocaleTimeString();
+                                    }
+                                },
+                                mounted() {
+                                    // Update time every second
+                                    this.timeInterval = setInterval(this.updateTime, 1000);
+                                    console.log('🚀 MaskServiceApp component mounted');
+                                },
+                                beforeUnmount() {
+                                    if (this.timeInterval) {
+                                        clearInterval(this.timeInterval);
+                                    }
+                                }
+                            };
+                            
+                            // Register component on the Vue app instance  
+                            if (window.vueApp) {
+                                window.vueApp.component('MaskServiceApp', MaskServiceAppComponent);
+                            } else {
+                                // Store for later registration when app is available
+                                window.pendingMaskServiceApp = MaskServiceAppComponent;
+                            }
+                            
+                            this.componentLoadTimes.MaskServiceApp = performance.now() - componentStartTime;
+                            console.log('📦 MaskServiceApp component registered statically');
+                            
+                        } catch (error) {
+                            console.error('Component registration failed:', error);
+                            throw new Error('Failed to register main application component');
+                        }
+                    },
+                    
+                    setupEventListeners() {
+                        // Global error handler
+                        window.addEventListener('error', (event) => {
+                            console.error('Global error:', event.error);
+                            this.handleGlobalError(event.error);
+                        });
+                        
+                        // Unhandled promise rejection handler
+                        window.addEventListener('unhandledrejection', (event) => {
+                            console.error('Unhandled promise rejection:', event.reason);
+                            this.handleGlobalError(new Error(event.reason));
+                        });
+                        
+                        // Visibility change handler
+                        document.addEventListener('visibilitychange', () => {
+                            if (document.hidden) {
+                                console.log('📱 App went to background');
+                            } else {
+                                console.log('📱 App came to foreground');
+                            }
+                        });
+                        
+                        // Keyboard shortcuts
+                        document.addEventListener('keydown', (event) => {
+                            if (event.ctrlKey || event.metaKey) {
+                                switch (event.key) {
+                                    case 'r':
+                                        if (event.shiftKey) {
+                                            event.preventDefault();
+                                            this.retryInitialization();
+                                        }
+                                        break;
+                                    case 'l':
+                                        if (event.shiftKey) {
+                                            event.preventDefault();
+                                            this.toggleLanguage();
+                                        }
+                                        break;
+                                }
+                            }
+                        });
+                    },
+                    
+                    restoreSession() {
+                        try {
+                            const savedSession = localStorage.getItem('maskservice-session');
+                            if (savedSession) {
+                                const sessionData = JSON.parse(savedSession);
+                                if (sessionData.expiresAt > Date.now()) {
+                                    this.currentUser = sessionData.user;
+                                    console.log('🔄 Session restored:', sessionData.user.role);
+                                } else {
+                                    localStorage.removeItem('maskservice-session');
+                                    console.log('⏰ Expired session removed');
+                                }
+                            }
+                        } catch (error) {
+                            console.error('Session restoration failed:', error);
+                            localStorage.removeItem('maskservice-session');
+                        }
+                    },
+                    
+                    handleAppInitialized() {
+                        console.log('✅ Main app component initialized');
+                        this.$emit('app-ready');
+                    },
+                    
+                    handleLanguageChange(newLanguage) {
+                        this.$i18n.locale = newLanguage;
+                        localStorage.setItem('app-language', newLanguage);
+                        document.documentElement.lang = newLanguage;
+                        console.log(`🌐 Language changed to: ${newLanguage}`);
+                    },
+                    
+                    handleMenuNavigation(navigationData) {
+                        this.navigationHistory.push({
+                            ...navigationData,
+                            timestamp: new Date().toISOString()
+                        });
+                        console.log('📂 Menu navigation:', navigationData);
+                    },
+                    
+                    handleGlobalError(error) {
+                        if (!this.hasError) {
+                            this.hasError = true;
+                            this.errorMessage = error.message || 'Unknown error occurred';
+                            this.isLoading = false;
+                        }
+                    },
+                    
+                    retryInitialization() {
+                        console.log('🔄 Retrying initialization...');
+                        this.hasError = false;
+                        this.errorMessage = '';
+                        this.isLoading = true;
+                        this.initStartTime = performance.now();
+                        
+                        // Retry after brief delay
+                        setTimeout(() => {
+                            this.initializeComponents().then(() => {
+                                this.isLoading = false;
+                            }).catch((error) => {
+                                this.handleGlobalError(error);
+                            });
+                        }, 500);
+                    },
+                    
+                    toggleLanguage() {
+                        const languages = ['pl', 'en', 'de'];
+                        const currentIndex = languages.indexOf(this.$i18n.locale);
+                        const nextIndex = (currentIndex + 1) % languages.length;
+                        this.handleLanguageChange(languages[nextIndex]);
+                    }
+                }
+            });
+            
+            // Use i18n
+            app.use(i18n);
+            
+            // Register MaskServiceApp component before mounting
+            app.component('MaskServiceApp', {
+                name: 'MaskServiceApp',
+                template: `
+                    <div class="mask-service-container">
+                        <!-- Header -->
+                        <header class="app-header">
+                            <div class="header-left">
+                                <span class="logo">{{ $t('app.title') || 'MASKSERVICE' }}</span>
+                                <span class="version">3.0 Vue</span>
+                            </div>
+                            <div class="header-center">
+                                <span class="device-status" :class="deviceStatusClass">
+                                    {{ $t(deviceStatusKey) || deviceStatus }}
+                                </span>
+                            </div>
+                            <div class="header-right">
+                                <div class="language-switcher">
+                                    <button 
+                                        v-for="lang in availableLanguages" 
+                                        :key="lang.code"
+                                        @click="changeLanguage(lang.code)"
+                                        :class="['lang-btn', { active: currentLanguage === lang.code }]"
+                                        :title="lang.name"
+                                    >
+                                        {{ lang.flag }}
+                                    </button>
+                                </div>
+                            </div>
+                        </header>
+                        
+                        <!-- Main Content -->
+                        <main class="main-content">
+                            <!-- Login Screen -->
+                            <div v-if="!currentUser" class="login-screen">
+                                <div class="login-container">
+                                    <h2>{{ $t('login.title') || 'Logowanie' }}</h2>
+                                    
+                                    <!-- Role Login Buttons -->
+                                    <div class="role-login-buttons">
+                                        <div v-for="role in availableRoles" :key="role.id" class="role-container">
+                                            <button 
+                                                @click="toggleRoleMenu(role.id)"
+                                                :class="['role-btn', role.cssClass]"
+                                            >
+                                                {{ $t(role.labelKey) || role.label }}
+                                            </button>
+                                            
+                                            <!-- Role Menu Accordion -->
+                                            <div 
+                                                v-if="expandedRole === role.id" 
+                                                class="role-menu-accordion"
+                                            >
+                                                <div 
+                                                    v-for="menuItem in role.menuItems" 
+                                                    :key="menuItem.id"
+                                                    @click="loginWithRole(role.id, menuItem)"
+                                                    class="menu-item"
+                                                >
+                                                    <span class="menu-icon">{{ menuItem.icon }}</span>
+                                                    <span class="menu-label">{{ $t(menuItem.labelKey) || menuItem.label }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- User Menu Screen -->
+                            <div v-else class="user-menu-screen">
+                                <div class="menu-header">
+                                    <h2>{{ $t('menu.welcome') || 'Menu główne' }}</h2>
+                                    <div class="user-info">
+                                        <span class="user-role">{{ currentUser.role }}</span>
+                                        <button @click="logout" class="logout-btn">
+                                            {{ $t('user.logout') || 'Wyloguj' }}
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="menu-grid">
+                                    <div 
+                                        v-for="menuItem in currentUserMenuItems" 
+                                        :key="menuItem.id"
+                                        @click="selectMenuItem(menuItem)"
+                                        class="menu-card"
+                                    >
+                                        <div class="card-icon">{{ menuItem.icon }}</div>
+                                        <div class="card-title">{{ $t(menuItem.labelKey) || menuItem.label }}</div>
+                                        <div class="card-description">{{ $t(menuItem.descriptionKey) || menuItem.description }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </main>
+                        
+                        <!-- Pressure Panel -->
+                        <div v-if="showPressurePanel" class="pressure-panel">
+                            <h3>{{ $t('pressure.title') || 'Panel Ciśnień' }}</h3>
+                            <div class="pressure-grid">
+                                <div 
+                                    v-for="(data, type) in pressureData" 
+                                    :key="type"
+                                    :class="['pressure-item', type]"
+                                >
+                                    <div class="pressure-label">{{ $t('pressure.' + type) || type }}</div>
+                                    <div class="pressure-value">{{ data.value }} {{ data.unit }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <footer class="app-footer">
+                            <div class="footer-left">
+                                <span class="device-info">MASKSERVICE C20 - 1001</span>
+                            </div>
+                            <div class="footer-right">
+                                <span class="current-time">{{ currentTime }}</span>
+                            </div>
+                        </footer>
+                    </div>
+                `,
+                data() {
+                    return {
+                        // Device status
+                        deviceStatus: 'OFFLINE',
+                        
+                        // User management
+                        currentUser: null,
+                        expandedRole: null,
+                        
+                        // Language management
+                        currentLanguage: 'pl',
+                        availableLanguages: [
+                            { code: 'pl', name: 'Polski', flag: '🇵🇱' },
+                            { code: 'en', name: 'English', flag: '🇬🇧' },
+                            { code: 'de', name: 'Deutsch', flag: '🇩🇪' }
+                        ],
+                        
+                        // Role configuration
+                        availableRoles: [
+                            {
+                                id: 'OPERATOR',
+                                labelKey: 'roles.OPERATOR',
+                                label: 'Login as OPERATOR',
+                                cssClass: 'btn-operator',
+                                menuItems: [
+                                    { id: 'test_wizard', icon: '🧙', labelKey: 'menu.test_wizard', label: 'Test Wizard' },
+                                    { id: 'quick_test', icon: '⚡', labelKey: 'menu.quick_test', label: 'Quick Test' }
+                                ]
+                            },
+                            {
+                                id: 'ADMIN',
+                                labelKey: 'roles.ADMIN',
+                                label: 'Login as ADMIN',
+                                cssClass: 'btn-admin',
+                                menuItems: [
+                                    { id: 'reports_batch', icon: '📊', labelKey: 'menu.reports_batch', label: 'Batch Reports' },
+                                    { id: 'users_management', icon: '👥', labelKey: 'menu.users_management', label: 'Users Management' }
+                                ]
+                            },
+                            {
+                                id: 'SERVICEUSER',
+                                labelKey: 'roles.SERVICEUSER',
+                                label: 'Login as SERVICEUSER',
+                                cssClass: 'btn-service',
+                                menuItems: [
+                                    { id: 'workshop_maintenance', icon: '🔧', labelKey: 'menu.workshop_maintenance', label: 'Maintenance' },
+                                    { id: 'device_diagnostics', icon: '🔍', labelKey: 'menu.device_diagnostics', label: 'Device Diagnostics' }
+                                ]
+                            }
+                        ],
+                        
+                        // Pressure simulation data
+                        pressureData: {
+                            low: { value: 10, unit: 'mbar' },
+                            medium: { value: 20, unit: 'bar' },
+                            high: { value: 30, unit: 'bar' }
+                        },
+                        
+                        // Time display
+                        currentTime: new Date().toLocaleTimeString()
+                    }
+                },
+                computed: {
+                    deviceStatusClass() {
+                        return `status-${this.deviceStatus.toLowerCase()}`;
+                    },
+                    deviceStatusKey() {
+                        return `device.${this.deviceStatus.toLowerCase()}`;
+                    },
+                    showPressurePanel() {
+                        return this.currentUser && ['OPERATOR', 'SERVICEUSER'].includes(this.currentUser.role);
+                    },
+                    currentUserMenuItems() {
+                        if (!this.currentUser) return [];
+                        const role = this.availableRoles.find(r => r.id === this.currentUser.role);
+                        return role ? role.menuItems : [];
+                    }
+                },
+                methods: {
+                    toggleRoleMenu(roleId) {
+                        this.expandedRole = this.expandedRole === roleId ? null : roleId;
+                        console.log(`📂 Toggled role menu: ${roleId}`);
+                    },
+                    
+                    loginWithRole(roleId, menuItem) {
+                        this.currentUser = { role: roleId, selectedMenuItem: menuItem };
+                        this.deviceStatus = 'ONLINE';
+                        this.expandedRole = null;
+                        console.log(`✅ Logged in as ${roleId} with menu item:`, menuItem);
+                    },
+                    
+                    logout() {
+                        this.currentUser = null;
+                        this.deviceStatus = 'OFFLINE';
+                        this.expandedRole = null;
+                        console.log('👋 User logged out');
+                    },
+                    
+                    selectMenuItem(menuItem) {
+                        console.log(`🎯 Selected menu item:`, menuItem);
+                        this.$emit('menu-navigation', menuItem);
+                    },
+                    
+                    changeLanguage(languageCode) {
+                        this.currentLanguage = languageCode;
+                        this.$emit('language-changed', languageCode);
+                        console.log(`🌐 Language changed to: ${languageCode}`);
+                    },
+                    
+                    updateTime() {
+                        this.currentTime = new Date().toLocaleTimeString();
+                    }
+                },
+                mounted() {
+                    // Update time every second
+                    this.timeInterval = setInterval(this.updateTime, 1000);
+                    console.log('🚀 MaskServiceApp component mounted');
+                },
+                beforeUnmount() {
+                    if (this.timeInterval) {
+                        clearInterval(this.timeInterval);
+                    }
+                }
+            });
+            
+            console.log('📦 MaskServiceApp component registered on Vue app instance');
+            
+            // Global error handler for Vue
+            app.config.errorHandler = (error, instance, info) => {
+                console.error('Vue error:', error, info);
+            };
+            
+            // Mount the app
+            const mountedApp = app.mount('#app');
+            
+            // Global app reference
+            window.MaskServiceVueApp = mountedApp;
+            
+            console.log('🎯 Vue.js App successfully initialized!');
+            
+        } catch (error) {
+            console.error('❌ Critical initialization error:', error);
+            
+            // Fallback error display
+            document.getElementById('app').innerHTML = `
+                <div class="app-error">
+                    <h2>Błąd inicjalizacji aplikacji / Application Initialization Error</h2>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p>Please refresh the page or contact support.</p>
+                    <button onclick="window.location.reload()" class="btn btn-primary">
+                        Odśwież stronę / Refresh Page
+                    </button>
+                </div>
+            `;
+        }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeApp);
+    } else {
+        initializeApp();
+    }
+    
+    // Performance monitoring
+    window.addEventListener('load', () => {
+        const loadTime = performance.now();
+        console.log(`📊 Page fully loaded in ${loadTime.toFixed(2)}ms`);
+    });
+    
+</script>
 
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Login Screen -->
-        <div id="login-screen" class="screen active">
-            <div class="menu-container">
-                <!--                    <div class="menu-header" data-i18n="login.menu_header">LOGIN MENU</div>-->
-                <div class="menu-layout">
-                    <div class="menu-sidebar">
-                             <span class="start-buttons">
-
-                        <button id="login-scanner-btn" class="menu-item"
-                                onclick="navigateAction('login-scanner-btn'); selectLoginMethod('scanner')"
-                                data-i18n="login.scanner">Scanner
-                        </button>
-                        <button id="login-keyword-btn" class="menu-item active"
-                                onclick="navigateAction('login-keyword-btn'); selectLoginMethod('keyword')"
-                                data-i18n="login.keyword">Keyword
-                        </button>
-
-                                    </span>
-                        <span class="login-buttons">
+</body>
+</html>
                             <!-- OPERATOR Role -->
                             <div class="role-menu-container">
                                 <button id="login-operator-btn" class="menu-item btn-gray login-btn"

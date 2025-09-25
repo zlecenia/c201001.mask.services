@@ -4,7 +4,7 @@
  */
 
 // Vue.js CDN version for development
-const { createApp, ref, reactive, computed, onMounted, nextTick } = Vue;
+// const { createApp, ref, reactive, computed, onMounted, nextTick } = Vue;
 
 /**
  * Main Vue App Instance for MASKTRONIC C20
@@ -139,7 +139,7 @@ class MaskServiceVueApp {
                     },
                     
                     setRoute: (route) => {
-                        if (route && route.view) {
+                        if (route?.view) {
                             appState.currentScreen = route.view;
                             appState.currentLanguage = route.language || 'pl';
                             
@@ -415,7 +415,7 @@ loadComponentToDom(screenName) {
         }
         
         // Check if component is registered
-        if (!this.app || !this.app._context.components[componentName]) {
+        if (!this.app?._context.components[componentName]) {
             console.error(`❌ Vue: Component '${componentName}' not registered`);
             menuContent.innerHTML = `<div class="error-message">
                 <h2>Component Not Registered</h2>
@@ -428,7 +428,6 @@ loadComponentToDom(screenName) {
         menuContent.innerHTML = `<div id="vue-component-${screenName}" class="vue-component-container"></div>`;
         
         // Create a new Vue app instance for this component
-        const { createApp } = Vue;
         const componentApp = createApp({
             components: {
                 [componentName]: this.app._context.components[componentName]
