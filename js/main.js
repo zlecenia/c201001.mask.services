@@ -179,12 +179,162 @@ async function initializeApp() {
                             this.handleGlobalError(error);
                         });
                     }, 500);
+                },
+                
+                // Mock login method for role selection
+                mockLogin(role) {
+                    console.log(`🚀 Mock login as ${role}`);
+                    
+                    // Update current user
+                    this.currentUser = {
+                        username: `demo_${role.toLowerCase()}`,
+                        role: role,
+                        isAuthenticated: true,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    // Set current route based on role
+                    switch(role) {
+                        case 'OPERATOR':
+                            this.currentRoute = 'user-menu';
+                            break;
+                        case 'ADMIN':
+                            this.currentRoute = 'system';
+                            break;
+                        case 'SERVICEUSER':
+                            this.currentRoute = 'user-menu';
+                            break;
+                        default:
+                            this.currentRoute = 'login';
+                    }
+                    
+                    // Store session in localStorage
+                    localStorage.setItem('maskservice-session', JSON.stringify(this.currentUser));
+                    localStorage.setItem('maskservice-route', this.currentRoute);
+                    
+                    console.log(`✅ Logged in as ${role}, navigating to ${this.currentRoute}`);
+                    
+                    // Trigger component update
+                    this.$nextTick(() => {
+                        console.log('🔄 Component updated after login');
+                    });
                 }
-            }
+            },
+            
+            // Add missing template for proper rendering
+            template: `
+                <div v-if="isLoading" class="app-loading">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">{{ $t('global.loading') || 'Ładowanie...' }}</div>
+                    <div class="loading-subtitle">{{ $t('app.initializing') || 'Inicjalizacja systemu MASKSERVICE C20' }}</div>
+                </div>
+                
+                <div v-else-if="hasError" class="app-error">
+                    <h2>{{ $t('global.error') || 'Błąd aplikacji' }}</h2>
+                    <p>{{ errorMessage }}</p>
+                    <button @click="retryInitialization" class="btn btn-primary">
+                        {{ $t('global.retry') || 'Spróbuj ponownie' }}
+                    </button>
+                </div>
+                
+                <div v-else>
+                    <!-- Main app content rendered by Vue components -->
+                    <LoginScreen v-if="currentRoute === 'login'"></LoginScreen>
+                    <UserMenuScreen v-else-if="currentRoute === 'user-menu'"></UserMenuScreen>
+                    <SystemScreen v-else-if="currentRoute === 'system'"></SystemScreen>
+                    
+                    <!-- Default fallback content -->
+                    <div v-if="!currentRoute" class="welcome-container">
+                        <div class="welcome-header">
+                            <h1>🔧 {{ APP_NAME }}</h1>
+                            <p>Version {{ APP_VERSION }} - Build {{ BUILD_DATE }}</p>
+                        </div>
+                        
+                        <div class="role-selection">
+                            <h2>{{ $t('login.selectRole') || 'Wybierz rolę użytkownika' }}</h2>
+                            
+                            <div class="role-buttons">
+                                <button @click="mockLogin('OPERATOR')" class="btn btn-operator">
+                                    🔧 {{ $t('roles.operator') || 'OPERATOR' }}
+                                </button>
+                                <button @click="mockLogin('ADMIN')" class="btn btn-admin">
+                                    ⚙️ {{ $t('roles.admin') || 'ADMIN' }}
+                                </button>
+                                <button @click="mockLogin('SERVICEUSER')" class="btn btn-service">
+                                    🛠️ {{ $t('roles.serviceuser') || 'SERVICEUSER' }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
         });
         
         // Use i18n
         app.use(i18n);
+        
+        // Register Vue components before mounting
+        console.log('📦 Registering Vue components...');
+        
+        // Main screen components
+        if (window.LoginScreen) {
+            app.component('LoginScreen', window.LoginScreen);
+            console.log('✅ LoginScreen component registered');
+        } else {
+            console.warn('⚠️ LoginScreen component not found in window');
+        }
+        
+        if (window.UserMenuScreen) {
+            app.component('UserMenuScreen', window.UserMenuScreen);
+            console.log('✅ UserMenuScreen component registered');
+        } else {
+            console.warn('⚠️ UserMenuScreen component not found in window');
+        }
+        
+        if (window.SystemScreen) {
+            app.component('SystemScreen', window.SystemScreen);
+            console.log('✅ SystemScreen component registered');
+        } else {
+            console.warn('⚠️ SystemScreen component not found in window');
+        }
+        
+        // Template components
+        if (window.TestMenuTemplate) {
+            app.component('TestMenuTemplate', window.TestMenuTemplate);
+            console.log('✅ TestMenuTemplate component registered');
+        }
+        
+        if (window.UserDataTemplate) {
+            app.component('UserDataTemplate', window.UserDataTemplate);
+            console.log('✅ UserDataTemplate component registered');
+        }
+        
+        if (window.SystemSettingsTemplate) {
+            app.component('SystemSettingsTemplate', window.SystemSettingsTemplate);
+            console.log('✅ SystemSettingsTemplate component registered');
+        }
+        
+        if (window.WorkshopTemplate) {
+            app.component('WorkshopTemplate', window.WorkshopTemplate);
+            console.log('✅ WorkshopTemplate component registered');
+        }
+        
+        if (window.TestReportsTemplate) {
+            app.component('TestReportsTemplate', window.TestReportsTemplate);
+            console.log('✅ TestReportsTemplate component registered');
+        }
+        
+        if (window.DeviceDataTemplate) {
+            app.component('DeviceDataTemplate', window.DeviceDataTemplate);
+            console.log('✅ DeviceDataTemplate component registered');
+        }
+        
+        if (window.RealtimeSensorsTemplate) {
+            app.component('RealtimeSensorsTemplate', window.RealtimeSensorsTemplate);
+            console.log('✅ RealtimeSensorsTemplate component registered');
+        }
+        
+        console.log('🎯 Vue component registration completed');
         
         // Global error handler for Vue
         app.config.errorHandler = (error, instance, info) => {

@@ -1960,23 +1960,8 @@
 
 <!-- Core modules loaded in dependency order with cache buster -->
 <script>
-    // Dynamic script loading with cache buster
-    const scripts = [
-        'js/utils.js',
-        'js/config.js',
-        'js/auth.js',
-        'js/keyboard.js',
-        'js/menu.js',
-        'js/modules/data-export.js',
-        'js/modules/settings-ui-generator.js',
-        'js/modules/template-validator.js',
-        'js/modules/view-tester.js',
-        'js/router.js'
-    ];
-    
-    scripts.forEach(function(src) {
-        document.write('<script src="' + src + '?v=' + cacheBuster + '"><\/script>');
-    });
+    // Legacy script loading removed - all functionality now handled by Vue.js components
+    // No legacy scripts needed after aggressive Vue.js migration
     
     // Add automated test suite (only on localhost)
     if (window.location.hostname === 'localhost') {
@@ -2030,10 +2015,13 @@
 <script src="js/components/WorkshopMaintenanceTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/WorkshopPartsTemplate.js?v=" type="text/javascript"></script>
 <script src="js/components/WorkshopToolsTemplate.js?v=" type="text/javascript"></script>
-<script src="js/modules/vue-view-loader.js?v=" type="text/javascript"></script>
+<!-- vue-view-loader.js removed - functionality replaced by Vue.js routing -->
 <script src="js/vue-i18n.js?v=" type="text/javascript"></script>
 <script src="js/vue-sensor-monitoring.js?v=" type="text/javascript"></script>
 <script src="js/vue-app.js?v=" type="text/javascript"></script>
+
+<!-- Runtime UI Monitor - Real-time detection of rendering issues -->
+<script src="js/runtime-ui-monitor.js?v=" type="text/javascript"></script>
 
 <!-- Vue.js Application Initialization -->
 <script>

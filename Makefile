@@ -58,13 +58,22 @@ run:
 	@sleep 3
 	@echo "$(GREEN)✅ Server started on http://localhost:$(PORT)$(NC)"
 
-# Stop development server
+# Stop development server using robust script
 stop:
-	@if [ -f .server.pid ]; then \
-		echo "$(BLUE)🛑 Stopping development server...$(NC)"; \
-		kill `cat .server.pid` 2>/dev/null || true; \
-		rm -f .server.pid; \
-		echo "$(GREEN)✅ Server stopped$(NC)"; \
+	@if [ -f scripts/stop-server.sh ]; then \
+		./scripts/stop-server.sh; \
+	else \
+		echo "$(RED)❌ Robust stop script not found, using fallback method...$(NC)"; \
+		if [ -f .server.pid ]; then \
+			echo "$(BLUE)🛑 Stopping development server...$(NC)"; \
+			kill `cat .server.pid` 2>/dev/null || true; \
+			rm -f .server.pid; \
+			echo "$(GREEN)✅ Server stopped$(NC)"; \
+		fi; \
+		# Also try to kill by port as fallback \
+		echo "$(YELLOW)🔌 Killing processes on port $(PORT)...$(NC)"; \
+		lsof -ti:$(PORT) | xargs -r kill -9 2>/dev/null || true; \
+		echo "$(GREEN)✅ Port cleanup completed$(NC)"; \
 	fi
 
 # Run automated tests
