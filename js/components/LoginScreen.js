@@ -20,6 +20,9 @@ const LoginScreen = {
     emits: ['navigate', 'authenticate'],
     
     setup(props, { emit }) {
+        // CRITICAL FIX: Import Vue 3 Composition API functions
+        const { reactive, ref, computed, onMounted } = Vue;
+        
         // Reactive state
         const loginState = reactive({
             password: '',

@@ -1,4 +1,4 @@
-export default {
+const UserMenuScreen = {
   name: 'UserMenuScreen',
   template: `
     <div class="user-menu-screen screen active">
@@ -9,11 +9,11 @@ export default {
             <!-- Session Info -->
             <div class="session-info">
               <div class="user-welcome">
-                <span class="welcome-text">{{ $t('menu.welcome') || 'Witamy' }}</span>
+                <span class="welcome-text">Witamy</span>
                 <span class="user-role" :data-role="currentUser.role">{{ currentUser.role }}</span>
               </div>
               <button class="btn-logout" @click="handleLogout">
-                {{ $t('menu.logout') || 'Logout' }}
+                Logout
               </button>
             </div>
 
@@ -37,10 +37,10 @@ export default {
             <!-- Welcome Message -->
             <div v-if="!selectedMenuItem" class="welcome-message">
               <h2>
-                {{ $t('menu.select_option') || 'Wybierz opcję z menu' }}
+                Wybierz opcję z menu
               </h2>
               <p>
-                {{ $t('system.ready') || 'System gotowy do pracy' }}
+                System gotowy do pracy
               </p>
             </div>
 
@@ -329,3 +329,10 @@ export default {
     this.injectStyles();
   }
 }
+
+// Console log component loading
+console.log('🔶 Vue UserMenuScreen component loaded');
+
+// Export to window object for browser usage
+window.UserMenuScreen = UserMenuScreen;
+console.log('✅ UserMenuScreen exported to window object');
