@@ -122,13 +122,60 @@
         </button>
     </div>
     
-    <!-- Main Vue Application -->
-    <MaskServiceApp 
-        v-else
-        @app-initialized="handleAppInitialized"
-        @language-changed="handleLanguageChange"
-        @menu-navigation="handleMenuNavigation"
-    />
+    <!-- ROLE SELECTION SCREEN -->
+    <div v-if="currentRoute === 'role-selection'">
+        <div class="welcome-header">
+            <h1>🔧 {{ appName }}</h1>
+            <p>{{ appVersion }} - Build {{ buildDate }}</p>
+        </div>
+        
+        <div class="role-selection">
+            <h2>Wybierz rolę użytkownika</h2>
+            <div class="role-buttons">
+                <button @click="selectRole('OPERATOR')" class="role-btn btn-operator">
+                    👷 OPERATOR
+                </button>
+                <button @click="selectRole('ADMIN')" class="role-btn btn-admin">
+                    👨‍💼 ADMIN
+                </button>
+                <button @click="selectRole('SERVICEUSER')" class="role-btn btn-service">
+                    🔧 SERVICEUSER
+                </button>
+                <button @click="selectRole('SUPERUSER')" class="role-btn btn-super">
+                    👑 SUPERUSER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN SCREEN -->
+    <div v-else-if="currentRoute === 'login'">
+        <LoginScreen 
+            :role="selectedRole" 
+            @login="handleLogin" 
+            @back="backToRoleSelection">
+        </LoginScreen>
+    </div>
+
+    <!-- USER MENU SCREEN -->
+    <div v-else-if="currentRoute === 'user-menu'">
+        <UserMenuScreen 
+            :user="currentUser" 
+            :language="'pl'"
+            @navigate="handleNavigation"
+            @logout="handleLogout">
+        </UserMenuScreen>
+    </div>
+
+    <!-- SYSTEM SCREEN -->
+    <div v-else-if="currentRoute === 'system-screen'">
+        <SystemScreen 
+            :user="currentUser" 
+            :language="'pl'"
+            @navigate="handleNavigation"
+            @back="backToUserMenu">
+        </SystemScreen>
+    </div>
 </div>
 
 <!-- Vue.js Application Initialization Script -->
@@ -164,14 +211,18 @@
                         errorMessage: '',
                         
                         // Navigation state
-                        currentRoute: null,
+                        currentRoute: 'role-selection',
                         navigationHistory: [],
                         
                         // User session
                         currentUser: null,
+                        selectedRole: null,
                         sessionTimeout: null,
                         
                         // Application metadata
+                        appName: 'MASKSERVICE C20',
+                        appVersion: '3.0 Vue',
+                        buildDate: new Date().toISOString().split('T')[0],
                         APP_NAME: 'MASKSERVICE C20',
                         APP_VERSION: '3.0 Vue',
                         BUILD_DATE: new Date().toISOString().split('T')[0],
@@ -218,16 +269,64 @@
                 },
                 
                 methods: {
+                    // === NAVIGATION METHODS ===
+                    selectRole(role) {
+                        console.log(`🚀 ROLE SELECTED: ${role}`);
+                        this.selectedRole = role;
+                        this.currentRoute = 'login';
+                    },
+                    
+                    handleLogin(userData) {
+                        console.log('🔐 LOGIN SUCCESS:', userData);
+                        this.currentUser = userData;
+                        this.currentRoute = 'user-menu';
+                    },
+                    
+                    backToRoleSelection() {
+                        console.log('🔙 Back to role selection');
+                        this.currentRoute = 'role-selection';
+                        this.selectedRole = null;
+                        this.currentUser = null;
+                    },
+                    
+                    handleNavigation(target) {
+                        console.log('🔶 Vue Navigation Event:', target);
+                        
+                        if (target === 'system-screen') {
+                            this.currentRoute = 'system-screen';
+                        } else {
+                            console.log('🔄 Navigation redirected to UserMenuScreen');
+                            this.currentRoute = 'user-menu';
+                        }
+                    },
+                    
+                    handleLogout() {
+                        console.log('👋 LOGOUT');
+                        this.backToRoleSelection();
+                    },
+                    
+                    backToUserMenu() {
+                        console.log('🔙 Back to user menu');
+                        this.currentRoute = 'user-menu';
+                    },
+                    
+                    // === COMPONENT INITIALIZATION ===
                     async initializeComponents() {
-                        // Static component registration to avoid MIME type issues
+                        // Simple component registration without complex template
                         const componentStartTime = performance.now();
                         
                         try {
-                            // Register MaskServiceApp component directly on the Vue app instance
-                            const MaskServiceAppComponent = {
-                                name: 'MaskServiceApp',
-                                template: `
-                                    <div class="mask-service-container">
+                            // Skip complex MaskServiceAppComponent registration
+                            console.log('🔧 Skipping complex template - using simple navigation approach');
+                            
+                            // Component initialization completed without complex template
+                            const loadTime = performance.now() - componentStartTime;
+                            console.log(`✅ Simple navigation approach initialized in ${loadTime.toFixed(2)}ms`);
+                            
+                        } catch (error) {
+                            console.error('❌ Component initialization failed:', error);
+                        }
+                    },
                                         <!-- Header -->
                                         <header class="app-header">
                                             <div class="header-left">

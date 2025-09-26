@@ -4,6 +4,8 @@
  * Uses global Vue APIs from vue-app.js (no duplicate destructuring)
  */
 
+console.log('🔶 Vue SystemScreen.js script loading...');
+
 const SystemScreen = {
     name: 'SystemScreen',
     props: {

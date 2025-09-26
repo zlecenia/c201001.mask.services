@@ -231,6 +231,16 @@
             </div>
         </div>
         
+        <!-- SYSTEM SCREEN -->
+        <div v-else-if="currentRoute === 'system-screen'" class="system-screen-container">
+            <SystemScreen 
+                :user="currentUser" 
+                :language="'pl'"
+                @navigate="handleNavigation"
+                @back="backToRoleSelection">
+            </SystemScreen>
+        </div>
+        
         <!-- SUCCESS SCREEN -->
         <div v-else-if="currentRoute === 'success'" class="login-screen-container">
             <h1>🎉 Sukces!</h1>
@@ -248,6 +258,7 @@
     <!-- Vue Components -->
     <script src="js/components/LoginScreen.js"></script>
     <script src="js/components/vue/UserMenuScreen.js"></script>
+    <script src="js/components/SystemScreen.js"></script>
     
     <script>
         console.log('🚀 MASKSERVICE C20 - Fixed Vue.js App starting...');
@@ -421,6 +432,14 @@
                     console.log('✅ UserMenuScreen component registered with Vue app');
                 } else {
                     console.log('❌ CRITICAL: UserMenuScreen component not found on window object');
+                }
+                
+                if (window.SystemScreen) {
+                    console.log('🔧 Registering SystemScreen component globally...');
+                    app.component('SystemScreen', window.SystemScreen);
+                    console.log('✅ SystemScreen component registered with Vue app');
+                } else {
+                    console.log('❌ CRITICAL: SystemScreen component not found on window object');
                 }
                 
                 console.log('🔶 All Vue components registered - should render properly');
