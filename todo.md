@@ -32,7 +32,7 @@ Testowaniu funkcjonalności - walidacja wszystkich podzielonych modułów
 Naprawie problemów z lokalizacją - znalezienie nieprzetłumaczonych etykiet
 Utworzeniu modułu Analytics Dashboard - nowy moduł analityczny
 Implementacji Workflow Engine - automatyzacja zgodna ze standardami PN-EN
-System MASKSERVICE C20 jest teraz w pełni zmodularyzowany z intuicyjnymi, wyspecjalizowanymi podmenu dla lepszej użyteczności i organizacji!
+System MASKTRONIC C20 jest teraz w pełni zmodularyzowany z intuicyjnymi, wyspecjalizowanymi podmenu dla lepszej użyteczności i organizacji!
 
 
 
@@ -54,7 +54,7 @@ w momencie wpisywania hasla nie pozwalaj na pokazywanie systemowej klawiatury w 
 operator ma za zadanie przeprowadzi testy, dlatego jego menu musi by ograniczone do tetsw i raportw
 
 scenariusze testowe moga by uzupenione przez inne role, ale oni nie musi testowa tylko zarzadzac rolami, 
-najwiecej opcji ma serwisant, ale on nie testuje i nie raportuje
+najwiecej opcji ma serviceuser, ale on nie testuje i nie raportuje
 
 przeanalizuj translacje i popraw gdzi jeszcze sa dodane atrybuty data-i18n
 
@@ -109,3 +109,111 @@ Template "device-history-template" is not available.
 http://localhost:8084/#/user-menu-screen/pl/default
 
 http://localhost:8084/#/user-menu-screen/pl/default
+
+
+
+
+
+te funkcje nie ładują template, zrob funkcje walidujaca czy na prawde zaladowal sie template a nie tylko czy kliknieto, wywołało daną funkcję, sprawdzaj i loguj dokladniej proces ladowania stron oraz sprawdzaj czy po kliknięciu na bautton zadziałał router i zmienił url, aby było wiadomo czy jest problem z routerem
+
+window.MenuManager.selectMenuOption('settings_scenarios')
+window.MenuManager.selectMenuOption('settings_integration')
+window.MenuManager.selectMenuOption('settings_standards')
+
+
+Nie działa zmiana jezyka, ani dynamiczna zmiana sensorów, 
+
+sprawdz czy wszystkie pliki JS są wykorzystywane, czy nie ma duplikatów i czy któreś wymagają podlinkowania do danej funkcji
+
+
+
+większosć wygenerowanych widoków we views/*/*.html mają niepoprawną strukturę
+
+
+
+ustandaryzuj import/export danych w 3 formatach: json, xml, csv oraz export do wydruku w pdf bezposrerednio z JS w miejscach, gdzie sa dane
+
+
+
+--
+
+biorąc pod uwage pliki z config/*.json uzyj tego rozwizania edytora do edycji i nadpisywania poprzez usluge API python wraz z serwowaniem calego projektu ze wszystkimi plikami
+uwzglednij schema, ktore sprawdza poprawnosc danych
+Ustandaryzuj import/export danych (JSON, XML, CSV)
+Dodaj eksport do PDF bezpośrednio z JavaScript
+
+
+
+zacznij stosować vue w projekcie zamiast aktualnych modułów i stopniowo usuwaj vanillia na rzecz vue w kolejnych miejscach
+przenoś zawartośc do nowych plikow frameworka vue 
+usuwaj kolejne fragmenty html i pliki .js
+
+
+
+wyodrebnij z plikow vue/js wszystkie pliki .json i ładuj je oddzielnie jako konfiguracje z foldera konfgiruacji, udokumentuj refaktoryzacje, 
+
+find /home/tom/github/zlecenia/c201001.mask.services/js/components -name "*.js" -exec wc -l {} + | sort -nr
+
+
+
+kontynuuj i sprawdz czy wszystkie komponenty vue sa dostepne z menu,. czy kazdy komponent mozna zoabczyc w przegladarce poprzez klikniecie menu
+
+i zrob edytor tych plikow json
+
+
+
+
+zrob refaktoryzacje index.html, oraz plików z js/modules, gdzie sa rozne implementecja, ktore masz azaadoptować do vue jako komponenty i użyć w plaikacji index.html,
+podziel pliki z kodem gdzie ilosc linii kodu przekracza 500 linii na mniejsze pliki, reuzywalne  komponenty vue.
+udokumentuj refaktoryzacje, zaktualizuj plik test.js do aktualnej struktury i specyfiki, dodaj wiecej nowych testow, usun niektualne po reffaktoryzacji z vue
+
+popraw wygląd zawartości w klasie .menu-content, aby był kompaktowy i rozłożony na szerokość, ponieważ maksymalna wysokość panelu to 30% szerokości ekranu,
+jeśli zawartośc zawiera więcej to robzij menu na kilka i pokaż je w bocznej lewewej kolumnie pod ostatnimi button items w menu 
+podziel komponenty vue, ktore maja wiecej niz 500linii kodu na mniejsze, reuzwalne komplementarne, komponenty, aby nie bylo duplikatow
+
+ 
+
+
+usun podstrone ładowania z "Witamy  MASKTRONIC System starting in Progress..." po zalogowaniu i przechodz od razu do menu po zalogowaniu
+Zamiast tworzyc nowe menu, rozszerza aktualne menu np. dla " Login as operator" pod #login-operator-btn pokaż menu, ktore normalnie ladowalo sie od nowa,  
+
+
+<div class="menu-layout">
+ <div class="menu-sidebar" id="user-menu-items">            
+ <div id="session-info" class="session-info">
+ <button onclick="logout()" class="btn-logout" data-i18n="menu.logout">Logout</button>
+</div>
+
+<div class="menu-item" onclick="window.MenuManager.selectMenuOption('test_wizard')">
+ <span class="menu-icon">🧙</span>
+ <span class="menu-label">Test Wizard</span>
+</div>
+podobnie zrob dla innych ADMIN, SERVICEUSER, SUPERUSER
+
+
+po zalogowaniu dwa pierwsze items button menu #login-scanner-btn  i  #login-keyword-btn  maja zniknac a pojawic sie Logout jako nowy button na saemym dole kolumny menu
+
+podmenu np. #operator-menu pojawiac sie ma dopiero po zalogowaniu i rozsuwaj w formie harkonijki a nie popup
+podobnie zrob dla innych ADMIN, SERVICEUSER, SUPERUSER
+
+
+
+zmiana domeny bez c samo ID
+
+w js/vue-sensor-monitoring.js znajdz wszystkeiz mienne i je zdefiniuj na poczatku w konfiguracji modułu
+wydorebnij interwał generowania danych i ustaw na 100ms
+
+
+przenalizuj wszystkie pliki modułów i dodaj do nich tłumaczenia z plików z  folderu    locales/*.json
+uzupełnij pliki o nowe zmienne
+każdy plik modułu Vue powinienien mieć zmienne dotyczace danych zadeklarowane na początku pliku oraz stałe odnośnie tłumaczeń pobierane z plików  tłumaczenia w zależności od wybranej lokalizacji z locales/*.json
+
+
+dlaczego data i czas nie pokazuje sie w vue http://localhost:8081/index.html #time-info
+
+
+dodaj takie testy, ktore wykażą, że to co aktualnie zostało zaimplementowane nie działa poporawnie, wykrywaj gdypo akcjach, np kliknieciu poajwia sie brak widoku, jak aktualnie i pokazuj wiecej logow, aby dociec dlaczego zmiana w trakcie akcji doprowadzila do usuneicia a nie do aktualizacji widoku z jednym z wczesniej zbudowanych dwidokow, biale tlo jest errorerm , wykrywaj tego typu bledy w trakcie dzialnia aplikacji i notyfikuj w logach jako error
+
+Doda
+
+

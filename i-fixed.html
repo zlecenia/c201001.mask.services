@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASKSERVICE C20 - Vue.js Fixed</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        #app {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .welcome-header {
+            background: #2c3e50;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .welcome-header h1 {
+            margin: 0 0 10px 0;
+            font-size: 2.5em;
+        }
+        
+        .diagnostics-panel {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px;
+        }
+        
+        .diagnostic-grid {
+            display: grid;
+            gap: 10px;
+        }
+        
+        .diagnostic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+        }
+        
+        .status-ok { color: #28a745; font-weight: 600; }
+        .status-error { color: #dc3545; font-weight: 600; }
+        
+        .role-selection {
+            padding: 30px;
+        }
+        
+        .role-buttons {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-blue { background: #007bff; color: white; }
+        .btn-green { background: #28a745; color: white; }
+        .btn-orange { background: #fd7e14; color: white; }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .login-screen-container {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .btn-back {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- ROLE SELECTION SCREEN -->
+        <div v-if="currentRoute === 'role-selection'">
+            <div class="welcome-header">
+                <h1>🔧 {{ appName }}</h1>
+                <p>{{ appVersion }} - Build {{ buildDate }}</p>
+                <p><strong>Production Mode</strong> - Vue.js Application</p>
+            </div>
+            
+            <!-- DIAGNOSTICS PANEL -->
+            <div class="diagnostics-panel">
+                <h3>📊 Script Loading Diagnostics</h3>
+                <div class="diagnostic-grid">
+                    <div class="diagnostic-item">
+                        <span>Vue.js:</span>
+                        <span :class="diagnostics.vue ? 'status-ok' : 'status-error'">
+                            {{ diagnostics.vue ? '✅ Available' : '❌ Missing' }}
+                        </span>
+                    </div>
+                    <div class="diagnostic-item">
+                        <span>LoginScreen Component:</span>
+                        <span :class="diagnostics.loginScreen ? 'status-ok' : 'status-error'">
+                            {{ diagnostics.loginScreen ? '✅ Available' : '❌ Missing' }}
+                        </span>
+                    </div>
+                    <div class="diagnostic-item">
+                        <span>App State:</span>
+                        <span class="status-ok">✅ {{ currentRoute.toUpperCase() }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ROLE SELECTION -->
+            <div class="role-selection">
+                <h2>👥 Wybierz rolę użytkownika</h2>
+                <p>Wybierz swoją rolę aby uzyskać dostęp do systemu MASKSERVICE C20</p>
+                
+                <div class="role-buttons">
+                    <button v-for="role in availableRoles" 
+                            :key="role.key"
+                            @click="selectRole(role)" 
+                            :class="['btn', 'btn-' + role.color]">
+                        {{ role.icon }} {{ role.label }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- LOGIN SCREEN PLACEHOLDER -->
+        <div v-else-if="currentRoute === 'login'" class="login-screen-container">
+            <button @click="backToRoleSelection" class="btn-back">
+                🔙 Powrót do wyboru roli
+            </button>
+            
+            <h1>🔑 LoginScreen</h1>
+            <p>Wybrany użytkownik: <strong>{{ selectedRole?.label }}</strong></p>
+            <p>Role: <strong>{{ selectedRole?.key }}</strong></p>
+            
+            <!-- TESTING: LoginScreen.js Component Integration -->
+            <div style="margin-top: 30px; border: 2px solid #42b883; padding: 15px; border-radius: 8px;">
+                <h3>🔶 Vue Component Test: LoginScreen.js</h3>
+                <p v-if="diagnostics.loginScreen">✅ LoginScreen component available</p>
+                <p v-else>❌ LoginScreen component not loaded</p>
+                
+                <!-- Attempt to render LoginScreen component -->
+                <div v-if="diagnostics.loginScreen">
+                    <component 
+                        :is="'LoginScreen'"
+                        :user="selectedRole"
+                        :language="'pl'"
+                        @navigate="handleNavigation"
+                        @authenticate="handleAuthentication"
+                    />
+                </div>
+                
+                <!-- Fallback to mock login if component fails -->
+                <div v-else style="border: 2px solid orange; padding: 10px; margin-top: 10px;">
+                    <h4>🟡 Fallback: Mock Login Form</h4>
+                    <input type="text" v-model="username" placeholder="Username" style="padding: 10px; margin: 10px; font-size: 1em;">
+                    <br>
+                    <input type="password" v-model="password" placeholder="Password" style="padding: 10px; margin: 10px; font-size: 1em;">
+                    <br>
+                    <button @click="mockLogin" class="btn btn-green" style="margin: 10px;">
+                        🚀 Zaloguj się (Mock)
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- USER MENU SCREEN -->
+        <div v-else-if="currentRoute === 'user-menu'" class="user-menu-screen-container">
+            <button @click="backToRoleSelection" class="btn-back">
+                🔙 Powrót do wyboru roli
+            </button>
+            
+            <!-- TESTING: UserMenuScreen.js Component Integration -->
+            <div style="height: 100vh; display: flex; flex-direction: column;">
+                <div v-if="diagnostics.userMenuScreen">
+                    <component 
+                        :is="'UserMenuScreen'"
+                        :current-user="currentUser"
+                        :menu-items="menuItems"
+                        @menu-selected="handleMenuSelection"
+                        @logout="handleLogout"
+                    />
+                </div>
+                
+                <!-- Fallback if component fails -->
+                <div v-else style="border: 2px solid orange; padding: 20px; margin: 20px;">
+                    <h3>🟡 UserMenuScreen Component Not Available</h3>
+                    <p>Diagnostics: {{ diagnostics.userMenuScreen ? '✅ Available' : '❌ Missing' }}</p>
+                    <button @click="backToRoleSelection" class="btn btn-orange">
+                        🔙 Powrót do wyboru roli
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- SUCCESS SCREEN -->
+        <div v-else-if="currentRoute === 'success'" class="login-screen-container">
+            <h1>🎉 Sukces!</h1>
+            <p>Zalogowany jako: <strong>{{ currentUser?.username }}</strong></p>
+            <p>Rola: <strong>{{ currentUser?.role }}</strong></p>
+            <button @click="backToRoleSelection" class="btn btn-orange">
+                🔙 Powrót do wyboru roli
+            </button>
+        </div>
+    </div>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    
+    <!-- Vue Components -->
+    <script src="js/components/LoginScreen.js"></script>
+    <script src="js/components/vue/UserMenuScreen.js"></script>
+    
+    <script>
+        console.log('🚀 MASKSERVICE C20 - Fixed Vue.js App starting...');
+        console.log('Vue available:', typeof Vue !== 'undefined');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                console.log('📦 Creating Vue app...');
+                
+                const { createApp } = Vue;
+                
+                const app = createApp({
+                    data() {
+                        return {
+                            // App info
+                            appName: 'MASKSERVICE C20',
+                            appVersion: '3.0 Vue Fixed',
+                            buildDate: new Date().toISOString().split('T')[0],
+                            
+                            // Application state
+                            currentRoute: 'role-selection',
+                            selectedRole: null,
+                            currentUser: null,
+                            
+                            // Form data
+                            username: '',
+                            password: '',
+                            
+                            // Available roles
+                            availableRoles: [
+                                { key: 'OPERATOR', label: 'Operator', color: 'blue', icon: '🔧' },
+                                { key: 'ADMIN', label: 'Administrator', color: 'green', icon: '⚙️' },
+                                { key: 'SERVICEUSER', label: 'Serwisant', color: 'orange', icon: '🛠️' }
+                            ],
+                            
+                            // Diagnostics
+                            diagnostics: {
+                                vue: typeof Vue !== 'undefined',
+                                loginScreen: typeof window.LoginScreen !== 'undefined',
+                                userMenuScreen: typeof window.UserMenuScreen !== 'undefined'
+                            },
+                            
+                            // Menu items for UserMenuScreen
+                            menuItems: [
+                                {
+                                    id: 'device-data',
+                                    label: 'Dane urządzeń',
+                                    icon: '📊',
+                                    description: 'Przeglądaj dane z czujników i urządzeń'
+                                },
+                                {
+                                    id: 'system-config',
+                                    label: 'Konfiguracja systemu',
+                                    icon: '⚙️',
+                                    description: 'Zarządzaj ustawieniami systemu'
+                                },
+                                {
+                                    id: 'user-management',
+                                    label: 'Zarządzanie użytkownikami',
+                                    icon: '👥',
+                                    description: 'Dodawaj i edytuj konta użytkowników'
+                                },
+                                {
+                                    id: 'reports',
+                                    label: 'Raporty',
+                                    icon: '📈',
+                                    description: 'Generuj raporty i statystyki'
+                                },
+                                {
+                                    id: 'maintenance',
+                                    label: 'Konserwacja',
+                                    icon: '🔧',
+                                    description: 'Zarządzanie konserwacją urządzeń'
+                                }
+                            ],
+                            
+                            // Component registration storage
+                            registeredComponents: {}
+                        };
+                    },
+                    
+
+                    
+                    methods: {
+                        selectRole(role) {
+                            console.log(`🚀 ROLE SELECTED: ${role.key}`);
+                            this.selectedRole = role;
+                            this.currentRoute = 'login';
+                            console.log(`✅ Navigation to LoginScreen successful`);
+                        },
+                        
+                        // New: Handle Vue component events
+                        handleNavigation(screen, language, mode) {
+                            console.log(`🔶 Vue Navigation Event: ${screen}, ${language}, ${mode}`);
+                            // Handle navigation from LoginScreen component
+                            if (screen === 'system-screen') {
+                                // Navigate to user-menu instead of success to show UserMenuScreen
+                                this.currentRoute = 'user-menu';
+                                console.log(`✅ Navigation redirected to UserMenuScreen via handleNavigation`);
+                            }
+                        },
+                        
+                        handleAuthentication(username, role) {
+                            console.log(`🔶 Vue Authentication Event: ${username} as ${role}`);
+                            this.currentUser = { username, role };
+                            // Navigate to user menu instead of success screen
+                            this.currentRoute = 'user-menu';
+                            console.log(`✅ Navigation to UserMenuScreen successful`);
+                        },
+                        
+                        // Handle menu selection from UserMenuScreen
+                        handleMenuSelection(menuItem) {
+                            console.log(`🔶 Vue Menu Selection: ${menuItem.id} - ${menuItem.label}`);
+                            // TODO: Navigate to specific screens based on menu selection
+                        },
+                        
+                        // Handle logout from UserMenuScreen
+                        handleLogout() {
+                            console.log(`🔶 Vue Logout Event`);
+                            this.backToRoleSelection();
+                        },
+                        
+                        mockLogin() {
+                            console.log(`🔑 Mock login: ${this.username} as ${this.selectedRole?.key}`);
+                            this.currentUser = {
+                                username: this.username || 'demo_user',
+                                role: this.selectedRole?.key
+                            };
+                            this.currentRoute = 'success';
+                            console.log(`✅ Login successful`);
+                        },
+                        
+                        backToRoleSelection() {
+                            console.log('🔙 Back to role selection');
+                            this.currentRoute = 'role-selection';
+                            this.selectedRole = null;
+                            this.currentUser = null;
+                            this.username = '';
+                            this.password = '';
+                        }
+                    },
+                    
+                    mounted() {
+                        console.log('✅ Vue app mounted successfully!');
+                        console.log('App data:', this.$data);
+                        console.log('📊 Current route:', this.currentRoute);
+                        
+                        // Post-mount component check
+                        if (this.$options.components && this.$options.components.LoginScreen) {
+                            console.log('🔶 LoginScreen component registered in Vue app ✅');
+                        } else {
+                            console.log('❌ LoginScreen component NOT registered in Vue app');
+                        }
+                    }
+                });
+                
+                console.log('⚙️ Mounting Vue app to #app...');
+                
+                // CRITICAL: Register Vue components BEFORE mounting
+                if (window.LoginScreen) {
+                    console.log('🔧 Registering LoginScreen component globally...');
+                    app.component('LoginScreen', window.LoginScreen);
+                    console.log('✅ LoginScreen component registered with Vue app');
+                } else {
+                    console.log('❌ CRITICAL: LoginScreen component not found on window object');
+                }
+                
+                if (window.UserMenuScreen) {
+                    console.log('🔧 Registering UserMenuScreen component globally...');
+                    app.component('UserMenuScreen', window.UserMenuScreen);
+                    console.log('✅ UserMenuScreen component registered with Vue app');
+                } else {
+                    console.log('❌ CRITICAL: UserMenuScreen component not found on window object');
+                }
+                
+                console.log('🔶 All Vue components registered - should render properly');
+                
+                const mountedApp = app.mount('#app');
+                console.log('🎉 Vue app mounted successfully:', mountedApp);
+                
+                // Global reference
+                window.MaskServiceFixedApp = mountedApp;
+                
+            } catch (error) {
+                console.error('❌ CRITICAL Vue error:', error);
+                document.getElementById('app').innerHTML = `
+                    <div style="padding: 30px; text-align: center; background: #ffe6e6; border: 2px solid #dc3545; margin: 20px; border-radius: 8px;">
+                        <h2>❌ Vue.js ERROR</h2>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <button onclick="window.location.reload()" style="padding: 10px 20px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer;">🔄 Reload</button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
