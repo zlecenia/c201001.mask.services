@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MINIMAL Vue.js Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        
+        #app {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔧 MINIMAL Vue.js Test</h1>
+    
+    <div id="app">
+        <div class="test-section">
+            <h2>📊 Basic Vue.js Test</h2>
+            <p><strong>Message:</strong> {{ message }}</p>
+            <p><strong>Counter:</strong> {{ counter }}</p>
+            <button @click="increment">+1</button>
+            <button @click="changeMessage">Change Message</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Vue.js Diagnostics</h3>
+            <p><strong>Vue Available:</strong> <span :class="vueAvailable ? 'success' : 'error'">{{ vueAvailable ? 'YES ✅' : 'NO ❌' }}</span></p>
+            <p><strong>App Mounted:</strong> <span class="success">YES ✅</span></p>
+            <p><strong>Reactivity Working:</strong> <span :class="counter > 0 ? 'success' : 'error'">{{ counter > 0 ? 'YES ✅' : 'Click +1 to test' }}</span></p>
+        </div>
+    </div>
+    
+    <!-- Vue.js 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    
+    <script>
+        console.log('🚀 MINIMAL Vue.js test starting...');
+        console.log('Vue available:', typeof Vue !== 'undefined');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                console.log('📦 Creating Vue app...');
+                
+                const { createApp } = Vue;
+                
+                const app = createApp({
+                    data() {
+                        return {
+                            message: 'Hello from Vue.js!',
+                            counter: 0,
+                            vueAvailable: typeof Vue !== 'undefined'
+                        };
+                    },
+                    
+                    methods: {
+                        increment() {
+                            this.counter++;
+                            console.log('Counter incremented:', this.counter);
+                        },
+                        
+                        changeMessage() {
+                            this.message = `Updated at ${new Date().toLocaleTimeString()}`;
+                            console.log('Message changed:', this.message);
+                        }
+                    },
+                    
+                    mounted() {
+                        console.log('✅ Vue app mounted successfully!');
+                        console.log('App data:', this.$data);
+                    }
+                });
+                
+                console.log('⚙️ Mounting to #app...');
+                const mountedApp = app.mount('#app');
+                console.log('🎉 Vue app mounted:', mountedApp);
+                
+                // Global reference
+                window.MinimalVueTest = mountedApp;
+                
+            } catch (error) {
+                console.error('❌ CRITICAL Vue error:', error);
+                document.getElementById('app').innerHTML = `
+                    <div class="error">
+                        <h2>❌ Vue.js ERROR</h2>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>Stack:</strong> ${error.stack}</p>
+                        <button onclick="window.location.reload()">🔄 Reload</button>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>
